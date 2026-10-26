@@ -1,0 +1,84 @@
+/**
+ * Kottakkal Theme - Wellness Journal Stylesheet
+ * Page: templates/page-wellness.php
+ */
+
+.phead {
+  padding-block: calc(160px + env(safe-area-inset-top, 0px)) clamp(48px, 7vw, 96px);
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font: 500 0.78rem/1.4 var(--sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+  margin-bottom: 30px;
+}
+
+.crumbs a {
+  color: var(--fg-2);
+  text-decoration: none;
+}
+
+.crumbs a:hover {
+  color: var(--accent);
+}
+
+.phead h1 {
+  font-size: var(--fs-hero);
+  margin-top: 22px;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.phead .lede {
+  margin-top: 28px;
+  max-width: 60ch;
+}
+
+.empty {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(36px, 7vw, 120px);
+  align-items: center;
+}
+
+.cats {
+  display: grid;
+  border-top: 1px solid var(--line);
+}
+
+.cats div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.cats b {
+  font: 400 1.6rem/1.2 var(--display);
+  color: var(--heading);
+}
+
+.cats span {
+  font: 400 1rem/1 var(--display);
+  color: var(--gold-ink);
+  align-self: center;
+}
+
+.ph-acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+@media (max-width: 860px) {
+  .empty {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,153 @@
+/**
+ * Kottakkal Theme - Single Doctor Profile Stylesheet
+ * Template: templates/single-doctor.php
+ */
+
+.phead {
+  padding-block: calc(160px + env(safe-area-inset-top, 0px)) 0;
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font: 500 0.78rem/1.4 var(--sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+  margin-bottom: 30px;
+}
+
+.crumbs a {
+  color: var(--fg-2);
+  text-decoration: none;
+}
+
+.crumbs a:hover {
+  color: var(--accent);
+}
+
+.docfull {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(32px, 7vw, 120px);
+  padding-block: clamp(56px, 8vw, 120px);
+}
+
+.docfull .frame {
+  overflow: hidden;
+  border-radius: 2px;
+  align-self: start;
+  position: sticky;
+  top: 120px;
+}
+
+.docfull .plate {
+  aspect-ratio: 4/5;
+}
+
+.mono {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  font: 400 clamp(5rem, 3rem + 7vw, 10rem)/1 var(--display);
+  color: rgba(243, 238, 226, 0.9);
+  letter-spacing: -0.04em;
+  opacity: 0.8;
+}
+
+.docfull h1 {
+  font-size: var(--fs-1);
+  margin-top: 18px;
+}
+
+.docfull .body {
+  display: grid;
+  gap: 18px;
+  margin-top: 26px;
+  max-width: 62ch;
+}
+
+.docfull .body p.lede {
+  font-size: 1.18rem;
+  line-height: 1.7;
+}
+
+.creds {
+  list-style: none;
+  margin: 22px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.creds li {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 10px;
+  font-size: 0.92rem;
+  color: var(--fg-2);
+}
+
+.creds li::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  margin-top: 8px;
+  border: 1px solid var(--gold);
+  transform: rotate(45deg);
+}
+
+.specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 26px;
+}
+
+.specs span {
+  font-size: 0.82rem;
+  padding: 8px 14px;
+  border: 1px solid var(--line-2);
+  border-radius: 99px;
+  color: var(--heading);
+}
+
+.ph-acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+/* Band */
+.band {
+  background: var(--surface-3);
+  margin-top: var(--section);
+}
+
+.band .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding-block: clamp(56px, 7vw, 96px);
+}
+
+.band h2 {
+  font-size: var(--fs-2);
+  max-width: 18ch;
+}
+
+@media (max-width: 860px) {
+  .docfull {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .docfull .frame {
+    position: relative;
+    top: 0;
+  }
+}

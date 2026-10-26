@@ -1,0 +1,213 @@
+/**
+ * Kottakkal Theme - Single Care Pathway Stylesheet
+ * Template: templates/single-pathway.php
+ */
+
+.phead {
+  padding-block: calc(160px + env(safe-area-inset-top, 0px)) clamp(48px, 7vw, 96px);
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font: 500 0.78rem/1.4 var(--sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+  margin-bottom: 30px;
+}
+
+.crumbs a {
+  color: var(--fg-2);
+  text-decoration: none;
+}
+
+.crumbs a:hover {
+  color: var(--accent);
+}
+
+.phead h1 {
+  font-size: var(--fs-1);
+  margin-top: 22px;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.phead .lede {
+  margin-top: 24px;
+}
+
+.ph2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: clamp(36px, 7vw, 120px);
+  align-items: end;
+}
+
+.ph2 .plate {
+  aspect-ratio: 4/5;
+}
+
+.ph-acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+/* Sidebar TOC Layout */
+.dgrid {
+  display: grid;
+  grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+  gap: clamp(28px, 6vw, 110px);
+}
+
+.toc {
+  position: sticky;
+  top: 120px;
+  align-self: start;
+  display: grid;
+  gap: 12px;
+  font-size: 0.84rem;
+  letter-spacing: 0.04em;
+}
+
+.toc a {
+  color: var(--fg-2);
+  text-decoration: none;
+  padding-left: 16px;
+  border-left: 1px solid var(--line);
+  transition: color 0.3s, border-color 0.3s;
+}
+
+.toc a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.dsec {
+  padding-bottom: 56px;
+  margin-bottom: 56px;
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 120px;
+  display: grid;
+  gap: 22px;
+  min-width: 0;
+}
+
+.dsec:last-child {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.dsec h2 {
+  font-size: var(--fs-2);
+}
+
+.dsec p {
+  max-width: 62ch;
+}
+
+.callout {
+  border-left: 2px solid var(--gold);
+  padding: 8px 0 8px 22px;
+  color: var(--fg-2);
+  max-width: 62ch;
+  font-style: italic;
+}
+
+/* Related Therapies */
+.related {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.related .xcard h3 {
+  font-size: 1.4rem;
+}
+
+/* Mini Doctor Cards */
+.minidocs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 14px;
+}
+
+.minidoc {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  text-decoration: none;
+  padding: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 2px;
+  transition: border-color 0.3s;
+}
+
+.minidoc:hover {
+  border-color: var(--accent);
+}
+
+.minidoc .plate {
+  aspect-ratio: 1;
+}
+
+.minidoc .mono {
+  font-size: 2rem;
+}
+
+.minidoc b {
+  display: block;
+  font: 400 1.25rem/1.15 var(--display);
+  color: var(--heading);
+}
+
+.minidoc small {
+  color: var(--fg-2);
+  font-size: 0.8rem;
+}
+
+/* Band */
+.band {
+  background: var(--surface-3);
+}
+
+.band .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding-block: clamp(56px, 7vw, 96px);
+}
+
+.band h2 {
+  font-size: var(--fs-2);
+  max-width: 18ch;
+}
+
+@media (max-width: 860px) {
+  .ph2, .dgrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .toc {
+    display: none;
+  }
+  .ph2 .plate {
+    aspect-ratio: 16/12;
+  }
+  .related {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .related {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

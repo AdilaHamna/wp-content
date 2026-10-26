@@ -1,0 +1,108 @@
+/**
+ * Kottakkal Theme - Legal & Policy Stylesheet
+ * Page: templates/page-legal.php
+ */
+
+.phead {
+  padding-block: calc(160px + env(safe-area-inset-top, 0px)) clamp(48px, 7vw, 96px);
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font: 500 0.78rem/1.4 var(--sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+  margin-bottom: 30px;
+}
+
+.crumbs a {
+  color: var(--fg-2);
+  text-decoration: none;
+}
+
+.crumbs a:hover {
+  color: var(--accent);
+}
+
+.phead h1 {
+  font-size: var(--fs-1);
+  margin-top: 22px;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.legal {
+  max-width: 74ch;
+  display: grid;
+  gap: 18px;
+  margin-bottom: var(--section);
+}
+
+.legal h2 {
+  font-size: var(--fs-3);
+  margin-top: 30px;
+  color: var(--heading);
+}
+
+.legal p {
+  color: var(--fg);
+  line-height: 1.75;
+}
+
+.legal ul {
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  color: var(--fg-2);
+}
+
+.flag {
+  display: inline-block;
+  margin-top: 24px;
+  font: 600 0.78rem/1 var(--sans);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border: 1px dashed var(--gold);
+  color: var(--gold-ink);
+  padding: 11px 14px;
+}
+
+.tw {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  margin-top: 20px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 560px;
+  font-size: 0.88rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+th {
+  font: 600 0.78rem/1.5 var(--sans);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+  background: var(--surface-3);
+}
+
+code {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.84em;
+  background: var(--surface-3);
+  padding: 2px 6px;
+  border-radius: 2px;
+}
