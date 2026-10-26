@@ -494,8 +494,12 @@ p {
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   gap: 7px;
   opacity: 0.86;
+  white-space: nowrap;
+  flex-shrink: 0;
   transition: opacity 0.3s;
 }
 
@@ -529,6 +533,8 @@ p {
   min-height: 46px;
   padding: 0 22px;
   font-size: 0.78rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .hdr.over .btn-solid {
@@ -1100,6 +1106,54 @@ p {
 }
 
 /* Responsive Overrides */
+@media (max-width: 1320px) {
+  .hdr-in {
+    gap: 16px;
+  }
+  .nav {
+    gap: 1px;
+  }
+  .nav > a, .nav > button {
+    padding: 12px 10px;
+    font-size: 0.81rem;
+    letter-spacing: 0.06em;
+  }
+  .hdr .btn {
+    padding: 0 18px;
+    font-size: 0.74rem;
+  }
+  .brand .emb {
+    height: 52px;
+  }
+  .brand .wm {
+    height: 40px;
+  }
+}
+
+@media (max-width: 1240px) {
+  .hdr-in {
+    gap: 12px;
+  }
+  .nav > a, .nav > button {
+    padding: 10px 8px;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    gap: 5px;
+  }
+  .hdr .btn {
+    padding: 0 14px;
+    min-height: 42px;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+  }
+  .brand .emb {
+    height: 48px;
+  }
+  .brand .wm {
+    height: 36px;
+  }
+}
+
 @media (max-width: 1100px) {
   .nav, .hdr .btn {
     display: none;
