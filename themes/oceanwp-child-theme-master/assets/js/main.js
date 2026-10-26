@@ -136,21 +136,53 @@
     });
   }
 
-  // Copy to Clipboard buttons
+  // Copy to Clipboard buttons with robust HTTP & HTTPS fallback
+  function copyTextToClipboard(text, btn) {
+    var orig = btn.textContent;
+    var setSuccess = function() {
+      btn.textContent = "Copied";
+      btn.classList.add("copied");
+      setTimeout(function() {
+        btn.textContent = orig;
+        btn.classList.remove("copied");
+      }, 1800);
+    };
+
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(setSuccess).catch(function() {
+        fallbackCopy(text, setSuccess);
+      });
+    } else {
+      fallbackCopy(text, setSuccess);
+    }
+  }
+
+  function fallbackCopy(text, cb) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.top = "0";
+    ta.style.left = "-9999px";
+    ta.style.opacity = "0";
+    ta.setAttribute("readonly", "");
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      var successful = document.execCommand("copy");
+      if (cb) cb();
+    } catch(err) {
+      if (cb) cb();
+    }
+    document.body.removeChild(ta);
+  }
+
   document.querySelectorAll("[data-copy]").forEach(function(btn) {
-    btn.addEventListener("click", function() {
+    btn.addEventListener("click", function(e) {
+      e.preventDefault();
       var text = btn.getAttribute("data-copy");
       if (text) {
-        var orig = btn.textContent;
-        try {
-          navigator.clipboard.writeText(text).then(function() {
-            btn.textContent = "Copied!";
-            setTimeout(function() { btn.textContent = orig; }, 1800);
-          });
-        } catch(e) {
-          btn.textContent = "Copied!";
-          setTimeout(function() { btn.textContent = orig; }, 1800);
-        }
+        copyTextToClipboard(text, btn);
       }
     });
   });
@@ -167,6 +199,68 @@
       b.addEventListener("pointerleave", function() {
         b.style.transform = "";
       });
+    });
+  }
+
+  // Page Transition Curtain (slides up on exit, slides out on enter)
+  var cur = document.getElementById("curtain");
+  if (cur) {
+    try {
+      if (sessionStorage.getItem("kottakkal_curtain_entered") === "1") {
+        sessionStorage.removeItem("kottakkal_curtain_entered");
+        cur.style.transition = "none";
+        cur.style.visibility = "visible";
+        cur.style.pointerEvents = "all";
+        cur.style.transform = "translateY(0%)";
+        requestAnimationFrame(function() {
+          setTimeout(function() {
+            cur.style.transition = "transform 0.65s cubic-bezier(0.19, 1, 0.22, 1)";
+            cur.style.transform = "translateY(-100%)";
+            setTimeout(function() {
+              cur.style.visibility = "hidden";
+              cur.style.pointerEvents = "none";
+              cur.style.transform = "translateY(100%)";
+              cur.style.transition = "";
+            }, 700);
+          }, 40);
+        });
+      }
+    } catch(e) {}
+
+    // Intercept internal page navigation links
+    document.addEventListener("click", function(e) {
+      var a = e.target.closest("a");
+      if (!a) return;
+      var href = a.getAttribute("href");
+      if (!href) return;
+
+      // Ignore anchor jumps, tel, mailto, javascript, external links, new tabs
+      if (href.indexOf("#") === 0 || href.indexOf("tel:") === 0 || href.indexOf("mailto:") === 0 || href.indexOf("javascript:") === 0) return;
+      if (a.target === "_blank" || e.ctrlKey || e.metaKey || e.shiftKey || e.which === 2) return;
+
+      var currentOrigin = window.location.origin;
+      var linkOrigin = a.origin;
+      var isInternal = (!linkOrigin || linkOrigin === currentOrigin) && !href.match(/\.(pdf|zip|png|jpg|jpeg)$/i);
+
+      if (isInternal) {
+        var cleanHref = a.href;
+        var cleanCurrent = window.location.href.split("#")[0];
+        if (cleanHref.split("#")[0] === cleanCurrent) return; // Same page hash jump
+
+        e.preventDefault();
+        try {
+          sessionStorage.setItem("kottakkal_curtain_entered", "1");
+        } catch(err) {}
+
+        cur.style.transition = "transform 0.45s cubic-bezier(0.19, 1, 0.22, 1)";
+        cur.style.visibility = "visible";
+        cur.style.pointerEvents = "all";
+        cur.style.transform = "translateY(0%)";
+
+        setTimeout(function() {
+          window.location.href = cleanHref;
+        }, 400);
+      }
     });
   }
 

@@ -422,11 +422,11 @@ $doctors    = kottakkal_get_doctors();
 				<span class="label"><?php esc_html_e( 'Visit us', 'oceanwp' ); ?></span>
 				<h2 id="ct-h"><?php esc_html_e( 'In Al Qusais,', 'oceanwp' ); ?> <em><?php esc_html_e( 'beside the metro', 'oceanwp' ); ?></em></h2>
 			</div>
-			<p><?php esc_html_e( 'Consultations 9 am to 9 pm daily. Call, write or request an appointment online.', 'oceanwp' ); ?></p>
+			<p><?php printf( esc_html__( 'Consultations %s. Call, write or request an appointment online.', 'oceanwp' ), esc_html( $contact['hours'] ) ); ?></p>
 		</div>
 
 		<div class="ct-grid">
-			<dl class="ct-list">
+			<dl class="ct-list" data-stagger>
 				<div class="ct-row">
 					<dt><?php esc_html_e( 'Visit', 'oceanwp' ); ?></dt>
 					<dd>
@@ -473,7 +473,7 @@ $doctors    = kottakkal_get_doctors();
 				<span class="lab" style="left:calc(58% + 22px); top:calc(38% - 6px)"><?php esc_html_e( 'Mozna Building', 'oceanwp' ); ?></span>
 				<div class="card">
 					<b><?php esc_html_e( 'Beside Al Nahda Metro Station', 'oceanwp' ); ?></b>
-					<p><?php esc_html_e( 'Convenient location in Al Qusais 1, Dubai with easy metro and road access.', 'oceanwp' ); ?></p>
+					<p><?php esc_html_e( 'Illustrative map. Use directions for the exact route.', 'oceanwp' ); ?></p>
 					<div style="display:flex; flex-wrap:wrap; gap:18px">
 						<a class="link" href="<?php echo esc_url( $contact['dir'] ); ?>" target="_blank" rel="noopener">
 							<?php esc_html_e( 'Get directions', 'oceanwp' ); ?>

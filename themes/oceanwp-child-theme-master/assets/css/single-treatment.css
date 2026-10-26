@@ -221,7 +221,14 @@
 
 .band h2 {
   font-size: var(--fs-2);
-  max-width: 18ch;
+  white-space: nowrap;
+  max-width: none;
+}
+
+@media (max-width: 768px) {
+  .band h2 {
+    white-space: normal;
+  }
 }
 
 @media (max-width: 860px) {
