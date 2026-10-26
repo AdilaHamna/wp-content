@@ -1,0 +1,33 @@
+# WordPress uploads & temporary directories
+uploads/
+upgrade/
+
+# Log & cache files
+*.log
+cache/
+backups/
+
+# Default WordPress themes & Parent theme
+themes/twentytwentyfive/
+themes/twentytwentyfour/
+themes/twentytwentythree/
+themes/oceanwp/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor / IDE configuration
+.vscode/
+.idea/
+*.sublime-*
+
+# Environment files
+.env
+.env.local
+
+# Node modules
+node_modules/
+npm-debug.log*
