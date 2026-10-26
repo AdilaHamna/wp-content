@@ -92,11 +92,11 @@ $doctors    = kottakkal_get_doctors();
 	<div class="wrap">
 		<div class="intro">
 			<div class="intro-art">
-				<div>
+				<div data-reveal="img">
 					<?php echo kottakkal_render_plate( 'intro-a', 'drop', 'oil', 'Medicated herbal oil', '4/5' ); ?>
 				</div>
-				<div class="b">
-					<?php echo kottakkal_render_plate( 'intro-b', 'rice', 'ivory', 'Njavara rice', '3/4' ); ?>
+				<div class="b" data-reveal="img">
+					<?php echo kottakkal_render_plate( 'intro-b', 'rice', 'ivory', '', '3/4' ); ?>
 				</div>
 				<span class="tag"><?php esc_html_e( 'In the heart of Dubai', 'oceanwp' ); ?></span>
 			</div>
@@ -355,16 +355,19 @@ $doctors    = kottakkal_get_doctors();
 
 <!-- Quote Band (Founder / CEO Message) -->
 <section class="qband dark" aria-label="<?php esc_attr_e( 'Our founding idea', 'oceanwp' ); ?>">
-	<svg class="lv lv1" viewBox="0 0 400 500" fill="none" stroke="currentColor" stroke-width="0.8" aria-hidden="true">
+	<svg class="lv lv1" data-speed="1.4" viewBox="0 0 400 500" fill="none" stroke="currentColor" stroke-width="0.8" aria-hidden="true">
 		<g transform="translate(200 500) rotate(14)"><path d="M0 0C125 -103.4 107.5 -366.6 0 -470C-107.5 -366.6 -125 -103.4 0 0Z" fill="currentColor" fill-opacity="0.05"/><path d="M0 6L0 -455.9" stroke-opacity="0.8"/></g>
 	</svg>
-	<svg class="lv lv2" viewBox="0 0 400 500" fill="none" stroke="currentColor" stroke-width="0.8" aria-hidden="true">
+	<svg class="lv lv2" data-speed="0.5" viewBox="0 0 400 500" fill="none" stroke="currentColor" stroke-width="0.8" aria-hidden="true">
 		<g transform="translate(200 500) rotate(-20)"><path d="M0 0C125 -103.4 107.5 -366.6 0 -470C-107.5 -366.6 -125 -103.4 0 0Z" fill="currentColor" fill-opacity="0.04"/><path d="M0 6L0 -455.9" stroke-opacity="0.8"/></g>
+	</svg>
+	<svg class="lv lv3" data-speed="2" viewBox="0 0 400 500" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+		<g transform="translate(200 500) rotate(0)"><path d="M0 0C125 -103.4 107.5 -366.6 0 -470C-107.5 -366.6 -125 -103.4 0 0Z" fill="currentColor" fill-opacity="0.1"/><path d="M0 6L0 -455.9" stroke-opacity="0.8"/></g>
 	</svg>
 	<div class="wrap">
 		<blockquote>
 			<span class="label bare"><?php esc_html_e( 'From our CEO', 'oceanwp' ); ?></span>
-			<q><?php esc_html_e( 'Igniting life with nature', 'oceanwp' ); ?></q>
+			<q data-split><?php esc_html_e( 'Igniting life with nature', 'oceanwp' ); ?></q>
 			<p><?php esc_html_e( 'Somarajan AR founded the centre on his family’s Ayurvedic lineage, with a commitment to authentic, classical treatment practised with honesty and care.', 'oceanwp' ); ?></p>
 			<cite><?php esc_html_e( 'Somarajan AR · Chief Executive Officer', 'oceanwp' ); ?></cite>
 		</blockquote>
@@ -392,10 +395,13 @@ $doctors    = kottakkal_get_doctors();
 
 <!-- Appointment Booking Section (With Contact Form 7 / Native Form) -->
 <section class="booking dark section" id="booking" aria-labelledby="bk-h">
+	<svg class="bg-leaf" data-speed="0.6" viewBox="0 0 400 500" fill="none" stroke="currentColor" stroke-width="0.8" aria-hidden="true">
+		<g transform="translate(200 500) rotate(-18)"><path d="M0 0C125 -103.4 107.5 -366.6 0 -470C-107.5 -366.6 -125 -103.4 0 0Z" fill="currentColor" fill-opacity="0.08"/><path d="M0 6L0 -455.9" stroke-opacity="0.8"/></g>
+	</svg>
 	<div class="wrap bk-grid">
 		<div class="bk-copy">
 			<span class="label"><?php esc_html_e( 'Appointments', 'oceanwp' ); ?></span>
-			<h2 id="bk-h"><?php esc_html_e( 'Your journey to wellbeing', 'oceanwp' ); ?> <em><?php esc_html_e( 'begins here.', 'oceanwp' ); ?></em></h2>
+			<h2 id="bk-h" data-split><?php esc_html_e( 'Your journey to wellbeing', 'oceanwp' ); ?> <em><?php esc_html_e( 'begins here.', 'oceanwp' ); ?></em></h2>
 			<p class="lede">
 				<?php esc_html_e( 'Connect with our team to discuss your needs and arrange a consultation. It takes about a minute.', 'oceanwp' ); ?>
 			</p>

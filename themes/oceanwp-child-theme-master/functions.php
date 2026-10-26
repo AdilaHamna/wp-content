@@ -37,7 +37,7 @@ function kottakkal_enqueue_scripts() {
 	// Home Page
 	if ( is_front_page() || is_page_template( 'templates/page-home.php' ) ) {
 		wp_enqueue_style( 'kottakkal-home', $theme_uri . '/assets/css/home.css', array( 'kottakkal-main' ), $version );
-		wp_enqueue_script( 'kottakkal-home-js', $theme_uri . '/assets/js/home.js', array(), $version, true );
+		wp_enqueue_script( 'kottakkal-home-js', $theme_uri . '/assets/js/home.js', array( 'kottakkal-main-js', 'gsap', 'gsap-scroll-trigger' ), $version, true );
 		wp_enqueue_style( 'kottakkal-cf7', $theme_uri . '/assets/css/cf7.css', array( 'kottakkal-main' ), $version );
 	}
 
@@ -98,8 +98,12 @@ function kottakkal_enqueue_scripts() {
 		wp_enqueue_style( 'kottakkal-legal', $theme_uri . '/assets/css/legal.css', array( 'kottakkal-main' ), $version );
 	}
 
+	// GSAP Core & ScrollTrigger for animations
+	wp_enqueue_script( 'gsap', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js', array(), '3.12.5', true );
+	wp_enqueue_script( 'gsap-scroll-trigger', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js', array( 'gsap' ), '3.12.5', true );
+
 	// Global interactions script
-	wp_enqueue_script( 'kottakkal-main-js', $theme_uri . '/assets/js/main.js', array(), $version, true );
+	wp_enqueue_script( 'kottakkal-main-js', $theme_uri . '/assets/js/main.js', array( 'gsap', 'gsap-scroll-trigger' ), $version, true );
 
 	// Booking Wizard JavaScript (Multi-step flow, validation, review & AJAX submission)
 	wp_enqueue_script( 'kottakkal-booking-js', $theme_uri . '/assets/js/booking-wizard.js', array( 'kottakkal-main-js' ), $version, true );

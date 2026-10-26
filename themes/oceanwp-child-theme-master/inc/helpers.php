@@ -671,6 +671,9 @@ function kottakkal_render_plate( $key, $ill, $tone = 'oil', $cap = '', $ratio = 
 
 	$inner = '';
 	if ( ! empty( $photo_url ) ) {
+		if ( ! empty( $cap ) ) {
+			$cap = 'Illustrative image';
+		}
 		$inner = '<img src="' . esc_url( $photo_url ) . '" alt="' . esc_attr( $cap ) . '" loading="lazy" decoding="async">';
 	} else {
 		$inner = '<svg class="ill" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid meet" aria-hidden="true">' . kottakkal_render_svg_art( $ill ) . '</svg>';

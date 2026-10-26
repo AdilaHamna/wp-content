@@ -20,6 +20,16 @@ $pathways    = kottakkal_get_pathways();
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 	<meta name="theme-color" content="#173F32">
+	<script>
+		(function() {
+			try {
+				var t = localStorage.getItem('kottakkal_theme');
+				if (t === 'dark' || (!t && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+					document.documentElement.setAttribute('data-theme', 'dark');
+				}
+			} catch(e) {}
+		})();
+	</script>
 	<?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>

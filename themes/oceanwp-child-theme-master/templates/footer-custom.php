@@ -18,7 +18,7 @@ $treatments = kottakkal_get_treatments();
 <footer class="foot" id="foot">
 	<div class="wrap">
 		<div class="foot-cta">
-			<h2><?php esc_html_e( 'Begin with a', 'oceanwp' ); ?> <em><?php esc_html_e( 'consultation.', 'oceanwp' ); ?></em></h2>
+			<h2 data-split><?php esc_html_e( 'Begin with a', 'oceanwp' ); ?> <em><?php esc_html_e( 'consultation.', 'oceanwp' ); ?></em></h2>
 			<a class="orb mag" href="<?php echo esc_url( home_url( '/book/' ) ); ?>">
 				<?php esc_html_e( 'Book an', 'oceanwp' ); ?><br><?php esc_html_e( 'appointment', 'oceanwp' ); ?>
 			</a>
