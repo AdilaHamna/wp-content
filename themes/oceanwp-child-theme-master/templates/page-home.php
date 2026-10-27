@@ -448,7 +448,7 @@ $doctors    = kottakkal_get_doctors();
 				</div>
 				<div class="ct-row">
 					<dt><?php esc_html_e( 'Write', 'oceanwp' ); ?></dt>
-					<dd><a class="big" href="mailto:<?php echo esc_attr( $contact['email'] ); ?>" style="font-size:clamp(1.1rem,.85rem + 1vw,1.7rem)"><?php echo esc_html( $contact['email'] ); ?></a></dd>
+					<dd><a class="big" href="mailto:<?php echo esc_attr( $contact['email'] ); ?>"><?php echo esc_html( $contact['email'] ); ?></a></dd>
 					<button class="copy" type="button" data-copy="<?php echo esc_attr( $contact['email'] ); ?>"><?php esc_html_e( 'Copy', 'oceanwp' ); ?></button>
 				</div>
 				<div class="ct-row">

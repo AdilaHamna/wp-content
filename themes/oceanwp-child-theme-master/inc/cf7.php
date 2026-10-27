@@ -155,7 +155,7 @@ function kottakkal_render_booking_wizard( $selected_service = '' ) {
 					<!-- Full Name Field -->
 					<div class="fld full">
 						<label for="bk-name"><?php esc_html_e( 'FULL NAME', 'oceanwp' ); ?></label>
-						<input id="bk-name" type="text" autocomplete="name" aria-describedby="e-name" placeholder="">
+						<input id="bk-name" type="text" autocomplete="name" aria-describedby="e-name" placeholder="" maxlength="60">
 						<span class="err" id="e-name"></span>
 					</div>
 
@@ -175,7 +175,7 @@ function kottakkal_render_booking_wizard( $selected_service = '' ) {
 								<option value="+1">US/CA +1</option>
 								<option value="">Other</option>
 							</select>
-							<input id="bk-phone" type="tel" inputmode="tel" autocomplete="tel-national" aria-labelledby="l-phone" aria-describedby="e-phone" placeholder="50 123 4567">
+							<input id="bk-phone" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="10" autocomplete="tel-national" aria-labelledby="l-phone" aria-describedby="e-phone" placeholder="50 123 4567">
 						</div>
 						<span class="err" id="e-phone"></span>
 					</div>
@@ -286,6 +286,26 @@ function kottakkal_handle_ajax_booking() {
 		wp_send_json_error( array( 'message' => 'Please fill in all required fields.' ) );
 	}
 
+	// Validate Name: letters and spaces only (no hyphens, numbers or special characters)
+	if ( preg_match( '/[-0-9]/', $name ) || ! preg_match( '/^[\p{L}\s]{2,60}$/u', $name ) ) {
+		wp_send_json_error( array( 'message' => 'Please enter a valid full name (letters and spaces only, no hyphens or symbols).' ) );
+	}
+
+	// Validate Phone: numbers only (check digit count)
+	$clean_digits = preg_replace( '/\D/', '', $phone );
+	if ( empty( $clean_digits ) || strlen( $clean_digits ) < 7 || strlen( $clean_digits ) > 15 ) {
+		wp_send_json_error( array( 'message' => 'Please enter a valid phone number (numbers only).' ) );
+	}
+
+	// UAE specific check if +971 prefix is provided
+	if ( strpos( $phone, '+971' ) !== false || strpos( $clean_digits, '971' ) === 0 ) {
+		$uae_national = preg_replace( '/^(\+?971|00971)/', '', preg_replace( '/\s+/', '', $phone ) );
+		$uae_digits   = preg_replace( '/\D/', '', $uae_national );
+		if ( strlen( $uae_digits ) < 8 || strlen( $uae_digits ) > 10 ) {
+			wp_send_json_error( array( 'message' => 'Please enter a valid 9-digit UAE phone number (e.g. 50 123 4567).' ) );
+		}
+	}
+
 	if ( ! is_email( $email ) ) {
 		wp_send_json_error( array( 'message' => 'Please enter a valid email address.' ) );
 	}
@@ -316,58 +336,77 @@ function kottakkal_handle_ajax_booking() {
 		update_post_meta( $post_id, '_bk_status', 'pending' );
 	}
 
-	// 2. Email Notification to Clinic Admin & Staff
-	$recipients = array( $admin_email );
-	if ( ! empty( $contact['email'] ) && $contact['email'] !== $admin_email ) {
-		$recipients[] = $contact['email'];
+	// 2. Prepare Formatted Details & Links
+	$date_obj = DateTime::createFromFormat( 'Y-m-d', $date );
+	$formatted_date = $date_obj ? $date_obj->format( 'l, j F Y' ) : $date;
+	$clean_phone = preg_replace( '/[^0-9]/', '', $phone );
+	$wa_link = 'https://wa.me/' . ( ! empty( $clean_phone ) ? $clean_phone : '971547051545' );
+	$submitted_at = current_time( 'j M Y, g:i a' );
+
+	$official_email  = ! empty( $contact['email'] ) ? $contact['email'] : 'info@kottakkalgreenlife.com';
+	$adila_email     = 'adilahamna4@gmail.com';
+
+	// Both Kottakkal Official Mail and adilahamna4@gmail.com receive all booking details
+	$recipients = array( $official_email, $adila_email );
+	if ( ! empty( $admin_email ) && ! in_array( $admin_email, $recipients, true ) ) {
+		$recipients[] = $admin_email;
 	}
 	$to = apply_filters( 'kottakkal_booking_notification_emails', $recipients, $ref );
 
-	$subject = sprintf( '[%s] New Appointment Request: %s (%s)', $ref, $service, $name );
-	$body    = "New Appointment Request Received:\n\n" .
-		"Reference ID: {$ref}\n" .
-		"Service: {$service}\n" .
-		"Preferred Date: {$date}\n" .
-		"Preferred Time Window: {$time}\n\n" .
-		"Client Name: {$name}\n" .
-		"Phone Number: {$phone}\n" .
-		"Email Address: {$email}\n\n" .
-		"Message / Notes:\n" . ( $message ? $message : 'None provided' ) . "\n\n" .
-		"View in WordPress Dashboard: " . admin_url( 'edit.php?post_type=kottakkal_booking' ) . "\n\n" .
-		"--\nKottakkal GreenLife Ayurvedic Center Website";
+	// 3. Email Notification to Kottakkal Official Mail & Admin (adilahamna4@gmail.com)
+	$admin_subject = sprintf( '[Kottakkal Request] New Consultation: %s - %s (Ref: %s)', $service, $name, $ref );
+	$admin_body = kottakkal_build_admin_booking_email_html( array(
+		'ref'          => $ref,
+		'name'         => $name,
+		'phone'        => $phone,
+		'clean_phone'  => $clean_phone,
+		'wa_link'      => $wa_link,
+		'email'        => $email,
+		'service'      => $service,
+		'date'         => $formatted_date,
+		'time'         => $time,
+		'message'      => $message,
+		'submitted_at' => $submitted_at,
+		'post_id'      => $post_id,
+		'recipients'   => $recipients,
+	) );
 
-	$headers = array(
-		'From: Kottakkal GreenLife <' . $admin_email . '>',
+	$admin_headers = array(
+		'Content-Type: text/html; charset=UTF-8',
+		'From: Kottakkal Green Life Ayurvedic Center <info@kottakkalgreenlife.com>',
 		'Reply-To: ' . $name . ' <' . $email . '>',
 	);
 
-	wp_mail( $to, $subject, $body, $headers );
+	wp_mail( $to, $admin_subject, $admin_body, $admin_headers );
 
-	// 3. Confirmation Email to Client / Patient
-	$client_subject = sprintf( 'Your Appointment Request: %s (Ref: %s)', $service, $ref );
-	$client_body    = "Dear {$name},\n\n" .
-		"Thank you for contacting Kottakkal Green Life Ayurvedic Center.\n\n" .
-		"We have received your appointment request for:\n" .
-		"• Service: {$service}\n" .
-		"• Preferred Date: {$date}\n" .
-		"• Preferred Time: {$time}\n" .
-		"• Reference Number: {$ref}\n\n" .
-		"Our team will contact you promptly on {$phone} to confirm your exact appointment schedule.\n\n" .
-		"If you need immediate assistance or wish to reschedule, please call or WhatsApp us:\n" .
-		"Telephone: {$contact['phone']}\n" .
-		"Email: {$contact['email']}\n" .
-		"Address: {$contact['addr1']}, {$contact['addr2']}\n" .
-		"Hours: {$contact['hours']}\n\n" .
-		"Warm regards,\n" .
-		"Kottakkal Green Life Ayurvedic Center LLC";
+	// 4. Confirmation Email to Client / Patient with Full Booking Details
+	$client_subject = sprintf( 'Booking Request Received - Ref: %s - Kottakkal Green Life Ayurveda', $ref );
+	$client_body = kottakkal_build_client_booking_email_html( array(
+		'ref'            => $ref,
+		'name'           => $name,
+		'phone'          => $phone,
+		'email'          => $email,
+		'service'        => $service,
+		'date'           => $formatted_date,
+		'time'           => $time,
+		'message'        => $message,
+		'contact'        => $contact,
+		'admin_recipient'=> $official_email,
+	) );
 
-	wp_mail( $email, $client_subject, $client_body, array( 'From: Kottakkal GreenLife <' . $admin_email . '>' ) );
+	$client_headers = array(
+		'Content-Type: text/html; charset=UTF-8',
+		'From: Kottakkal Green Life Ayurvedic Center <info@kottakkalgreenlife.com>',
+		'Reply-To: Kottakkal Green Life <info@kottakkalgreenlife.com>',
+	);
+
+	wp_mail( $email, $client_subject, $client_body, $client_headers );
 
 	wp_send_json_success( array(
 		'ref'     => $ref,
 		'name'    => $name,
 		'service' => $service,
-		'date'    => $date,
+		'date'    => $formatted_date,
 		'time'    => $time,
 		'phone'   => $contact['phone'],
 		'tel'     => $contact['tel'],
@@ -375,3 +414,222 @@ function kottakkal_handle_ajax_booking() {
 }
 add_action( 'wp_ajax_kottakkal_submit_booking', 'kottakkal_handle_ajax_booking' );
 add_action( 'wp_ajax_nopriv_kottakkal_submit_booking', 'kottakkal_handle_ajax_booking' );
+
+/**
+ * Filter Contact Form 7 submissions to ensure recipients include Kottakkal official mail and adilahamna4@gmail.com
+ */
+add_filter( 'wpcf7_mail_components', function( $components, $form, $mail ) {
+	if ( is_object( $mail ) && method_exists( $mail, 'name' ) && 'mail' === $mail->name() ) {
+		$components['recipient'] = 'info@kottakkalgreenlife.com, adilahamna4@gmail.com';
+	}
+	return $components;
+}, 10, 3 );
+
+/**
+ * Build Admin Notification HTML Email
+ *
+ * @param array $d Booking data.
+ * @return string HTML email content.
+ */
+function kottakkal_build_admin_booking_email_html( $d ) {
+	$notes_display = ! empty( $d['message'] ) ? nl2br( esc_html( $d['message'] ) ) : '<em style="color:#888;">None provided</em>';
+	$dashboard_url = admin_url( 'edit.php?post_type=kottakkal_booking' );
+
+	return '<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>New Consultation Request</title>
+</head>
+<body style="margin:0; padding:0; background:#0B1411; font-family:\'Segoe UI\', Roboto, -apple-system, sans-serif; color:#E5E0D4; -webkit-font-smoothing:antialiased;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0B1411; padding:32px 16px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" style="max-width:620px; background:#13221C; border:1px solid rgba(216,190,136,0.25); border-radius:6px; overflow:hidden; box-shadow:0 12px 36px rgba(0,0,0,0.45);">
+          <!-- Header -->
+          <tr>
+            <td style="background:#0E1A16; padding:28px 32px; border-bottom:1px solid rgba(216,190,136,0.2);">
+              <div style="font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:#D8BE88; font-weight:600; margin-bottom:6px;">Kottakkal Green Life Ayurvedic Center · Dubai</div>
+              <h1 style="margin:0; font-size:22px; color:#FAF7F2; font-weight:600; letter-spacing:-0.02em;">New Consultation Request</h1>
+              <div style="margin-top:8px; font-size:13px; color:#A3AA9F;">Reference ID: <strong style="color:#FAF7F2; letter-spacing:0.05em;">' . esc_html( $d['ref'] ) . '</strong> · Submitted ' . esc_html( $d['submitted_at'] ) . '</div>
+            </td>
+          </tr>
+          <!-- Main Content -->
+          <tr>
+            <td style="padding:28px 32px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin-bottom:24px;">
+                <tr>
+                  <td style="padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:#D8BE88; width:140px; vertical-align:top;">Requested Service</td>
+                  <td style="padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:15px; color:#FAF7F2; font-weight:600;">' . esc_html( $d['service'] ) . '</td>
+                </tr>
+                <tr>
+                  <td style="padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:#D8BE88; vertical-align:top;">Preferred Date</td>
+                  <td style="padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:15px; color:#FAF7F2;">' . esc_html( $d['date'] ) . '</td>
+                </tr>
+                <tr>
+                  <td style="padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:#D8BE88; vertical-align:top;">Preferred Time</td>
+                  <td style="padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:15px; color:#FAF7F2;">' . esc_html( $d['time'] ) . '</td>
+                </tr>
+                <tr>
+                  <td style="padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:#D8BE88; vertical-align:top;">Client Name</td>
+                  <td style="padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:15px; color:#FAF7F2; font-weight:600;">' . esc_html( $d['name'] ) . '</td>
+                </tr>
+                <tr>
+                  <td style="padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:#D8BE88; vertical-align:top;">Phone</td>
+                  <td style="padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:15px; color:#FAF7F2;">
+                    <a href="tel:' . esc_attr( $d['phone'] ) . '" style="color:#FAF7F2; text-decoration:underline;">' . esc_html( $d['phone'] ) . '</a>
+                    &nbsp;&middot;&nbsp;
+                    <a href="' . esc_url( $d['wa_link'] ) . '" target="_blank" style="color:#D8BE88; text-decoration:underline; font-size:13px;">Chat on WhatsApp &rarr;</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:#D8BE88; vertical-align:top;">Email</td>
+                  <td style="padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:15px; color:#FAF7F2;">
+                    <a href="mailto:' . esc_attr( $d['email'] ) . '" style="color:#FAF7F2; text-decoration:underline;">' . esc_html( $d['email'] ) . '</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:12px 0; font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:#D8BE88; vertical-align:top;">Message / Notes</td>
+                  <td style="padding:12px 0; font-size:14px; color:#E5E0D4; line-height:1.6;">' . $notes_display . '</td>
+                </tr>
+              </table>
+
+              <!-- CTA Button -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px;">
+                <tr>
+                  <td align="center">
+                    <a href="' . esc_url( $dashboard_url ) . '" target="_blank" style="display:inline-block; background:#B79A62; color:#0E1A16; font-size:13px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; padding:12px 28px; border-radius:3px; text-decoration:none;">View in WordPress Admin &rarr;</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td style="background:#0E1A16; padding:18px 32px; border-top:1px solid rgba(255,255,255,0.08); font-size:12px; color:#A3AA9F; text-align:center;">
+              Recipients: info@kottakkalgreenlife.com &middot; adilahamna4@gmail.com &middot; Kottakkal Green Life Ayurvedic Center Website
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>';
+}
+
+/**
+ * Build Client Confirmation HTML Email with Full Booking Details
+ *
+ * @param array $d Booking data.
+ * @return string HTML email content.
+ */
+function kottakkal_build_client_booking_email_html( $d ) {
+	$notes_display = ! empty( $d['message'] ) ? nl2br( esc_html( $d['message'] ) ) : '<em style="color:#888;">None provided</em>';
+	$c = $d['contact'];
+
+	return '<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Your Appointment Request Received</title>
+</head>
+<body style="margin:0; padding:0; background:#F5F2EA; font-family:\'Segoe UI\', Roboto, -apple-system, sans-serif; color:#272B27; -webkit-font-smoothing:antialiased;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F5F2EA; padding:32px 16px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" style="max-width:620px; background:#FFFFFF; border:1px solid #E5DFD1; border-radius:6px; overflow:hidden; box-shadow:0 12px 36px rgba(0,0,0,0.06);">
+          <!-- Brand Header -->
+          <tr>
+            <td style="background:#0E1A16; padding:32px; text-align:center;">
+              <div style="font-size:12px; letter-spacing:0.22em; text-transform:uppercase; color:#D8BE88; font-weight:600; margin-bottom:8px;">Kottakkal Green Life Ayurvedic Center L.L.C.</div>
+              <h1 style="margin:0; font-size:24px; color:#FAF7F2; font-weight:500; font-family:Georgia, serif; letter-spacing:-0.02em;">Appointment Request Received</h1>
+              <div style="margin-top:10px; font-size:13px; color:#A3AA9F;">Classical Kerala Ayurveda &middot; Al Qusais, Dubai</div>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:32px;">
+              <p style="font-size:16px; line-height:1.6; color:#272B27; margin:0 0 16px 0;">
+                Dear <strong>' . esc_html( $d['name'] ) . '</strong>,
+              </p>
+              <p style="font-size:15px; line-height:1.65; color:#4A514B; margin:0 0 24px 0;">
+                Thank you for contacting Kottakkal Green Life Ayurvedic Center. We have safely received your consultation booking request. Our medical coordinator is reviewing your preferred schedule and will contact you promptly to confirm your consultation slot.
+              </p>
+
+              <!-- Booking Summary Box -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FBF9F4; border:1px solid #E8E2D5; border-radius:4px; margin-bottom:28px;">
+                <tr>
+                  <td style="padding:20px 24px; border-bottom:1px solid #E8E2D5;">
+                    <span style="font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:#B79A62; font-weight:700;">Booking Reference</span>
+                    <div style="font-size:20px; font-weight:700; color:#0E1A16; margin-top:4px; letter-spacing:0.04em;">' . esc_html( $d['ref'] ) . '</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:16px 24px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="padding:8px 0; font-size:13px; text-transform:uppercase; letter-spacing:0.12em; color:#788075; width:140px;">Service</td>
+                        <td style="padding:8px 0; font-size:15px; font-weight:600; color:#0E1A16;">' . esc_html( $d['service'] ) . '</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:8px 0; font-size:13px; text-transform:uppercase; letter-spacing:0.12em; color:#788075;">Preferred Date</td>
+                        <td style="padding:8px 0; font-size:15px; color:#0E1A16;">' . esc_html( $d['date'] ) . '</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:8px 0; font-size:13px; text-transform:uppercase; letter-spacing:0.12em; color:#788075;">Preferred Time</td>
+                        <td style="padding:8px 0; font-size:15px; color:#0E1A16;">' . esc_html( $d['time'] ) . '</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:8px 0; font-size:13px; text-transform:uppercase; letter-spacing:0.12em; color:#788075;">Contact Phone</td>
+                        <td style="padding:8px 0; font-size:15px; color:#0E1A16;">' . esc_html( $d['phone'] ) . '</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:8px 0; font-size:13px; text-transform:uppercase; letter-spacing:0.12em; color:#788075;">Contact Email</td>
+                        <td style="padding:8px 0; font-size:15px; color:#0E1A16;">' . esc_html( $d['email'] ) . '</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:8px 0; font-size:13px; text-transform:uppercase; letter-spacing:0.12em; color:#788075; vertical-align:top;">Notes</td>
+                        <td style="padding:8px 0; font-size:14px; color:#4A514B; line-height:1.5;">' . $notes_display . '</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Next Steps -->
+              <h2 style="font-size:16px; font-weight:600; color:#0E1A16; margin:0 0 12px 0;">What to Expect Next:</h2>
+              <ol style="margin:0 0 28px 0; padding-left:20px; font-size:14px; line-height:1.7; color:#4A514B;">
+                <li style="margin-bottom:8px;"><strong>Confirmation Call:</strong> Our clinic coordinator will call or WhatsApp you at <strong>' . esc_html( $d['phone'] ) . '</strong> to confirm the exact consultation time slot.</li>
+                <li style="margin-bottom:8px;"><strong>Medical History:</strong> Please feel free to bring along any recent laboratory investigations, doctor prescriptions or scan reports for your doctor to review.</li>
+                <li><strong>Arrival:</strong> We are conveniently located in Mozna Building #205, adjacent to Al Nahda Metro Station in Al Qusais 1, Dubai.</li>
+              </ol>
+
+              <!-- Clinic Contact Card -->
+              <div style="background:#F6F8F6; border-left:3px solid #173F32; padding:18px 20px; border-radius:2px; font-size:14px; line-height:1.6; color:#272B27;">
+                <strong>Need immediate assistance or wish to reschedule?</strong><br>
+                Telephone: <a href="tel:' . esc_attr( $c['tel'] ) . '" style="color:#173F32; font-weight:600; text-decoration:underline;">' . esc_html( $c['phone'] ) . '</a><br>
+                WhatsApp: <a href="' . esc_url( $c['whatsapp'] ) . '" target="_blank" style="color:#173F32; text-decoration:underline;">Click to message us on WhatsApp</a><br>
+                Address: ' . esc_html( $c['addr1'] . ', ' . $c['addr2'] ) . '<br>
+                Hours: ' . esc_html( $c['hours'] ) . '
+              </div>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background:#FAFAF7; padding:20px 32px; border-top:1px solid #EAE6DC; font-size:12px; color:#788075; text-align:center; line-height:1.6;">
+              &copy; ' . esc_html( date( 'Y' ) ) . ' Kottakkal Green Life Ayurvedic Center L.L.C. All rights reserved.<br>
+              <a href="' . esc_url( home_url( '/privacy-policy/' ) ) . '" style="color:#788075; text-decoration:underline;">Privacy Policy</a> &middot;
+              <a href="' . esc_url( home_url( '/contact-us/' ) ) . '" style="color:#788075; text-decoration:underline;">Contact Us</a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>';
+}
+

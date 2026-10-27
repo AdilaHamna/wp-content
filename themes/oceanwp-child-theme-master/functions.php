@@ -22,6 +22,9 @@ function kottakkal_enqueue_scripts() {
 	$theme_uri = get_stylesheet_directory_uri();
 	$version   = wp_get_theme()->get( 'Version' );
 
+	// Google Fonts: Fraunces (display/wordmarks), Inter (standard content body & UI), Playfair Display
+	wp_enqueue_style( 'kottakkal-google-fonts', 'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap', array(), null );
+
 	// Parent OceanWP stylesheet
 	wp_enqueue_style( 'oceanwp-style', get_template_directory_uri() . '/style.css' );
 

@@ -1,6 +1,6 @@
 /**
  * Kottakkal Theme - Appointment Booking Wizard Stylesheet
- * Matching Reference Site & Multi-Step Wizard Screenshot
+ * Luxury Botanical Editorial Design System - Matching Reference Website
  */
 
 .kottakkal-wizard {
@@ -9,20 +9,21 @@
 }
 
 .panel {
-  background: #FAF7F2;
-  color: #173F32;
+  background: var(--surface, #13221C);
+  color: var(--fg, #E5E0D4);
   border-radius: 4px;
-  padding: clamp(24px, 4vw, 48px);
-  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.45);
+  padding: clamp(24px, 4vw, 44px);
+  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.5);
+  /* border: 1px solid rgba(255, 255, 255, 0.08); */
   min-width: 0;
 }
 
-/* Stepper Progress Bar (4 Steps) */
+/* Stepper Progress Bar (4 Steps matching Reference) */
 .progress {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  margin: 0 0 36px;
+  gap: 16px;
+  margin: 0 0 38px;
   padding: 0;
 }
 
@@ -30,17 +31,17 @@
   list-style: none;
   display: grid;
   gap: 10px;
-  font: 600 0.76rem/1.3 var(--sans);
-  letter-spacing: 0.16em;
+  font: 600 0.78rem/1.3 var(--sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #737A74;
-  transition: color 0.4s var(--ease);
+  color: rgba(243, 238, 226, 0.45);
+  transition: color 0.4s var(--ease, ease);
 }
 
 .progress li i {
   display: block;
   height: 2px;
-  background: rgba(23, 63, 50, 0.12);
+  background: rgba(255, 255, 255, 0.14);
   position: relative;
   overflow: hidden;
   border-radius: 1px;
@@ -50,10 +51,10 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: #173F32;
+  background: var(--accent, #B7D1BC);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.6s var(--ease);
+  transition: transform 0.6s var(--ease, ease);
 }
 
 .progress li.done i::after,
@@ -61,9 +62,12 @@
   transform: scaleX(1);
 }
 
-.progress li.cur,
+.progress li.cur {
+  color: #FAF7F2;
+}
+
 .progress li.done {
-  color: #173F32;
+  color: rgba(243, 238, 226, 0.75);
 }
 
 /* Stepper Forms & Animated Steps */
@@ -81,7 +85,7 @@
 
 .step.on {
   display: block;
-  animation: stepIn 0.5s var(--ease) both;
+  animation: stepIn 0.5s var(--ease, ease) both;
 }
 
 @keyframes stepIn {
@@ -97,91 +101,107 @@
 
 .step legend {
   padding: 0;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .step h3 {
   font-family: var(--display, 'Playfair Display', Georgia, serif);
-  font-size: clamp(1.8rem, 1.4rem + 1.2vw, 2.5rem);
+  font-size: clamp(2rem, 1.6rem + 1.6vw, 2.85rem);
   font-weight: 400;
-  color: #173F32;
+  color: #FAF7F2;
   margin: 0;
-  line-height: 1.1;
+  line-height: 1.15;
   letter-spacing: -0.015em;
 }
 
 .step .sub {
-  margin-top: 8px;
-  color: #556057;
-  font-size: 0.96rem;
+  margin-top: 10px;
+  color: #9AA89F;
+  font-size: 1rem;
   line-height: 1.5;
 }
 
-/* Step 1: Service Selection Cards */
+/* Step 1: Service Selection Cards (Matching Reference Screenshot) */
 .opts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 26px;
+  gap: 14px;
+  margin-top: 28px;
 }
 
 .opt {
   position: relative;
-  display: grid;
-  gap: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
   text-align: left;
-  padding: 16px 18px 16px 46px;
-  border: 1px solid rgba(23, 63, 50, 0.2);
-  border-radius: 2px;
-  background: #F6F2E9;
+  padding: 22px 24px 22px 56px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.02);
   cursor: pointer;
-  transition: border-color 0.3s, background 0.3s, transform 0.3s var(--ease);
+  transition: border-color 0.3s, background-color 0.3s, transform 0.3s var(--ease, ease);
+  color: #FAF7F2;
+  box-sizing: border-box;
+  min-height: 94px;
 }
 
 .opt:hover {
-  border-color: #173F32;
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .opt:active {
-  transform: scale(0.985);
+  transform: scale(0.99);
 }
 
 .opt b {
   font-family: var(--display, 'Playfair Display', Georgia, serif);
   font-weight: 500;
-  font-size: 1.1rem;
-  color: #173F32;
-  line-height: 1.25;
+  font-size: 1.22rem;
+  color: #FAF7F2;
+  line-height: 1.28;
+  display: block;
 }
 
 .opt small {
-  font-size: 0.82rem;
-  color: #556057;
-  line-height: 1.45;
+  font-family: var(--sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: #9AA89F;
+  line-height: 1.5;
+  display: block;
 }
 
 .opt::before {
   content: "";
   position: absolute;
-  left: 16px;
-  top: 20px;
-  width: 16px;
-  height: 16px;
+  left: 20px;
+  top: 25px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  border: 1px solid rgba(23, 63, 50, 0.3);
-  transition: border-color 0.3s, box-shadow 0.3s;
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
+  background: transparent;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+}
+
+.opt:hover::before {
+  border-color: rgba(255, 255, 255, 0.55);
 }
 
 .opt[aria-checked="true"],
 .opt.selected {
-  border-color: #173F32;
-  background: #E9EEE5;
+  border-color: var(--accent, #B7D1BC);
+  background: rgba(183, 209, 188, 0.08);
 }
 
 .opt[aria-checked="true"]::before,
 .opt.selected::before {
-  border-color: #173F32;
-  box-shadow: inset 0 0 0 3px #E9EEE5, inset 0 0 0 9px #173F32;
+  border-color: var(--accent, #B7D1BC);
+  box-shadow: inset 0 0 0 3px #13221C, inset 0 0 0 10px var(--accent, #B7D1BC);
 }
 
 .opt.wide {
@@ -207,18 +227,19 @@
   justify-items: center;
   gap: 2px;
   padding: 12px 0;
-  border: 1px solid rgba(23, 63, 50, 0.2);
-  border-radius: 2px;
-  background: #F6F2E9;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.02);
   cursor: pointer;
   transition: background 0.3s, border-color 0.3s;
+  color: #FAF7F2;
 }
 
 .date small {
-  font: 600 0.74rem/1.4 var(--sans);
+  font: 600 0.74rem/1.4 var(--sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #556057;
+  color: rgba(243, 238, 226, 0.65);
 }
 
 .date b {
@@ -226,24 +247,25 @@
   font-size: 1.7rem;
   font-weight: 400;
   line-height: 1.1;
-  color: #173F32;
+  color: #FAF7F2;
 }
 
 .date:hover {
-  border-color: #173F32;
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .date[aria-checked="true"],
 .date.selected {
-  background: #173F32;
-  border-color: #173F32;
+  background: var(--accent, #B7D1BC);
+  border-color: var(--accent, #B7D1BC);
 }
 
 .date[aria-checked="true"] b,
 .date[aria-checked="true"] small,
 .date.selected b,
 .date.selected small {
-  color: #FAF7F2;
+  color: #0E1A16 !important;
 }
 
 /* Time Options */
@@ -255,10 +277,16 @@
 }
 
 .times .opt {
-  padding: 14px 14px 14px 42px;
+  padding: 14px 14px 14px 44px;
+  min-height: 72px;
 }
 
-/* Step 3: Details Form Fields (Underline Aesthetic matching Screenshot) */
+.times .opt::before {
+  top: 18px;
+  left: 16px;
+}
+
+/* Step 3: Details Form Fields */
 .flds {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -278,16 +306,16 @@
 
 .fld label,
 .fld .lbl {
-  font: 600 0.74rem/1.3 var(--sans);
+  font: 600 0.74rem/1.3 var(--sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #173F32;
+  color: rgba(243, 238, 226, 0.85);
 }
 
 .fld .opt-l {
   letter-spacing: 0.04em;
   text-transform: none;
-  color: #737A74;
+  color: rgba(243, 238, 226, 0.5);
   font-weight: 400;
 }
 
@@ -298,11 +326,11 @@
   min-height: 48px;
   padding: 10px 0;
   border: 0;
-  border-bottom: 1px solid rgba(23, 63, 50, 0.24);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 0;
   background: transparent;
-  font: 400 1.05rem/1.4 var(--sans);
-  color: #173F32;
+  font: 400 1.05rem/1.4 var(--sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
+  color: #FAF7F2;
   transition: border-color 0.3s, box-shadow 0.3s;
   appearance: none;
   -webkit-appearance: none;
@@ -310,12 +338,12 @@
 
 .fld input::placeholder,
 .fld textarea::placeholder {
-  color: #8C948D;
+  color: rgba(243, 238, 226, 0.35);
   font-weight: 400;
 }
 
 .fld select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4.5L6 8L9.5 4.5' stroke='%23173F32' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4.5L6 8L9.5 4.5' stroke='%23FAF7F2' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-position: right 4px center;
   background-repeat: no-repeat;
   background-size: 12px 12px;
@@ -324,8 +352,8 @@
 }
 
 .fld select option {
-  background: #FAF7F2;
-  color: #173F32;
+  background: #13221C;
+  color: #FAF7F2;
 }
 
 .fld textarea {
@@ -338,17 +366,17 @@
 .fld select:focus,
 .fld textarea:focus {
   outline: none;
-  border-bottom-color: #173F32;
-  box-shadow: 0 1px 0 #173F32;
+  border-bottom-color: var(--accent, #B7D1BC);
+  box-shadow: 0 1px 0 var(--accent, #B7D1BC);
 }
 
 .fld [aria-invalid="true"] {
-  border-bottom-color: #9A3A28 !important;
+  border-bottom-color: #E89A85 !important;
 }
 
 .err {
   font-size: 0.8rem;
-  color: #9A3A28;
+  color: #E89A85;
   margin-top: 4px;
 }
 
@@ -376,7 +404,7 @@
   gap: 12px;
   align-items: start;
   font-size: 0.88rem;
-  color: #556057;
+  color: rgba(243, 238, 226, 0.72);
   line-height: 1.55;
   cursor: pointer;
   text-transform: none !important;
@@ -394,30 +422,30 @@
   padding: 0;
   margin: 3px 0 0;
   border: 0;
-  accent-color: #173F32;
+  accent-color: var(--accent, #B7D1BC);
   cursor: pointer;
 }
 
 .consent input[aria-invalid="true"] {
-  outline: 2px solid #9A3A28;
+  outline: 2px solid #E89A85;
   outline-offset: 2px;
 }
 
 .consent a {
-  color: #173F32;
+  color: #FAF7F2;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
 .consent a:hover {
-  color: #285844;
+  color: var(--accent, #B7D1BC);
 }
 
 /* Step 4: Review Screen */
 .review {
   margin: 24px 0 0;
   display: grid;
-  border-top: 1px solid rgba(23, 63, 50, 0.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .review div {
@@ -426,29 +454,29 @@
   gap: 14px;
   align-items: baseline;
   padding: 16px 0;
-  border-bottom: 1px solid rgba(23, 63, 50, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   font-size: 0.95rem;
 }
 
 .review dt {
-  font: 600 0.74rem/1.8 var(--sans);
+  font: 600 0.74rem/1.8 var(--sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #737A74;
+  color: rgba(243, 238, 226, 0.55);
 }
 
 .review dd {
   margin: 0;
   min-width: 0;
   overflow-wrap: anywhere;
-  color: #173F32;
+  color: #FAF7F2;
   font-weight: 500;
 }
 
 .review .btn-edit {
   background: none;
   border: 0;
-  color: #173F32;
+  color: var(--accent, #B7D1BC);
   font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
@@ -458,7 +486,7 @@
 }
 
 .review .btn-edit:hover {
-  color: #285844;
+  color: #CEE4D2;
 }
 
 /* Action Footer (Back, Step Note, Continue/Submit) */
@@ -470,7 +498,7 @@
   gap: 14px;
   margin-top: 36px;
   padding-top: 24px;
-  border-top: 1px solid rgba(23, 63, 50, 0.12);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .bk-actions[hidden],
@@ -480,17 +508,17 @@
 
 .bk-actions .note {
   font-size: 0.86rem;
-  color: #556057;
+  color: rgba(243, 238, 226, 0.65);
   font-weight: 500;
 }
 
 .bk-actions .btn-line {
-  border: 1px solid rgba(23, 63, 50, 0.22);
-  background: #EFE9DC;
-  color: #173F32;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: transparent;
+  color: #FAF7F2;
   border-radius: 999px;
   padding: 12px 30px;
-  font: 600 0.78rem/1 var(--sans);
+  font: 600 0.78rem/1 var(--sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   cursor: pointer;
@@ -498,28 +526,29 @@
 }
 
 .bk-actions .btn-line:hover {
-  background: #E5DDD0;
-  border-color: #173F32;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.45);
 }
 
 .bk-actions .btn-solid {
-  background: #173F32;
-  color: #FAF7F2;
-  border: 1px solid #173F32;
+  background: var(--accent, #B7D1BC);
+  color: #0E1A16;
+  border: 1px solid var(--accent, #B7D1BC);
   border-radius: 999px;
   padding: 13px 34px;
-  font: 600 0.8rem/1 var(--sans);
+  font: 600 0.8rem/1 var(--sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  transition: background 0.3s, transform 0.3s var(--ease);
+  transition: background 0.3s, transform 0.3s var(--ease, ease);
 }
 
 .bk-actions .btn-solid:hover {
-  background: #285844;
+  background: #CEE4D2;
+  border-color: #CEE4D2;
 }
 
 .bk-actions .btn-solid .ic {
@@ -530,7 +559,7 @@
 .bk-err {
   margin-top: 14px;
   font-size: 0.88rem;
-  color: #9A3A28;
+  color: #E89A85;
 }
 
 .bk-err:empty {
@@ -547,14 +576,14 @@
 .done svg {
   width: 60px;
   height: 60px;
-  color: #173F32;
+  color: var(--accent, #B7D1BC);
 }
 
 .done svg circle,
 .done svg path {
   stroke-dasharray: 200;
   stroke-dashoffset: 200;
-  animation: checkDraw 1.2s var(--ease) forwards;
+  animation: checkDraw 1.2s var(--ease, ease) forwards;
 }
 
 .done svg path {
@@ -568,23 +597,23 @@
 }
 
 .done .ref {
-  font: 600 0.78rem/1.5 var(--sans);
+  font: 600 0.78rem/1.5 var(--sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #755A2B;
+  color: var(--gold-hi, #D8BE88);
 }
 
 .done h3 {
   font-family: var(--display, 'Playfair Display', Georgia, serif);
   font-size: 2rem;
-  color: #173F32;
+  color: #FAF7F2;
   margin: 0;
 }
 
 .done p.muted {
   font-size: 0.98rem;
   line-height: 1.6;
-  color: #556057;
+  color: rgba(243, 238, 226, 0.75);
   max-width: 58ch;
 }
 
@@ -607,5 +636,12 @@
   .progress li span {
     font-size: 0.7rem;
     letter-spacing: 0.08em;
+  }
+  .opt {
+    padding: 18px 18px 18px 52px;
+  }
+  .opt::before {
+    left: 18px;
+    top: 22px;
   }
 }
