@@ -46,10 +46,10 @@ $pathways    = kottakkal_get_pathways();
 <header class="hdr" id="hdr">
 	<div class="wrap hdr-in">
 		<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php bloginfo( 'name' ); ?>, home">
-			<img class="emb logo-l" src="<?php echo esc_url( $theme_uri . '/assets/img/brand/emblem.png' ); ?>" alt="" width="238" height="240">
-			<img class="emb logo-d" src="<?php echo esc_url( $theme_uri . '/assets/img/brand/emblem-white.png' ); ?>" alt="" width="238" height="240">
-			<img class="wm logo-l" src="<?php echo esc_url( $theme_uri . '/assets/img/brand/wordmark.png' ); ?>" alt="Kottakkal Green Life Ayurvedic Center" width="689" height="200">
-			<img class="wm logo-d" src="<?php echo esc_url( $theme_uri . '/assets/img/brand/wordmark-white.png' ); ?>" alt="Kottakkal Green Life Ayurvedic Center" width="689" height="200">
+			<img class="emb logo-l" src="<?php echo esc_url( $theme_uri . '/assets/img/brand/emblem.png' ); ?>" alt="" width="240" height="240">
+			<img class="emb logo-d" src="<?php echo esc_url( $theme_uri . '/assets/img/brand/emblem-white.png' ); ?>" alt="" width="240" height="240">
+			<img class="wm logo-l" src="<?php echo esc_url( $theme_uri . '/assets/img/brand/wordmark.png' ); ?>" alt="Kottakkal Green Life Ayurvedic Center" width="502" height="206">
+			<img class="wm logo-d" src="<?php echo esc_url( $theme_uri . '/assets/img/brand/wordmark-white.png' ); ?>" alt="Kottakkal Green Life Ayurvedic Center" width="502" height="206">
 		</a>
 
 		<nav class="nav" id="nav" aria-label="<?php esc_attr_e( 'Main', 'oceanwp' ); ?>">
@@ -149,7 +149,7 @@ $pathways    = kottakkal_get_pathways();
 	<div class="top">
 		<span class="brand">
 			<img src="<?php echo esc_url( $theme_uri . '/assets/img/brand/emblem-white.png' ); ?>" alt="" style="height:46px">
-			<img src="<?php echo esc_url( $theme_uri . '/assets/img/brand/wordmark-white.png' ); ?>" alt="Kottakkal Green Life Ayurvedic Center" style="height:36px">
+			<img src="<?php echo esc_url( $theme_uri . '/assets/img/brand/wordmark-white.png' ); ?>" alt="Kottakkal Green Life Ayurvedic Center" style="height:50px">
 		</span>
 		<button class="x" type="button" id="menuX" aria-label="<?php esc_attr_e( 'Close menu', 'oceanwp' ); ?>">✕</button>
 	</div>

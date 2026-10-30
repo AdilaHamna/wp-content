@@ -27,7 +27,7 @@ $treatments = kottakkal_get_treatments();
 		<div class="foot-grid">
 			<div>
 				<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Home', 'oceanwp' ); ?>">
-					<img src="<?php echo esc_url( $theme_uri . '/assets/img/brand/logo-full-white.png' ); ?>" alt="Kottakkal Green Life Ayurvedic Center L.L.C., Igniting Life with Nature" width="592" height="420" style="height:150px; width:auto;" loading="lazy">
+					<img src="<?php echo esc_url( $theme_uri . '/assets/img/brand/logo-green.png' ); ?>" alt="Kottakkal Green Life Ayurvedic Center L.L.C., Igniting Life with Nature" width="657" height="380" style="height:160px; width:auto;" loading="lazy">
 				</a>
 				<p class="intro-t">
 					<?php esc_html_e( 'Classical Ayurvedic therapies and personalised care under the supervision of DHA-certified Ayurvedic doctors, in Al Qusais, Dubai.', 'oceanwp' ); ?>
@@ -73,6 +73,33 @@ $treatments = kottakkal_get_treatments();
 					<li><a href="mailto:<?php echo esc_attr( $contact['email'] ); ?>"><?php echo esc_html( $contact['email'] ); ?></a></li>
 					<li><?php echo esc_html( $contact['hours'] ); ?></li>
 				</ul>
+			</div>
+		</div>
+
+		<div class="foot-badges" role="region" aria-label="<?php esc_attr_e( 'Trust Badges', 'oceanwp' ); ?>">
+			<div class="foot-badge-capsule">
+				<img class="fbc-icon fbc-leaf" src="<?php echo esc_url( $theme_uri . '/assets/img/badges/icon-leaf-mint.png' ); ?>" alt="" width="52" height="52" aria-hidden="true" loading="lazy">
+				<span class="fbc-divider" aria-hidden="true"></span>
+				<div class="fbc-text">
+					<span class="fbc-val">100%</span>
+					<span class="fbc-sub"><?php esc_html_e( 'Natural & Herbal', 'oceanwp' ); ?></span>
+				</div>
+			</div>
+			<div class="foot-badge-capsule">
+				<img class="fbc-icon fbc-mortar" src="<?php echo esc_url( $theme_uri . '/assets/img/badges/icon-mortar-mint.png' ); ?>" alt="" width="56" height="52" aria-hidden="true" loading="lazy">
+				<span class="fbc-divider" aria-hidden="true"></span>
+				<div class="fbc-text">
+					<span class="fbc-val">5000</span>
+					<span class="fbc-sub"><?php esc_html_e( 'Years of Heritage', 'oceanwp' ); ?></span>
+				</div>
+			</div>
+			<div class="foot-badge-capsule foot-badge-dha">
+				<img class="fbc-icon fbc-seal" src="<?php echo esc_url( $theme_uri . '/assets/img/badges/icon-dha-seal.png' ); ?>" alt="<?php esc_attr_e( 'Approved', 'oceanwp' ); ?>" width="50" height="50" loading="lazy">
+				<span class="fbc-divider" aria-hidden="true"></span>
+				<div class="fbc-text">
+					<span class="fbc-val fbc-ar" dir="rtl" lang="ar">هيئة الصحة بدبي</span>
+					<span class="fbc-sub">DUBAI HEALTH AUTHORITY</span>
+				</div>
 			</div>
 		</div>
 

@@ -9,12 +9,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once get_stylesheet_directory() . '/templates/header-custom.php';
+global $post, $wp_query;
 
-global $post;
-$current_slug = $post ? $post->post_name : get_query_var( 'doctor' );
-$all_doctors  = kottakkal_get_doctors();
+$current_slug = get_query_var( 'doctor' ) ?: ( $post ? $post->post_name : '' );
+if ( empty( $current_slug ) ) {
+	$req_path = trim( (string) parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ), '/' );
+	if ( preg_match( '#^doctors/([^/]+)$#', $req_path, $matches ) ) {
+		$current_slug = sanitize_title( $matches[1] );
+	}
+}
 
+$all_doctors = kottakkal_get_doctors();
 $doctor = null;
 foreach ( $all_doctors as $d ) {
 	if ( $d['slug'] === $current_slug || $d['id'] === $current_slug ) {
@@ -26,6 +31,13 @@ foreach ( $all_doctors as $d ) {
 if ( ! $doctor && ! empty( $all_doctors ) ) {
 	$doctor = $all_doctors[0];
 }
+
+// Setup post and query state BEFORE header is output so body_class and wp_head have a valid post object
+if ( function_exists( 'kottakkal_setup_virtual_doctor_post' ) && $doctor ) {
+	kottakkal_setup_virtual_doctor_post( $doctor );
+}
+
+require_once get_stylesheet_directory() . '/templates/header-custom.php';
 
 $d_img   = ! empty( $doctor['img_url'] ) ? $doctor['img_url'] : '';
 $mono_el = empty( $d_img ) ? '<span class="mono" aria-hidden="true">' . esc_html( $doctor['mono'] ) . '</span>' : '';

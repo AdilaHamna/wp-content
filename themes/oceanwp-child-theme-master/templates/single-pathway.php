@@ -9,12 +9,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once get_stylesheet_directory() . '/templates/header-custom.php';
+global $post, $wp_query;
 
-global $post;
-$current_slug = $post ? $post->post_name : get_query_var( 'pathway' );
+$current_slug = get_query_var( 'pathway' ) ?: ( $post ? $post->post_name : '' );
+if ( empty( $current_slug ) ) {
+	$req_path = trim( (string) parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ), '/' );
+	if ( preg_match( '#^specialties/([^/]+)$#', $req_path, $matches ) ) {
+		$current_slug = sanitize_title( $matches[1] );
+	}
+}
+
 $all_pathways = kottakkal_get_pathways();
-
 $pathway = null;
 foreach ( $all_pathways as $p ) {
 	if ( $p['slug'] === $current_slug || $p['id'] === $current_slug ) {
@@ -26,6 +31,13 @@ foreach ( $all_pathways as $p ) {
 if ( ! $pathway && ! empty( $all_pathways ) ) {
 	$pathway = $all_pathways[0];
 }
+
+// Setup post and query state BEFORE header is output
+if ( function_exists( 'kottakkal_setup_virtual_pathway_post' ) && $pathway ) {
+	kottakkal_setup_virtual_pathway_post( $pathway );
+}
+
+require_once get_stylesheet_directory() . '/templates/header-custom.php';
 
 $all_treatments = kottakkal_get_treatments();
 $all_doctors    = kottakkal_get_doctors();

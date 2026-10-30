@@ -475,19 +475,19 @@ p {
 }
 
 .brand .emb {
-  height: 60px;
+  height: 58px;
 }
 
 .brand .wm {
-  height: 46px;
+  height: 60px;
 }
 
 .hdr.solid .brand .emb {
-  height: 50px;
+  height: 48px;
 }
 
 .hdr.solid .brand .wm {
-  height: 38px;
+  height: 50px;
 }
 
 .brand:hover .emb {
@@ -512,10 +512,10 @@ p {
 
 @media (max-width: 420px) {
   .hdr .brand .emb {
-    height: 46px;
+    height: 42px;
   }
   .hdr .brand .wm {
-    height: 34px;
+    height: 44px;
   }
 }
 
@@ -837,6 +837,63 @@ p {
   filter: saturate(0.88) contrast(1.03);
 }
 
+/* Doctor Portrait Framing (upper body & head alignment) */
+.plate.plate-doctor img {
+  object-position: center 8%;
+  filter: saturate(0.96) contrast(1.02);
+}
+
+.dcard .plate-doctor img {
+  object-position: center 10%;
+}
+
+.docfull .plate-doctor img {
+  object-position: center 6%;
+}
+
+.minidoc .plate-doctor img {
+  object-position: center 10%;
+}
+
+.plate.plate-doc-ajitha img {
+  object-position: center 4%;
+}
+
+.plate.plate-doc-naseeba img {
+  object-position: center 3%;
+}
+
+.dcard .plate-doc-ajitha img {
+  object-position: center 2%;
+}
+
+.dcard .plate-doc-naseeba img {
+  object-position: center 1%;
+}
+
+.docfull .plate-doc-ajitha img {
+  object-position: center 6%;
+}
+
+.docfull .plate-doc-naseeba img {
+  object-position: center 4%;
+}
+
+.plate.plate-doc-rajesh img,
+.plate.plate-doc-arun img {
+  object-position: center 12%;
+}
+
+.dcard .plate-doc-rajesh img,
+.dcard .plate-doc-arun img {
+  object-position: center 0%;
+}
+
+.docfull .plate-doc-rajesh img,
+.docfull .plate-doc-arun img {
+  object-position: center 12%;
+}
+
 .plate:has(img)::before {
   background: linear-gradient(180deg, rgba(13, 34, 27, 0.08), rgba(13, 34, 27, 0.28)), radial-gradient(120% 80% at 80% 0%, rgba(255, 220, 160, 0.18), transparent 60%);
 }
@@ -979,7 +1036,8 @@ p {
   display: grid;
   grid-template-columns: minmax(0, 1.3fr) repeat(3, minmax(0, 1fr));
   gap: 40px;
-  padding-block: 64px;
+  padding-top: 64px;
+  padding-bottom: 20px;
 }
 
 .foot h4 {
@@ -1075,8 +1133,9 @@ p {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 14px 28px;
-  padding-block: 24px;
-  border-top: 1px solid var(--on-dark-line);
+  padding-top: 16px;
+  padding-bottom: 24px;
+  border-top: none;
   font-size: 0.8rem;
 }
 
@@ -1089,9 +1148,134 @@ p {
 .disc {
   font-size: 0.8rem;
   line-height: 1.6;
-  max-width: 110ch;
+  width: 100%;
+  max-width: 100%;
   padding-top: 24px;
   border-top: 1px solid var(--on-dark-line);
+}
+
+.foot-badges {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 2.2vw, 24px);
+  margin-top: 18px;
+  margin-bottom: clamp(32px, 4.5vw, 52px);
+  flex-wrap: wrap;
+}
+
+.foot-badge-capsule {
+  background: rgba(10, 32, 24, 0.65);
+  border: 1px solid rgba(82, 183, 136, 0.35);
+  border-radius: 9999px;
+  padding: 10px 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  user-select: none;
+}
+
+.foot-badge-capsule:hover {
+  transform: translateY(-3px);
+  border-color: rgba(120, 220, 170, 0.6);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 20px rgba(82, 183, 136, 0.2);
+}
+
+.foot-badge-capsule .fbc-icon {
+  height: clamp(38px, 3.8vw, 48px);
+  width: auto;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+
+.foot-badge-capsule .fbc-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.22);
+  flex-shrink: 0;
+}
+
+.foot-badge-capsule .fbc-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.15;
+  text-align: left;
+}
+
+.foot-badge-capsule .fbc-val {
+  font-family: inherit;
+  font-size: clamp(17px, 1.6vw, 21px);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.foot-badge-capsule .fbc-val.fbc-ar {
+  font-family: 'Segoe UI', Tahoma, 'Geeza Pro', Arial, sans-serif;
+  font-size: clamp(14px, 1.3vw, 17px);
+  font-weight: 600;
+  letter-spacing: 0;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.foot-badge-capsule .fbc-sub {
+  font-family: inherit;
+  font-size: clamp(11px, 0.95vw, 12.5px);
+  font-weight: 400;
+  color: #d8eee4;
+  letter-spacing: 0.01em;
+  margin-top: 2px;
+}
+
+@media (max-width: 900px) {
+  .foot-badges {
+    gap: 10px;
+  }
+  .foot-badge-capsule {
+    padding: 8px 16px;
+    gap: 10px;
+    min-height: 52px;
+  }
+  .foot-badge-capsule .fbc-divider {
+    height: 26px;
+  }
+}
+
+@media (max-width: 600px) {
+  .foot-badges {
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .foot-badge-capsule {
+    padding: 6px 12px;
+    gap: 8px;
+    min-height: 44px;
+    border-radius: 9999px;
+  }
+  .foot-badge-capsule .fbc-icon {
+    height: 28px;
+  }
+  .foot-badge-capsule .fbc-divider {
+    height: 22px;
+  }
+  .foot-badge-capsule .fbc-val {
+    font-size: 13px;
+  }
+  .foot-badge-capsule .fbc-val.fbc-ar {
+    font-size: 11px;
+  }
+  .foot-badge-capsule .fbc-sub {
+    font-size: 9px;
+  }
 }
 
 /* Mobile Booking Bar */
@@ -1359,10 +1543,10 @@ a.big:hover {
     font-size: 0.74rem;
   }
   .brand .emb {
-    height: 52px;
+    height: 50px;
   }
   .brand .wm {
-    height: 40px;
+    height: 52px;
   }
 }
 
@@ -1383,10 +1567,10 @@ a.big:hover {
     letter-spacing: 0.1em;
   }
   .brand .emb {
-    height: 48px;
+    height: 46px;
   }
   .brand .wm {
-    height: 36px;
+    height: 48px;
   }
 }
 

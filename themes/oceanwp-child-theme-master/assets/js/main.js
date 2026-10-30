@@ -202,66 +202,26 @@
     });
   }
 
-  // Page Transition Curtain (slides up on exit, slides out on enter)
+  // Page Transition Curtain (safe dismissal on load and back-forward cache restore)
   var cur = document.getElementById("curtain");
   if (cur) {
+    function dismissCurtain() {
+      cur.style.transition = "opacity 0.25s ease, transform 0.25s ease";
+      cur.style.opacity = "0";
+      cur.style.visibility = "hidden";
+      cur.style.pointerEvents = "none";
+      cur.style.transform = "translateY(100%)";
+    }
+
+    // Dismiss immediately on load, on back/forward cache restore (pageshow), and on pagehide
+    dismissCurtain();
+    window.addEventListener("pageshow", dismissCurtain);
+    window.addEventListener("pagehide", dismissCurtain);
+    window.addEventListener("popstate", dismissCurtain);
+
     try {
-      if (sessionStorage.getItem("kottakkal_curtain_entered") === "1") {
-        sessionStorage.removeItem("kottakkal_curtain_entered");
-        cur.style.transition = "none";
-        cur.style.visibility = "visible";
-        cur.style.pointerEvents = "all";
-        cur.style.transform = "translateY(0%)";
-        requestAnimationFrame(function() {
-          setTimeout(function() {
-            cur.style.transition = "transform 0.65s cubic-bezier(0.19, 1, 0.22, 1)";
-            cur.style.transform = "translateY(-100%)";
-            setTimeout(function() {
-              cur.style.visibility = "hidden";
-              cur.style.pointerEvents = "none";
-              cur.style.transform = "translateY(100%)";
-              cur.style.transition = "";
-            }, 700);
-          }, 40);
-        });
-      }
-    } catch(e) {}
-
-    // Intercept internal page navigation links
-    document.addEventListener("click", function(e) {
-      var a = e.target.closest("a");
-      if (!a) return;
-      var href = a.getAttribute("href");
-      if (!href) return;
-
-      // Ignore anchor jumps, tel, mailto, javascript, external links, new tabs
-      if (href.indexOf("#") === 0 || href.indexOf("tel:") === 0 || href.indexOf("mailto:") === 0 || href.indexOf("javascript:") === 0) return;
-      if (a.target === "_blank" || e.ctrlKey || e.metaKey || e.shiftKey || e.which === 2) return;
-
-      var currentOrigin = window.location.origin;
-      var linkOrigin = a.origin;
-      var isInternal = (!linkOrigin || linkOrigin === currentOrigin) && !href.match(/\.(pdf|zip|png|jpg|jpeg)$/i);
-
-      if (isInternal) {
-        var cleanHref = a.href;
-        var cleanCurrent = window.location.href.split("#")[0];
-        if (cleanHref.split("#")[0] === cleanCurrent) return; // Same page hash jump
-
-        e.preventDefault();
-        try {
-          sessionStorage.setItem("kottakkal_curtain_entered", "1");
-        } catch(err) {}
-
-        cur.style.transition = "transform 0.45s cubic-bezier(0.19, 1, 0.22, 1)";
-        cur.style.visibility = "visible";
-        cur.style.pointerEvents = "all";
-        cur.style.transform = "translateY(0%)";
-
-        setTimeout(function() {
-          window.location.href = cleanHref;
-        }, 400);
-      }
-    });
+      sessionStorage.removeItem("kottakkal_curtain_entered");
+    } catch (err) {}
   }
 
   // Editorial Parallax and Scroll Animations (GSAP + ScrollTrigger)

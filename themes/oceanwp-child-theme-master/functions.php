@@ -55,7 +55,7 @@ function kottakkal_enqueue_scripts() {
 	}
 
 	// Single Treatment
-	if ( is_singular( 'treatment' ) || is_page_template( 'templates/single-treatment.php' ) ) {
+	if ( is_singular( 'treatment' ) || is_page_template( 'templates/single-treatment.php' ) || get_query_var( 'treatment' ) ) {
 		wp_enqueue_style( 'kottakkal-single-treatment', $theme_uri . '/assets/css/single-treatment.css', array( 'kottakkal-main' ), $version );
 	}
 
@@ -65,7 +65,7 @@ function kottakkal_enqueue_scripts() {
 	}
 
 	// Single Care Pathway
-	if ( is_singular( 'pathway' ) || is_page_template( 'templates/single-pathway.php' ) ) {
+	if ( is_singular( 'pathway' ) || is_page_template( 'templates/single-pathway.php' ) || get_query_var( 'pathway' ) ) {
 		wp_enqueue_style( 'kottakkal-single-pathway', $theme_uri . '/assets/css/single-pathway.css', array( 'kottakkal-main' ), $version );
 	}
 
@@ -75,7 +75,7 @@ function kottakkal_enqueue_scripts() {
 	}
 
 	// Single Doctor
-	if ( is_singular( 'doctor' ) || is_page_template( 'templates/single-doctor.php' ) ) {
+	if ( is_singular( 'doctor' ) || is_page_template( 'templates/single-doctor.php' ) || get_query_var( 'doctor' ) ) {
 		wp_enqueue_style( 'kottakkal-single-doctor', $theme_uri . '/assets/css/single-doctor.css', array( 'kottakkal-main' ), $version );
 	}
 
@@ -164,9 +164,458 @@ function kottakkal_template_include( $template ) {
 		if ( file_exists( $file ) ) return $file;
 	}
 
+	// Fallback routing for custom single pages if CPT permalinks collide with pages
+	$req_path = trim( (string) parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ), '/' );
+
+	// 1. Doctors
+	if ( preg_match( '#^doctors/([^/]+)$#', $req_path, $matches ) ) {
+		$slug = sanitize_title( $matches[1] );
+		$all_docs = kottakkal_get_doctors();
+		foreach ( $all_docs as $d ) {
+			if ( $d['slug'] === $slug || $d['id'] === $slug ) {
+				status_header( 200 );
+				set_query_var( 'doctor', $slug );
+				kottakkal_setup_virtual_doctor_post( $d );
+				$file = $theme_dir . '/templates/single-doctor.php';
+				if ( file_exists( $file ) ) return $file;
+			}
+		}
+	}
+
+	// 2. Care Pathways / Specialties
+	if ( preg_match( '#^specialties/([^/]+)$#', $req_path, $matches ) ) {
+		$slug = sanitize_title( $matches[1] );
+		$all_paths = kottakkal_get_pathways();
+		foreach ( $all_paths as $p ) {
+			if ( $p['slug'] === $slug || $p['id'] === $slug ) {
+				status_header( 200 );
+				set_query_var( 'pathway', $slug );
+				kottakkal_setup_virtual_pathway_post( $p );
+				$file = $theme_dir . '/templates/single-pathway.php';
+				if ( file_exists( $file ) ) return $file;
+			}
+		}
+	}
+
+	// 3. Treatments
+	if ( preg_match( '#^treatments/([^/]+)$#', $req_path, $matches ) ) {
+		$slug = sanitize_title( $matches[1] );
+		$all_treats = kottakkal_get_treatments();
+		foreach ( $all_treats as $t ) {
+			if ( $t['slug'] === $slug || $t['id'] === $slug ) {
+				status_header( 200 );
+				set_query_var( 'treatment', $slug );
+				kottakkal_setup_virtual_treatment_post( $t );
+				$file = $theme_dir . '/templates/single-treatment.php';
+				if ( file_exists( $file ) ) return $file;
+			}
+		}
+	}
+
 	return $template;
 }
 add_filter( 'template_include', 'kottakkal_template_include', 99 );
+
+/**
+ * Setup a proper WP_Post and WP_Query state for doctor profile pages
+ */
+function kottakkal_setup_virtual_doctor_post( $doctor_data ) {
+	global $wp_query, $post;
+	if ( ! $wp_query ) return;
+
+	$wp_query->is_404        = false;
+	$wp_query->is_attachment = false;
+	$wp_query->is_single     = true;
+	$wp_query->is_singular   = true;
+	$wp_query->is_page       = false;
+	$wp_query->is_archive    = false;
+
+	$db_post = null;
+	if ( ! empty( $doctor_data['post_id'] ) ) {
+		$db_post = get_post( $doctor_data['post_id'] );
+	}
+	if ( ! $db_post ) {
+		$posts = get_posts( array(
+			'post_type'   => 'doctor',
+			'name'        => $doctor_data['slug'],
+			'post_status' => 'any',
+			'numberposts' => 1,
+		) );
+		if ( ! empty( $posts ) ) {
+			$db_post = $posts[0];
+		}
+	}
+
+	if ( $db_post instanceof WP_Post ) {
+		$wp_query->post              = $db_post;
+		$wp_query->queried_object    = $db_post;
+		$wp_query->queried_object_id = $db_post->ID;
+		$wp_query->posts             = array( $db_post );
+		$wp_query->post_count        = 1;
+		$post                        = $db_post;
+		setup_postdata( $db_post );
+		return $db_post;
+	}
+
+	$mock = new stdClass();
+	$mock->ID                    = 999900 + ( abs( crc32( $doctor_data['id'] ?? 'doc' ) ) % 1000 );
+	$mock->post_author           = 1;
+	$mock->post_date             = current_time( 'mysql' );
+	$mock->post_date_gmt         = current_time( 'mysql', 1 );
+	$mock->post_content          = implode( "\n\n", $doctor_data['bio'] ?? array() );
+	$mock->post_title            = $doctor_data['name'] ?? 'Doctor';
+	$mock->post_excerpt          = $doctor_data['short'] ?? '';
+	$mock->post_status           = 'publish';
+	$mock->comment_status        = 'closed';
+	$mock->ping_status           = 'closed';
+	$mock->post_password         = '';
+	$mock->post_name             = $doctor_data['slug'] ?? 'doctor';
+	$mock->to_ping               = '';
+	$mock->pinged                = '';
+	$mock->post_modified         = current_time( 'mysql' );
+	$mock->post_modified_gmt     = current_time( 'mysql', 1 );
+	$mock->post_content_filtered = '';
+	$mock->post_parent           = 0;
+	$mock->guid                  = home_url( '/doctors/' . ( $doctor_data['slug'] ?? '' ) . '/' );
+	$mock->menu_order            = 0;
+	$mock->post_type             = 'doctor';
+	$mock->post_mime_type        = '';
+	$mock->comment_count         = 0;
+	$mock->filter                = 'raw';
+
+	$wp_post = new WP_Post( $mock );
+	$wp_query->post              = $wp_post;
+	$wp_query->queried_object    = $wp_post;
+	$wp_query->queried_object_id = $wp_post->ID;
+	$wp_query->posts             = array( $wp_post );
+	$wp_query->post_count        = 1;
+	$post                        = $wp_post;
+	setup_postdata( $wp_post );
+
+	return $wp_post;
+}
+
+/**
+ * Setup a proper WP_Post and WP_Query state for pathway/specialty pages
+ */
+function kottakkal_setup_virtual_pathway_post( $pathway_data ) {
+	global $wp_query, $post;
+	if ( ! $wp_query ) return;
+
+	$wp_query->is_404        = false;
+	$wp_query->is_attachment = false;
+	$wp_query->is_single     = true;
+	$wp_query->is_singular   = true;
+	$wp_query->is_page       = false;
+	$wp_query->is_archive    = false;
+
+	$db_post = null;
+	if ( ! empty( $pathway_data['post_id'] ) ) {
+		$db_post = get_post( $pathway_data['post_id'] );
+	}
+	if ( ! $db_post ) {
+		$posts = get_posts( array(
+			'post_type'   => 'pathway',
+			'name'        => $pathway_data['slug'],
+			'post_status' => 'any',
+			'numberposts' => 1,
+		) );
+		if ( ! empty( $posts ) ) {
+			$db_post = $posts[0];
+		}
+	}
+
+	if ( $db_post instanceof WP_Post ) {
+		$wp_query->post              = $db_post;
+		$wp_query->queried_object    = $db_post;
+		$wp_query->queried_object_id = $db_post->ID;
+		$wp_query->posts             = array( $db_post );
+		$wp_query->post_count        = 1;
+		$post                        = $db_post;
+		setup_postdata( $db_post );
+		return $db_post;
+	}
+
+	$mock = new stdClass();
+	$mock->ID                    = 999800 + abs( crc32( $pathway_data['slug'] ?? 'p' ) % 99 );
+	$mock->post_author           = 1;
+	$mock->post_date             = current_time( 'mysql' );
+	$mock->post_date_gmt         = current_time( 'mysql', 1 );
+	$mock->post_content          = $pathway_data['overview'] ?? '';
+	$mock->post_title            = $pathway_data['name'] ?? 'Care Pathway';
+	$mock->post_excerpt          = $pathway_data['intro'] ?? '';
+	$mock->post_status           = 'publish';
+	$mock->comment_status        = 'closed';
+	$mock->ping_status           = 'closed';
+	$mock->post_password         = '';
+	$mock->post_name             = $pathway_data['slug'] ?? 'pathway';
+	$mock->to_ping               = '';
+	$mock->pinged                = '';
+	$mock->post_modified         = current_time( 'mysql' );
+	$mock->post_modified_gmt     = current_time( 'mysql', 1 );
+	$mock->post_content_filtered = '';
+	$mock->post_parent           = 0;
+	$mock->guid                  = home_url( '/specialties/' . ( $pathway_data['slug'] ?? '' ) . '/' );
+	$mock->menu_order            = 0;
+	$mock->post_type             = 'pathway';
+	$mock->post_mime_type        = '';
+	$mock->comment_count         = 0;
+	$mock->filter                = 'raw';
+
+	$wp_post = new WP_Post( $mock );
+	$wp_query->post              = $wp_post;
+	$wp_query->queried_object    = $wp_post;
+	$wp_query->queried_object_id = $wp_post->ID;
+	$wp_query->posts             = array( $wp_post );
+	$wp_query->post_count        = 1;
+	$post                        = $wp_post;
+	setup_postdata( $wp_post );
+
+	return $wp_post;
+}
+
+/**
+ * Setup a proper WP_Post and WP_Query state for treatment pages
+ */
+function kottakkal_setup_virtual_treatment_post( $treatment_data ) {
+	global $wp_query, $post;
+	if ( ! $wp_query ) return;
+
+	$wp_query->is_404        = false;
+	$wp_query->is_attachment = false;
+	$wp_query->is_single     = true;
+	$wp_query->is_singular   = true;
+	$wp_query->is_page       = false;
+	$wp_query->is_archive    = false;
+
+	$db_post = null;
+	if ( ! empty( $treatment_data['post_id'] ) ) {
+		$db_post = get_post( $treatment_data['post_id'] );
+	}
+	if ( ! $db_post ) {
+		$posts = get_posts( array(
+			'post_type'   => 'treatment',
+			'name'        => $treatment_data['slug'],
+			'post_status' => 'any',
+			'numberposts' => 1,
+		) );
+		if ( ! empty( $posts ) ) {
+			$db_post = $posts[0];
+		}
+	}
+
+	if ( $db_post instanceof WP_Post ) {
+		$wp_query->post              = $db_post;
+		$wp_query->queried_object    = $db_post;
+		$wp_query->queried_object_id = $db_post->ID;
+		$wp_query->posts             = array( $db_post );
+		$wp_query->post_count        = 1;
+		$post                        = $db_post;
+		setup_postdata( $db_post );
+		return $db_post;
+	}
+
+	$mock = new stdClass();
+	$mock->ID                    = 999700 + abs( crc32( $treatment_data['slug'] ?? 't' ) % 99 );
+	$mock->post_author           = 1;
+	$mock->post_date             = current_time( 'mysql' );
+	$mock->post_date_gmt         = current_time( 'mysql', 1 );
+	$mock->post_content          = $treatment_data['procedure'] ?? '';
+	$mock->post_title            = $treatment_data['name'] ?? 'Treatment';
+	$mock->post_excerpt          = $treatment_data['short'] ?? '';
+	$mock->post_status           = 'publish';
+	$mock->comment_status        = 'closed';
+	$mock->ping_status           = 'closed';
+	$mock->post_password         = '';
+	$mock->post_name             = $treatment_data['slug'] ?? 'treatment';
+	$mock->to_ping               = '';
+	$mock->pinged                = '';
+	$mock->post_modified         = current_time( 'mysql' );
+	$mock->post_modified_gmt     = current_time( 'mysql', 1 );
+	$mock->post_content_filtered = '';
+	$mock->post_parent           = 0;
+	$mock->guid                  = home_url( '/treatments/' . ( $treatment_data['slug'] ?? '' ) . '/' );
+	$mock->menu_order            = 0;
+	$mock->post_type             = 'treatment';
+	$mock->post_mime_type        = '';
+	$mock->comment_count         = 0;
+	$mock->filter                = 'raw';
+
+	$wp_post = new WP_Post( $mock );
+	$wp_query->post              = $wp_post;
+	$wp_query->queried_object    = $wp_post;
+	$wp_query->queried_object_id = $wp_post->ID;
+	$wp_query->posts             = array( $wp_post );
+	$wp_query->post_count        = 1;
+	$post                        = $wp_post;
+	setup_postdata( $wp_post );
+
+	return $wp_post;
+}
+
+// Clean body classes on custom single pages
+add_filter( 'body_class', function( $classes ) {
+	if ( get_query_var( 'doctor' ) || is_singular( 'doctor' ) ) {
+		$classes = array_diff( $classes, array( 'attachment', 'attachmentid-', 'attachment-' ) );
+		$classes[] = 'single';
+		$classes[] = 'single-doctor';
+	}
+	if ( get_query_var( 'pathway' ) || is_singular( 'pathway' ) ) {
+		$classes = array_diff( $classes, array( 'attachment', 'attachmentid-', 'attachment-' ) );
+		$classes[] = 'single';
+		$classes[] = 'single-pathway';
+	}
+	if ( get_query_var( 'treatment' ) || is_singular( 'treatment' ) ) {
+		$classes = array_diff( $classes, array( 'attachment', 'attachmentid-', 'attachment-' ) );
+		$classes[] = 'single';
+		$classes[] = 'single-treatment';
+	}
+	return array_values( array_unique( $classes ) );
+}, 99 );
+
+// Prevent 404 for virtual doctor, pathway and treatment profile routes
+add_filter( 'pre_handle_404', function( $preempt, $wp_query ) {
+	$req_path = trim( (string) parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ), '/' );
+
+	// Doctors
+	if ( preg_match( '#^doctors/([^/]+)$#', $req_path, $matches ) ) {
+		$slug = sanitize_title( $matches[1] );
+		$all_docs = kottakkal_get_doctors();
+		foreach ( $all_docs as $d ) {
+			if ( $d['slug'] === $slug || $d['id'] === $slug ) {
+				status_header( 200 );
+				set_query_var( 'doctor', $slug );
+				kottakkal_setup_virtual_doctor_post( $d );
+				return true;
+			}
+		}
+	}
+
+	// Care Pathways / Specialties
+	if ( preg_match( '#^specialties/([^/]+)$#', $req_path, $matches ) ) {
+		$slug = sanitize_title( $matches[1] );
+		$all_paths = kottakkal_get_pathways();
+		foreach ( $all_paths as $p ) {
+			if ( $p['slug'] === $slug || $p['id'] === $slug ) {
+				status_header( 200 );
+				set_query_var( 'pathway', $slug );
+				kottakkal_setup_virtual_pathway_post( $p );
+				return true;
+			}
+		}
+	}
+
+	// Treatments
+	if ( preg_match( '#^treatments/([^/]+)$#', $req_path, $matches ) ) {
+		$slug = sanitize_title( $matches[1] );
+		$all_treats = kottakkal_get_treatments();
+		foreach ( $all_treats as $t ) {
+			if ( $t['slug'] === $slug || $t['id'] === $slug ) {
+				status_header( 200 );
+				set_query_var( 'treatment', $slug );
+				kottakkal_setup_virtual_treatment_post( $t );
+				return true;
+			}
+		}
+	}
+
+	return $preempt;
+}, 10, 2 );
+
+// Ensure query state is set during early template redirect
+add_action( 'template_redirect', function() {
+	$req_path = trim( (string) parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ), '/' );
+
+	if ( preg_match( '#^doctors/([^/]+)$#', $req_path, $matches ) ) {
+		$slug = sanitize_title( $matches[1] );
+		$all_docs = kottakkal_get_doctors();
+		foreach ( $all_docs as $d ) {
+			if ( $d['slug'] === $slug || $d['id'] === $slug ) {
+				kottakkal_setup_virtual_doctor_post( $d );
+				return;
+			}
+		}
+	}
+
+	if ( preg_match( '#^specialties/([^/]+)$#', $req_path, $matches ) ) {
+		$slug = sanitize_title( $matches[1] );
+		$all_paths = kottakkal_get_pathways();
+		foreach ( $all_paths as $p ) {
+			if ( $p['slug'] === $slug || $p['id'] === $slug ) {
+				kottakkal_setup_virtual_pathway_post( $p );
+				return;
+			}
+		}
+	}
+
+	if ( preg_match( '#^treatments/([^/]+)$#', $req_path, $matches ) ) {
+		$slug = sanitize_title( $matches[1] );
+		$all_treats = kottakkal_get_treatments();
+		foreach ( $all_treats as $t ) {
+			if ( $t['slug'] === $slug || $t['id'] === $slug ) {
+				kottakkal_setup_virtual_treatment_post( $t );
+				return;
+			}
+		}
+	}
+}, 1 );
+
+// Add top-priority rewrite rules for CPT single routes to avoid page collisions
+add_action( 'init', function() {
+	add_rewrite_tag( '%pathway%', '([^&/]+)' );
+	add_rewrite_tag( '%treatment%', '([^&/]+)' );
+	add_rewrite_tag( '%doctor%', '([^&/]+)' );
+
+	add_rewrite_rule( '^specialties/([^/]+)/?$', 'index.php?pathway=$matches[1]', 'top' );
+	add_rewrite_rule( '^treatments/([^/]+)/?$', 'index.php?treatment=$matches[1]', 'top' );
+	add_rewrite_rule( '^doctors/([^/]+)/?$', 'index.php?doctor=$matches[1]', 'top' );
+}, 1 );
+
+/**
+ * Auto-ensure doctors CPT posts exist in the database with published status
+ */
+function kottakkal_ensure_doctors_exist() {
+	if ( ! post_type_exists( 'doctor' ) ) {
+		return;
+	}
+
+	$default_doctors = kottakkal_get_default_doctors();
+	$created_any     = false;
+
+	foreach ( $default_doctors as $d ) {
+		$existing = get_posts( array(
+			'post_type'   => 'doctor',
+			'name'        => $d['slug'],
+			'post_status' => 'any',
+			'numberposts' => 1,
+		) );
+
+		if ( empty( $existing ) ) {
+			$pid = wp_insert_post( array(
+				'post_title'   => $d['name'],
+				'post_name'    => $d['slug'],
+				'post_content' => implode( "\n\n", $d['bio'] ),
+				'post_excerpt' => $d['short'],
+				'post_status'  => 'publish',
+				'post_type'    => 'doctor',
+			) );
+
+			if ( $pid && ! is_wp_error( $pid ) ) {
+				update_post_meta( $pid, '_kottakkal_role', $d['role'] );
+				update_post_meta( $pid, '_kottakkal_mono', $d['mono'] );
+				update_post_meta( $pid, '_kottakkal_tone', $d['tone'] );
+				update_post_meta( $pid, '_kottakkal_creds', $d['creds'] );
+				update_post_meta( $pid, '_kottakkal_specs', $d['specs'] );
+				$created_any = true;
+			}
+		}
+	}
+
+	if ( $created_any ) {
+		flush_rewrite_rules( false );
+	}
+}
+add_action( 'init', 'kottakkal_ensure_doctors_exist', 25 );
 
 /**
  * One-Click Setup & Content Seeder (Pages, CPT Posts & Settings)

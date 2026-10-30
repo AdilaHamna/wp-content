@@ -75,10 +75,11 @@ function kottakkal_register_cpts() {
 		'public'       => true,
 		'has_archive'  => true,
 		'rewrite'      => array( 'slug' => 'doctors', 'with_front' => false ),
-		'supports'     => array( 'title', 'editor', 'excerpt', 'thumbnail', 'page-attributes' ),
+		'supports'     => array( 'title', 'editor', 'excerpt', 'thumbnail', 'page-attributes', 'custom-fields' ),
 		'menu_icon'    => 'dashicons-id',
 		'show_in_rest' => true,
 	) );
+	add_post_type_support( 'doctor', 'thumbnail' );
 
 	// 4. Testimonials CPT
 	register_post_type( 'testimonial', array(
@@ -126,6 +127,7 @@ add_action( 'init', 'kottakkal_register_cpts' );
 function kottakkal_add_meta_boxes() {
 	add_meta_box( 'kottakkal_treatment_meta', __( 'Treatment Details & Botanical Art', 'oceanwp' ), 'kottakkal_render_treatment_metabox', 'treatment', 'normal', 'high' );
 	add_meta_box( 'kottakkal_doctor_meta', __( 'Doctor Credentials & Specialities', 'oceanwp' ), 'kottakkal_render_doctor_metabox', 'doctor', 'normal', 'high' );
+	add_meta_box( 'kottakkal_doctor_photo_side', __( 'Doctor Profile Photo', 'oceanwp' ), 'kottakkal_render_doctor_photo_side_metabox', 'doctor', 'side', 'high' );
 	add_meta_box( 'kottakkal_pathway_meta', __( 'Pathway Details & Mappings', 'oceanwp' ), 'kottakkal_render_pathway_metabox', 'pathway', 'normal', 'high' );
 	add_meta_box( 'kottakkal_testimonial_meta', __( 'Patient Story Details', 'oceanwp' ), 'kottakkal_render_testimonial_metabox', 'testimonial', 'normal', 'high' );
 }
@@ -225,6 +227,52 @@ function kottakkal_render_treatment_metabox( $post ) {
 }
 
 /**
+ * Doctor Profile Photo Side Meta Box Render
+ */
+function kottakkal_render_doctor_photo_side_metabox( $post ) {
+	$photo_url = get_post_meta( $post->ID, '_kottakkal_photo', true );
+	$photo_id  = get_post_meta( $post->ID, '_kottakkal_photo_id', true );
+
+	if ( empty( $photo_id ) ) {
+		$photo_id = get_post_thumbnail_id( $post->ID );
+	}
+	if ( empty( $photo_url ) && $photo_id ) {
+		$photo_url = wp_get_attachment_image_url( $photo_id, 'large' );
+	}
+	if ( empty( $photo_url ) ) {
+		$slug = $post->post_name;
+		$theme_dir = get_stylesheet_directory();
+		$theme_uri = get_stylesheet_directory_uri();
+		if ( ! empty( $slug ) && file_exists( $theme_dir . '/assets/img/doc-' . $slug . '.jpg' ) ) {
+			$photo_url = $theme_uri . '/assets/img/doc-' . $slug . '.jpg';
+		}
+	}
+	?>
+	<div class="kottakkal-photo-upload-wrap" style="text-align:center;">
+		<div id="doctor_photo_side_preview_wrap" style="width:100%; aspect-ratio:4/5; max-width:200px; margin:0 auto 12px; background:#f4f6f5; border:2px dashed #b5c2ba; border-radius:6px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
+			<img id="doctor_photo_side_preview" src="<?php echo esc_url( $photo_url ); ?>" style="width:100%; height:100%; object-fit:cover; <?php echo empty( $photo_url ) ? 'display:none;' : ''; ?>" alt="Doctor Photo">
+			<div id="doctor_photo_side_empty" style="<?php echo ! empty( $photo_url ) ? 'display:none;' : ''; ?> padding:20px; color:#666;">
+				<span class="dashicons dashicons-camera" style="font-size:42px; width:42px; height:42px; color:#8d9e95;"></span>
+				<p style="margin:6px 0 0; font-size:12px; color:#666;"><?php esc_html_e( 'No photo uploaded yet', 'oceanwp' ); ?></p>
+			</div>
+		</div>
+
+		<div style="display:flex; flex-direction:column; gap:8px;">
+			<button type="button" class="button button-primary button-large kottakkal-upload-photo-btn" style="width:100%; justify-content:center;">
+				<span class="dashicons dashicons-upload" style="vertical-align:middle; margin-top:2px;"></span> <?php esc_html_e( 'Upload / Select Photo', 'oceanwp' ); ?>
+			</button>
+			<button type="button" class="button button-link-delete kottakkal-remove-photo-btn" style="width:100%; text-align:center; <?php echo empty( $photo_url ) ? 'display:none;' : ''; ?>">
+				<?php esc_html_e( 'Remove Photo', 'oceanwp' ); ?>
+			</button>
+		</div>
+		<p class="description" style="font-size:11px; margin-top:10px; color:#666;">
+			<?php esc_html_e( 'Select or upload a doctor photo. Automatically syncs with WordPress featured image.', 'oceanwp' ); ?>
+		</p>
+	</div>
+	<?php
+}
+
+/**
  * Doctor Meta Box Render
  */
 function kottakkal_render_doctor_metabox( $post ) {
@@ -238,7 +286,49 @@ function kottakkal_render_doctor_metabox( $post ) {
 
 	$creds_text = is_array( $creds ) ? implode( "\n", $creds ) : (string) $creds;
 	$specs_text = is_array( $specs ) ? implode( ', ', $specs ) : (string) $specs;
+
+	$photo_url = get_post_meta( $post->ID, '_kottakkal_photo', true );
+	$photo_id  = get_post_meta( $post->ID, '_kottakkal_photo_id', true );
+	if ( empty( $photo_id ) ) {
+		$photo_id = get_post_thumbnail_id( $post->ID );
+	}
+	if ( empty( $photo_url ) && $photo_id ) {
+		$photo_url = wp_get_attachment_image_url( $photo_id, 'large' );
+	}
+	if ( empty( $photo_url ) ) {
+		$slug = $post->post_name;
+		$theme_dir = get_stylesheet_directory();
+		$theme_uri = get_stylesheet_directory_uri();
+		if ( ! empty( $slug ) && file_exists( $theme_dir . '/assets/img/doc-' . $slug . '.jpg' ) ) {
+			$photo_url = $theme_uri . '/assets/img/doc-' . $slug . '.jpg';
+		}
+	}
 	?>
+	<!-- Doctor Photo Banner in Main Box -->
+	<div style="background:#f4f7f5; border:1px solid #c9d8ce; border-radius:6px; padding:16px; margin-bottom:18px; display:flex; align-items:center; gap:20px;">
+		<div style="width:72px; height:84px; border-radius:4px; overflow:hidden; background:#e0eae3; flex-shrink:0; border:1px solid #b5c7bc; display:flex; align-items:center; justify-content:center;">
+			<img id="doctor_photo_main_preview" src="<?php echo esc_url( $photo_url ); ?>" style="width:100%; height:100%; object-fit:cover; <?php echo empty( $photo_url ) ? 'display:none;' : ''; ?>" alt="Doctor Preview">
+			<span id="doctor_photo_main_empty" class="dashicons dashicons-format-image" style="font-size:28px; width:28px; height:28px; color:#8a9c90; <?php echo ! empty( $photo_url ) ? 'display:none;' : ''; ?>"></span>
+		</div>
+		<div style="flex:1;">
+			<div style="font-weight:600; font-size:14px; color:#173F32; margin-bottom:4px;"><?php esc_html_e( 'Doctor Profile Photo / Image', 'oceanwp' ); ?></div>
+			<p style="margin:0 0 10px; font-size:12px; color:#556;">
+				<?php esc_html_e( 'Upload or select a portrait photo for this doctor from the WordPress Media Library.', 'oceanwp' ); ?>
+			</p>
+			<div style="display:flex; gap:8px;">
+				<button type="button" class="button button-primary kottakkal-upload-photo-btn">
+					<span class="dashicons dashicons-upload" style="vertical-align:middle;"></span> <?php esc_html_e( 'Upload / Choose Photo', 'oceanwp' ); ?>
+				</button>
+				<button type="button" class="button kottakkal-remove-photo-btn" style="<?php echo empty( $photo_url ) ? 'display:none;' : ''; ?>">
+					<?php esc_html_e( 'Remove Photo', 'oceanwp' ); ?>
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<input type="hidden" name="_kottakkal_photo" id="_kottakkal_photo" value="<?php echo esc_attr( $photo_url ); ?>">
+	<input type="hidden" name="_kottakkal_photo_id" id="_kottakkal_photo_id" value="<?php echo esc_attr( $photo_id ); ?>">
+
 	<div style="display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:16px; margin-bottom:14px;">
 		<div>
 			<label><strong>Designation / Role:</strong></label><br>
@@ -399,6 +489,19 @@ function kottakkal_save_cpt_meta( $post_id ) {
 				$specs = array_filter( array_map( 'trim', explode( ',', sanitize_text_field( wp_unslash( $_POST['_kottakkal_specs'] ) ) ) ) );
 				update_post_meta( $post_id, '_kottakkal_specs', $specs );
 			}
+			if ( isset( $_POST['_kottakkal_photo'] ) ) {
+				$photo_url = sanitize_text_field( wp_unslash( $_POST['_kottakkal_photo'] ) );
+				update_post_meta( $post_id, '_kottakkal_photo', $photo_url );
+			}
+			if ( isset( $_POST['_kottakkal_photo_id'] ) ) {
+				$photo_id = intval( $_POST['_kottakkal_photo_id'] );
+				update_post_meta( $post_id, '_kottakkal_photo_id', $photo_id );
+				if ( $photo_id > 0 ) {
+					set_post_thumbnail( $post_id, $photo_id );
+				} elseif ( empty( $_POST['_kottakkal_photo'] ) ) {
+					delete_post_thumbnail( $post_id );
+				}
+			}
 		}
 	}
 
@@ -498,4 +601,159 @@ function kottakkal_booking_column_content( $col, $post_id ) {
 	}
 }
 add_action( 'manage_kottakkal_booking_posts_custom_column', 'kottakkal_booking_column_content', 10, 2 );
+
+/**
+ * Custom Admin Columns for Doctors
+ */
+function kottakkal_doctor_columns( $cols ) {
+	$new_cols = array(
+		'cb'    => $cols['cb'],
+		'photo' => __( 'Photo', 'oceanwp' ),
+		'title' => __( 'Doctor Name', 'oceanwp' ),
+		'role'  => __( 'Designation / Role', 'oceanwp' ),
+		'tone'  => __( 'Profile Tone', 'oceanwp' ),
+		'specs' => __( 'Specialisations', 'oceanwp' ),
+		'date'  => $cols['date'],
+	);
+	return $new_cols;
+}
+add_filter( 'manage_doctor_posts_columns', 'kottakkal_doctor_columns' );
+
+function kottakkal_doctor_column_content( $col, $post_id ) {
+	if ( 'photo' === $col ) {
+		$img_url = get_post_meta( $post_id, '_kottakkal_photo', true );
+		if ( empty( $img_url ) ) {
+			$img_id = get_post_thumbnail_id( $post_id );
+			if ( $img_id ) {
+				$img_url = wp_get_attachment_image_url( $img_id, 'thumbnail' );
+			}
+		}
+		if ( empty( $img_url ) ) {
+			$p = get_post( $post_id );
+			$slug = $p ? $p->post_name : '';
+			$theme_dir = get_stylesheet_directory();
+			$theme_uri = get_stylesheet_directory_uri();
+			if ( ! empty( $slug ) && file_exists( $theme_dir . '/assets/img/doc-' . $slug . '.jpg' ) ) {
+				$img_url = $theme_uri . '/assets/img/doc-' . $slug . '.jpg';
+			}
+		}
+
+		if ( ! empty( $img_url ) ) {
+			echo '<img src="' . esc_url( $img_url ) . '" style="width:48px; height:48px; object-fit:cover; border-radius:50%; border:2px solid #173F32; display:block;" alt="">';
+		} else {
+			$mono = get_post_meta( $post_id, '_kottakkal_mono', true ) ?: 'DR';
+			echo '<div style="width:48px; height:48px; border-radius:50%; background:#173F32; color:#E39A3C; display:grid; place-items:center; font-weight:700; font-size:14px;">' . esc_html( $mono ) . '</div>';
+		}
+	} elseif ( 'role' === $col ) {
+		echo esc_html( get_post_meta( $post_id, '_kottakkal_role', true ) ?: 'Ayurveda Practitioner' );
+	} elseif ( 'tone' === $col ) {
+		$t = get_post_meta( $post_id, '_kottakkal_tone', true ) ?: 'forest';
+		echo '<span style="display:inline-block; padding:2px 8px; border-radius:12px; background:#173F32; color:#fff; font-size:11px;">' . esc_html( strtoupper( $t ) ) . '</span>';
+	} elseif ( 'specs' === $col ) {
+		$specs = get_post_meta( $post_id, '_kottakkal_specs', true );
+		if ( is_array( $specs ) ) {
+			echo esc_html( implode( ', ', array_slice( $specs, 0, 3 ) ) );
+		} else {
+			echo esc_html( $specs );
+		}
+	}
+}
+add_action( 'manage_doctor_posts_custom_column', 'kottakkal_doctor_column_content', 10, 2 );
+
+/**
+ * Enqueue Media Uploader Scripts for Doctor edit screen
+ */
+add_action( 'admin_enqueue_scripts', function( $hook ) {
+	global $post_type;
+	if ( in_array( $hook, array( 'post.php', 'post-new.php' ), true ) && $post_type === 'doctor' ) {
+		wp_enqueue_media();
+		wp_add_inline_script( 'media-editor', "
+			jQuery(document).ready(function($) {
+				var file_frame;
+				$(document).on('click', '.kottakkal-upload-photo-btn', function(e) {
+					e.preventDefault();
+					if (file_frame) {
+						file_frame.open();
+						return;
+					}
+					file_frame = wp.media({
+						title: 'Select Doctor Profile Photo',
+						button: { text: 'Use this Photo' },
+						multiple: false,
+						library: { type: 'image' }
+					});
+					file_frame.on('select', function() {
+						var attachment = file_frame.state().get('selection').first().toJSON();
+						var fullUrl = attachment.url;
+						var previewUrl = (attachment.sizes && attachment.sizes.medium) ? attachment.sizes.medium.url : fullUrl;
+						$('#_kottakkal_photo').val(fullUrl);
+						$('#_kottakkal_photo_id').val(attachment.id);
+
+						$('#doctor_photo_side_preview, #doctor_photo_main_preview').attr('src', previewUrl).show();
+						$('#doctor_photo_side_empty, #doctor_photo_main_empty').hide();
+						$('.kottakkal-remove-photo-btn').show();
+					});
+					file_frame.open();
+				});
+
+				$(document).on('click', '.kottakkal-remove-photo-btn', function(e) {
+					e.preventDefault();
+					$('#_kottakkal_photo').val('');
+					$('#_kottakkal_photo_id').val('');
+					$('#doctor_photo_side_preview, #doctor_photo_main_preview').attr('src', '').hide();
+					$('#doctor_photo_side_empty, #doctor_photo_main_empty').show();
+					$('.kottakkal-remove-photo-btn').hide();
+				});
+			});
+		" );
+	}
+} );
+
+/**
+ * Auto-seed default doctors into DB if no doctor posts exist
+ */
+function kottakkal_seed_doctors_to_db() {
+	if ( ! is_admin() ) {
+		return;
+	}
+
+	$existing = get_posts( array(
+		'post_type'   => 'doctor',
+		'post_status' => 'any',
+		'numberposts' => 1,
+	) );
+
+	if ( ! empty( $existing ) ) {
+		return;
+	}
+
+	if ( ! function_exists( 'kottakkal_get_default_doctors' ) ) {
+		return;
+	}
+
+	$defaults = kottakkal_get_default_doctors();
+	foreach ( $defaults as $idx => $doc ) {
+		$post_id = wp_insert_post( array(
+			'post_title'   => $doc['name'],
+			'post_name'    => $doc['slug'],
+			'post_content' => implode( "\n\n", $doc['bio'] ?? array() ),
+			'post_excerpt' => $doc['short'] ?? '',
+			'post_status'  => 'publish',
+			'post_type'    => 'doctor',
+			'menu_order'   => $idx + 1,
+		) );
+
+		if ( $post_id && ! is_wp_error( $post_id ) ) {
+			update_post_meta( $post_id, '_kottakkal_role', $doc['role'] ?? '' );
+			update_post_meta( $post_id, '_kottakkal_mono', $doc['mono'] ?? '' );
+			update_post_meta( $post_id, '_kottakkal_tone', $doc['tone'] ?? 'forest' );
+			update_post_meta( $post_id, '_kottakkal_creds', $doc['creds'] ?? array() );
+			update_post_meta( $post_id, '_kottakkal_specs', $doc['specs'] ?? array() );
+			if ( ! empty( $doc['img_url'] ) ) {
+				update_post_meta( $post_id, '_kottakkal_photo', $doc['img_url'] );
+			}
+		}
+	}
+}
+add_action( 'admin_init', 'kottakkal_seed_doctors_to_db' );
 

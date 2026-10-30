@@ -253,7 +253,7 @@ function kottakkal_get_default_pathways() {
 			'overview'  => 'Joint and muscle pain can cause swelling, discomfort and loss of movement. Our doctors see people with conditions such as frozen shoulder, tennis elbow, heel pain, back pain and sciatica, and with injuries that are slow to settle. Marma Chikitsa, a gentle touch therapy working on vital points of the body, is also offered.',
 			'approach'  => 'Your plan may combine Panchakarma procedures, detoxification, dietary adjustments and herbal medicines, chosen after consultation to address the underlying imbalance as well as the symptoms.',
 			'therapies' => array( 'kativasthi', 'njavara-kizhi', 'pottali-sweda', 'pizhichil', 'abhyangam' ),
-			'docs'      => array( 'naseeba', 'ajitha' ),
+			'docs'      => array( 'naseeba', 'ajitha', 'rajesh' ),
 			'img'       => 'assets/img/p-joint.jpg',
 		),
 		array(
@@ -328,7 +328,7 @@ function kottakkal_get_default_pathways() {
 			'overview'  => 'For people with degenerative and auto-immune conditions, we build an individual plan aimed at managing symptoms and improving day-to-day quality of life.',
 			'approach'  => 'Each plan follows a thorough review and is adjusted over time. Ayurvedic care here works alongside, not instead of, the treatment you receive from your medical doctor. Please bring details of your current medicines to your consultation.',
 			'therapies' => array( 'pizhichil', 'njavara-kizhi', 'abhyangam' ),
-			'docs'      => array(),
+			'docs'      => array( 'rajesh', 'naseeba' ),
 			'img'       => 'assets/img/p-degenerative.jpg',
 		),
 	);
@@ -346,6 +346,7 @@ function kottakkal_get_default_doctors() {
 			'mono'   => 'NR',
 			'role'   => 'Medical Director',
 			'tone'   => 'forest',
+			'img_url' => get_stylesheet_directory_uri() . '/assets/img/doc-naseeba.jpg',
 			'creds'  => array(
 				'DHA- and MOH-certified Ayurvedic practitioner',
 				'KMCT Ayurveda Medical College, Calicut',
@@ -373,6 +374,7 @@ function kottakkal_get_default_doctors() {
 			'mono'   => 'AB',
 			'role'   => 'Ayurveda Practitioner',
 			'tone'   => 'night',
+			'img_url' => get_stylesheet_directory_uri() . '/assets/img/doc-ajitha.jpg',
 			'creds'  => array(
 				'SN Ayurveda Medical College, Kollam (KUHS)',
 				'6+ years’ experience in India',
@@ -391,6 +393,34 @@ function kottakkal_get_default_doctors() {
 				'Dr. Ajitha Babu is an Ayurveda practitioner with more than six years of experience in India. She graduated from SN Ayurveda Medical College, Pangode, Kollam, affiliated to the Kerala University of Health Sciences.',
 				'Her experience covers joint conditions including arthritis, gynaecological conditions such as PCOD and PCOS, skin and hair care, and weight management through diet, yoga and lifestyle change.',
 				'She is a certified yoga trainer and teacher, trained through Yoga Alliance International and CIY.',
+			),
+		),
+		array(
+			'id'      => 'rajesh',
+			'slug'    => 'rajesh',
+			'name'    => 'Dr. Rajesh Kumar',
+			'mono'    => 'RK',
+			'role'    => 'Consultant Ayurvedic Physician',
+			'tone'    => 'clay',
+			'img_url' => get_stylesheet_directory_uri() . '/assets/img/doc-rajesh.jpg',
+			'creds'   => array(
+				'DHA-licensed Ayurvedic Practitioner',
+				'Government Ayurveda College, Trivandrum (BAMS)',
+				'8+ years’ clinical practice in Kerala and Dubai',
+			),
+			'short'   => 'Specialises in musculoskeletal disorders, spine health, chronic pain relief, and constitutional detoxification.',
+			'specs'   => array(
+				'Musculoskeletal & Spine Health',
+				'Panchakarma Detoxification',
+				'Chronic Pain & Arthritis',
+				'Digestive & Metabolic Health',
+				'Stress & Insomnia Relief',
+				'Preventive Wellness Counselling',
+			),
+			'bio'     => array(
+				'Dr. Rajesh Kumar is a DHA-licensed Ayurvedic practitioner with over eight years of clinical practice in classical Kerala Ayurveda therapies and holistic patient care.',
+				'A graduate of Government Ayurveda College, Trivandrum, he brings deep clinical expertise in managing musculoskeletal disorders, chronic back and neck conditions, and lifestyle-induced stress.',
+				'His clinical philosophy centers on root-cause healing, combining authentic therapeutic treatments with practical diet and lifestyle guidance to achieve sustainable health and vitality.',
 			),
 		),
 	);
@@ -524,7 +554,25 @@ function kottakkal_get_doctors() {
 		foreach ( $posts as $p ) {
 			$creds = get_post_meta( $p->ID, '_kottakkal_creds', true );
 			$specs = get_post_meta( $p->ID, '_kottakkal_specs', true );
-			$feat_img = get_the_post_thumbnail_url( $p->ID, 'large' );
+
+			// Check custom photo field first, then photo_id, then standard featured image, then local asset
+			$feat_img = get_post_meta( $p->ID, '_kottakkal_photo', true );
+			if ( empty( $feat_img ) ) {
+				$photo_id = get_post_meta( $p->ID, '_kottakkal_photo_id', true );
+				if ( ! empty( $photo_id ) ) {
+					$feat_img = wp_get_attachment_image_url( $photo_id, 'large' );
+				}
+			}
+			if ( empty( $feat_img ) ) {
+				$feat_img = get_the_post_thumbnail_url( $p->ID, 'large' );
+			}
+			if ( empty( $feat_img ) ) {
+				$theme_dir = get_stylesheet_directory();
+				$theme_uri = get_stylesheet_directory_uri();
+				if ( file_exists( $theme_dir . '/assets/img/doc-' . $p->post_name . '.jpg' ) ) {
+					$feat_img = $theme_uri . '/assets/img/doc-' . $p->post_name . '.jpg';
+				}
+			}
 
 			$items[] = array(
 				'id'      => $p->post_name,
@@ -659,6 +707,10 @@ function kottakkal_render_plate( $key, $ill, $tone = 'oil', $cap = '', $ratio = 
 			't-tarpanam'      => 'assets/img/t-tarpanam.jpg',
 			't-thalapothichil' => 'assets/img/t-thalapothichil.jpg',
 			't-udhwarthanam'  => 'assets/img/t-udhwarthanam.jpg',
+			'doc-naseeba'     => 'assets/img/doc-naseeba.jpg',
+			'doc-ajitha'      => 'assets/img/doc-ajitha.jpg',
+			'doc-rajesh'      => 'assets/img/doc-rajesh.jpg',
+			'doc-arun'        => 'assets/img/doc-arun.jpg',
 		);
 
 		if ( isset( $map[ $key ] ) && file_exists( $theme_dir . '/' . $map[ $key ] ) ) {
@@ -680,6 +732,7 @@ function kottakkal_render_plate( $key, $ill, $tone = 'oil', $cap = '', $ratio = 
 	}
 
 	$cap_html = ! empty( $cap ) ? '<span class="cap">' . esc_html( $cap ) . '</span>' : '';
+	$doc_cls  = ( str_starts_with( (string) $key, 'doc-' ) || $ill === 'doc' ) ? ' plate-doctor plate-' . sanitize_html_class( $key ) : '';
 
-	return '<div class="plate p-' . esc_attr( $tone ) . $lite . '"' . $ratio_attr . '><div class="art">' . $inner . '</div>' . $extra . $cap_html . '</div>';
+	return '<div class="plate p-' . esc_attr( $tone ) . $lite . $doc_cls . '"' . $ratio_attr . '><div class="art">' . $inner . '</div>' . $extra . $cap_html . '</div>';
 }

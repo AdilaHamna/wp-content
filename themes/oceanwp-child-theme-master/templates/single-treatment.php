@@ -9,10 +9,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once get_stylesheet_directory() . '/templates/header-custom.php';
+global $post, $wp_query;
 
-global $post;
-$current_slug = $post ? $post->post_name : get_query_var( 'treatment' );
+$current_slug = get_query_var( 'treatment' ) ?: ( $post ? $post->post_name : '' );
+if ( empty( $current_slug ) ) {
+	$req_path = trim( (string) parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ), '/' );
+	if ( preg_match( '#^treatments/([^/]+)$#', $req_path, $matches ) ) {
+		$current_slug = sanitize_title( $matches[1] );
+	}
+}
+
 $all_treatments = kottakkal_get_treatments();
 
 // Find current treatment
@@ -31,6 +37,13 @@ if ( ! $treatment && ! empty( $all_treatments ) ) {
 	$treatment = $all_treatments[0];
 	$current_index = 0;
 }
+
+// Setup post and query state BEFORE header is output
+if ( function_exists( 'kottakkal_setup_virtual_treatment_post' ) && $treatment ) {
+	kottakkal_setup_virtual_treatment_post( $treatment );
+}
+
+require_once get_stylesheet_directory() . '/templates/header-custom.php';
 
 $total_t = count( $all_treatments );
 $prev_t = $all_treatments[ ( $current_index - 1 + $total_t ) % $total_t ];
