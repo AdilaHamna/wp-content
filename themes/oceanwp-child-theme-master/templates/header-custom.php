@@ -96,8 +96,8 @@ $pathways    = kottakkal_get_pathways();
 					?>
 						<li style="transition-delay: <?php echo esc_attr( $idx * 40 ); ?>ms">
 							<a href="<?php echo esc_url( $t_link ); ?>" data-mp="<?php echo esc_attr( $t['id'] ); ?>" data-title="<?php echo esc_attr( $t['name'] ); ?>" data-desc="<?php echo esc_attr( $t['short'] ); ?>" data-img="<?php echo esc_url( $t_img ); ?>">
-								<?php echo esc_html( $t['name'] ); ?>
-								<small><?php echo esc_html( $t['ing'] ); ?></small>
+								<span class="mega-name"><?php echo esc_html( $t['name'] ); ?></span>
+								<small class="mega-desc"><?php echo esc_html( $t['ing'] ); ?></small>
 							</a>
 						</li>
 					<?php endforeach; ?>
@@ -127,21 +127,21 @@ $pathways    = kottakkal_get_pathways();
 					?>
 						<li style="transition-delay: <?php echo esc_attr( ( $idx + 5 ) * 40 ); ?>ms">
 							<a href="<?php echo esc_url( $t_link ); ?>" data-mp="<?php echo esc_attr( $t['id'] ); ?>" data-title="<?php echo esc_attr( $t['name'] ); ?>" data-desc="<?php echo esc_attr( $t['short'] ); ?>" data-img="<?php echo esc_url( $t_img ); ?>">
-								<?php echo esc_html( $t['name'] ); ?>
-								<small><?php echo esc_html( $t['ing'] ); ?></small>
+								<span class="mega-name"><?php echo esc_html( $t['name'] ); ?></span>
+								<small class="mega-desc"><?php echo esc_html( $t['ing'] ); ?></small>
 							</a>
 						</li>
 					<?php endforeach; ?>
 					<li style="transition-delay: 280ms">
 						<a href="<?php echo esc_url( home_url( '/treatments/' ) ); ?>">
-							<strong><?php esc_html_e( 'All 34 treatments', 'oceanwp' ); ?></strong>
-							<small>→</small>
+							<span class="mega-name"><strong><?php esc_html_e( 'All 34 treatments', 'oceanwp' ); ?></strong></span>
+							<small class="mega-desc">→</small>
 						</a>
 					</li>
 					<li style="transition-delay: 320ms">
 						<a href="<?php echo esc_url( home_url( '/specialties/' ) ); ?>">
-							<strong><?php esc_html_e( 'Care pathways', 'oceanwp' ); ?></strong>
-							<small>→</small>
+							<span class="mega-name"><strong><?php esc_html_e( 'Care pathways', 'oceanwp' ); ?></strong></span>
+							<small class="mega-desc">→</small>
 						</a>
 					</li>
 				</ul>

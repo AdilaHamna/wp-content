@@ -703,11 +703,12 @@ p {
 }
 
 .mega li a {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(auto, 48%) 1fr;
   align-items: baseline;
   justify-content: space-between;
-  gap: 12px;
-  padding: 9px 0;
+  gap: 16px;
+  padding: 10px 0;
   border-bottom: 1px solid var(--line);
   text-decoration: none;
   font: 400 1.2rem/1.2 var(--display);
@@ -715,15 +716,26 @@ p {
   transition: color 0.3s, padding 0.5s var(--ease);
 }
 
-.mega li a small {
-  font: 500 0.78rem/1 var(--sans);
-  letter-spacing: 0.06em;
+.mega li a .mega-name,
+.mega li a > strong,
+.mega li a > span {
+  text-align: left;
+  line-height: 1.25;
+}
+
+.mega li a small,
+.mega li a .mega-desc {
+  text-align: right;
+  justify-self: end;
+  font: 500 0.77rem/1.35 var(--sans);
+  letter-spacing: 0.02em;
   color: var(--fg-2);
+  display: block;
 }
 
 .mega li a:hover, .mega li a:focus-visible {
   color: var(--accent);
-  padding-left: 10px;
+  padding-left: 8px;
 }
 
 .mega-prev {
