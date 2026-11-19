@@ -202,6 +202,256 @@
     });
   }
 
+  // Sidebar Table of Contents (TOC) smooth scroll & heading visibility
+  function initTocScroll() {
+    var tocLinks = document.querySelectorAll(".toc a[href^='#']");
+    if (!tocLinks.length) return;
+
+    function getScrollOffset(targetEl) {
+      var header = document.querySelector(".hdr");
+      var headerH = header ? header.offsetHeight : 80;
+      var adminBar = document.querySelector("#wpadminbar");
+      var adminH = adminBar ? adminBar.offsetHeight : 0;
+      var rect = targetEl.getBoundingClientRect();
+      var targetTop = rect.top + (window.pageYOffset || document.documentElement.scrollTop || 0);
+      // Offset so heading appears cleanly with generous breathing room below the fixed header
+      return Math.max(0, targetTop - headerH - adminH - 32);
+    }
+
+    // Capture click before OceanWP or browser default
+    document.addEventListener("click", function(e) {
+      var anchor = e.target.closest(".toc a[href^='#']");
+      if (!anchor) return;
+
+      var hash = anchor.getAttribute("href");
+      if (!hash || hash === "#") return;
+
+      var targetEl = document.querySelector(hash);
+      if (!targetEl) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      var scrollPos = getScrollOffset(targetEl);
+
+      window.scrollTo({
+        top: scrollPos,
+        behavior: "smooth"
+      });
+
+      var parentToc = anchor.closest(".toc");
+      if (parentToc) {
+        parentToc.querySelectorAll("a").forEach(function(a) { a.classList.remove("active"); });
+        anchor.classList.add("active");
+      }
+
+      if (history.pushState) {
+        history.pushState(null, null, hash);
+      }
+    }, true);
+
+    // ScrollSpy: highlight active TOC item as user scrolls
+    function updateTocActive() {
+      var header = document.querySelector(".hdr");
+      var headerH = (header ? header.offsetHeight : 80) + 40;
+      var activeId = "";
+
+      document.querySelectorAll(".dsec[id]").forEach(function(sec) {
+        var rect = sec.getBoundingClientRect();
+        if (rect.top <= headerH + 60 && rect.bottom > headerH) {
+          activeId = sec.id;
+        }
+      });
+
+      if (activeId) {
+        tocLinks.forEach(function(a) {
+          if (a.getAttribute("href") === "#" + activeId) {
+            a.classList.add("active");
+          } else {
+            a.classList.remove("active");
+          }
+        });
+      }
+    }
+
+    window.addEventListener("scroll", updateTocActive, { passive: true });
+    updateTocActive();
+  }
+
+  initTocScroll();
+
+  // Therapies Explorer Filtering (used on Home and Treatments Archive)
+  function initTherapiesFilter() {
+    var grid = document.getElementById("xgrid");
+    var chips = document.querySelectorAll(".filters .chip");
+    var countEl = document.getElementById("xcount");
+    if (!grid || !chips.length || grid._filtersInitialized) return;
+    grid._filtersInitialized = true;
+
+    var cards = grid.querySelectorAll(".xcard");
+    chips.forEach(function(chip) {
+      chip.addEventListener("click", function(e) {
+        e.preventDefault();
+        var filter = chip.getAttribute("data-f");
+
+        chips.forEach(function(c) {
+          var isActive = (c === chip);
+          c.setAttribute("aria-pressed", String(isActive));
+          c.classList.toggle("active", isActive);
+        });
+
+        // Smoothly bring active chip into view inside scrollable track
+        if (typeof chip.scrollIntoView === "function") {
+          chip.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        }
+
+        var visibleCount = 0;
+        var shownCards = [];
+        cards.forEach(function(card) {
+          var rawCats = card.getAttribute("data-cats") || "";
+          var cats = rawCats.trim().split(/\s+/);
+          var show = (filter === "all" || cats.indexOf(filter) > -1);
+          card.hidden = !show;
+          if (show) {
+            visibleCount++;
+            shownCards.push(card);
+          }
+        });
+
+        if (countEl) {
+          var labelSpan = chip.querySelector("span");
+          var label = labelSpan ? labelSpan.textContent.trim().toLowerCase() : "";
+          countEl.textContent = (filter === "all")
+            ? "Showing all " + cards.length + " therapies."
+            : "Showing " + visibleCount + " " + (visibleCount === 1 ? "therapy" : "therapies") + " for " + label + ".";
+        }
+
+        if (window.gsap && shownCards.length) {
+          gsap.fromTo(shownCards,
+            { opacity: 0, y: 15 },
+            { opacity: 1, y: 0, duration: 0.35, stagger: 0.03, ease: "power2.out", overwrite: "auto" }
+          );
+        }
+
+        if (window.ScrollTrigger) {
+          ScrollTrigger.refresh();
+        }
+      });
+    });
+
+    // Support deep-linking via URL hash or query param (e.g. #f=panchakarma or ?filter=panchakarma)
+    try {
+      var initialFilter = "";
+      if (window.location.hash && window.location.hash.indexOf("f=") > -1) {
+        initialFilter = window.location.hash.split("f=")[1].split("&")[0];
+      } else if (window.location.search) {
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has("filter")) initialFilter = urlParams.get("filter");
+      }
+      if (initialFilter) {
+        var targetChip = document.querySelector('.filters .chip[data-f="' + CSS.escape(initialFilter) + '"]');
+        if (targetChip) {
+          setTimeout(function() { targetChip.click(); }, 150);
+        }
+      }
+    } catch (err) {}
+
+    // Custom view dot
+    if (window.matchMedia("(pointer: fine)").matches) {
+      var dot = document.getElementById("cdot");
+      if (dot) {
+        grid.addEventListener("pointermove", function(e) {
+          dot.style.transform = "translate(" + e.clientX + "px," + e.clientY + "px)";
+        });
+        grid.addEventListener("pointerover", function(e) {
+          if (e.target.closest(".xcard")) dot.classList.add("on");
+        });
+        grid.addEventListener("pointerout", function(e) {
+          if (!e.relatedTarget || !e.relatedTarget.closest || !e.relatedTarget.closest(".xcard")) {
+            dot.classList.remove("on");
+          }
+        });
+      }
+    }
+  }
+
+  // Horizontal Drag & Wheel Scroll for .filters on all screens
+  function initFiltersHorizontalScroll() {
+    var filterContainers = document.querySelectorAll(".filters");
+    filterContainers.forEach(function(slider) {
+      if (slider._dragInit) return;
+      slider._dragInit = true;
+
+      // Mouse wheel horizontal translation on desktop
+      slider.addEventListener("wheel", function(e) {
+        if (slider.scrollWidth > slider.clientWidth) {
+          if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && !e.shiftKey) {
+            slider.scrollLeft += e.deltaY;
+            e.preventDefault();
+          }
+        }
+      }, { passive: false });
+
+      // Mouse click-and-drag horizontal scroll
+      var isDown = false;
+      var startX = 0;
+      var scrollLeft = 0;
+      var moved = false;
+
+      slider.addEventListener("mousedown", function(e) {
+        if (e.button !== 0) return;
+        isDown = true;
+        moved = false;
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+        slider.classList.add("is-dragging");
+      });
+
+      window.addEventListener("mouseup", function() {
+        if (isDown) {
+          isDown = false;
+          slider.classList.remove("is-dragging");
+        }
+      });
+
+      slider.addEventListener("mouseleave", function() {
+        if (isDown) {
+          isDown = false;
+          slider.classList.remove("is-dragging");
+        }
+      });
+
+      slider.addEventListener("mousemove", function(e) {
+        if (!isDown) return;
+        var x = e.pageX - slider.offsetLeft;
+        var walk = (x - startX);
+        if (Math.abs(walk) > 4) {
+          moved = true;
+        }
+        slider.scrollLeft = scrollLeft - walk;
+      });
+
+      // Prevent accidental click during drag
+      slider.addEventListener("click", function(e) {
+        if (moved) {
+          e.preventDefault();
+          e.stopPropagation();
+          moved = false;
+        }
+      }, true);
+    });
+  }
+
+  window.initTherapiesFilter = initTherapiesFilter;
+  initTherapiesFilter();
+  initFiltersHorizontalScroll();
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function() {
+      initTherapiesFilter();
+      initFiltersHorizontalScroll();
+    });
+  }
+
   // Page Transition Curtain (safe dismissal on load and back-forward cache restore)
   var cur = document.getElementById("curtain");
   if (cur) {
@@ -420,7 +670,93 @@
       } catch(e) {}
     }
 
+    // Doctor Cards Scroll Animation
+    var docCards = document.querySelectorAll(".docs .doc-reveal, .docfull.doc-reveal");
+    if (docCards.length && typeof ScrollTrigger !== "undefined") {
+      ScrollTrigger.batch(".docs .doc-reveal, .docfull.doc-reveal", {
+        start: "top 85%",
+        once: true,
+        onEnter: function(batch) {
+          batch.forEach(function(el) {
+            el.classList.add("is-in-view");
+          });
+        }
+      });
+    }
+
     ScrollTrigger.refresh();
+  }
+
+  // IntersectionObserver for Doctor Cards Entrance
+  function initDocScrollObserver() {
+    var cards = document.querySelectorAll(".doc-reveal:not(.is-in-view)");
+    if (!cards.length) return;
+
+    if ("IntersectionObserver" in window) {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-in-view");
+            obs.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: "0px 0px -40px 0px"
+      });
+
+      cards.forEach(function(card) {
+        obs.observe(card);
+      });
+    } else {
+      cards.forEach(function(card) {
+        card.classList.add("is-in-view");
+      });
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initDocScrollObserver);
+  } else {
+    initDocScrollObserver();
+  }
+
+  // Care Pathways Accordion Panes Hover / Focus Interaction
+  function initAccordionPanes() {
+    var accordions = document.querySelectorAll(".acc, #acc");
+    accordions.forEach(function(acc) {
+      if (acc._accInitialized) return;
+      acc._accInitialized = true;
+      var panes = acc.querySelectorAll(".pane, [data-pane]");
+      if (!panes.length) return;
+
+      panes.forEach(function(pane) {
+        pane.addEventListener("mouseenter", function() {
+          panes.forEach(function(p) {
+            p.classList.toggle("on", p === pane);
+          });
+        });
+        pane.addEventListener("focus", function() {
+          panes.forEach(function(p) {
+            p.classList.toggle("on", p === pane);
+          });
+        });
+        pane.addEventListener("click", function(e) {
+          if (window.innerWidth > 860 && !pane.classList.contains("on")) {
+            e.preventDefault();
+            panes.forEach(function(p) {
+              p.classList.toggle("on", p === pane);
+            });
+          }
+        });
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initAccordionPanes);
+  } else {
+    initAccordionPanes();
   }
 
   // Initialize Motion on DOM ready

@@ -28,6 +28,15 @@ foreach ( $all_doctors as $d ) {
 	}
 }
 
+if ( ! $doctor && ( $current_slug === 'rajesh' || $current_slug === 'dr-rajesh' ) ) {
+	foreach ( $all_doctors as $d ) {
+		if ( $d['slug'] === 'minupriya' || $d['id'] === 'minupriya' || stripos( $d['name'], 'Minupriya' ) !== false ) {
+			$doctor = $d;
+			break;
+		}
+	}
+}
+
 if ( ! $doctor && ! empty( $all_doctors ) ) {
 	$doctor = $all_doctors[0];
 }
@@ -58,7 +67,7 @@ $mono_el = empty( $d_img ) ? '<span class="mono" aria-hidden="true">' . esc_html
 
 <!-- Full Doctor Profile -->
 <div class="wrap">
-	<article class="docfull">
+	<article class="docfull doc-reveal is-in-view">
 		<div class="frame">
 			<?php echo kottakkal_render_plate( 'doc-' . $doctor['id'], 'doc', $doctor['tone'], '', null, $mono_el, $d_img ); ?>
 		</div>
@@ -74,12 +83,29 @@ $mono_el = empty( $d_img ) ? '<span class="mono" aria-hidden="true">' . esc_html
 			</ul>
 
 			<div class="body">
-				<?php foreach ( $doctor['bio'] as $idx => $p ) : ?>
-					<p<?php echo $idx === 0 ? ' class="lede"' : ''; ?>><?php echo esc_html( $p ); ?></p>
-				<?php endforeach; ?>
+				<?php 
+				$p_count = 0;
+				foreach ( $doctor['bio'] as $p ) : 
+					$p = trim( (string) $p );
+					if ( empty( $p ) ) {
+						continue;
+					}
+					if ( preg_match( '/^###\s*(.*)$/', $p, $m ) || preg_match( '/^##\s*(.*)$/', $p, $m ) ) {
+						echo '<h3 class="doc-subhead">' . esc_html( $m[1] ) . '</h3>';
+					} elseif ( preg_match( '/^\*(.*)\*$/', $p, $m ) || preg_match( '/^_([^_]+)_$/', $p, $m ) ) {
+						echo '<p class="doc-journey"><em>' . esc_html( $m[1] ) . '</em></p>';
+					} elseif ( preg_match( '/^<p[^>]*>/i', $p ) ) {
+						echo wp_kses_post( $p );
+						$p_count++;
+					} else {
+						echo '<p>' . wp_kses_post( $p ) . '</p>';
+						$p_count++;
+					}
+				endforeach; ?>
 			</div>
 
-			<div class="specs">
+			<h3 class="doc-subhead" style="margin-top:28px; margin-bottom:12px; font-size:1.15rem;"><?php esc_html_e( 'Areas of Specialization', 'oceanwp' ); ?></h3>
+			<div class="specs" style="margin-top:0;">
 				<?php foreach ( $doctor['specs'] as $s ) : ?>
 					<span><?php echo esc_html( $s ); ?></span>
 				<?php endforeach; ?>

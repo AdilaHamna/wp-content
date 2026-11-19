@@ -46,15 +46,15 @@
 
 .bk-facts div {
   display: grid;
-  grid-template-columns: 110px minmax(0, 1fr);
+  grid-template-columns: 120px minmax(0, 1fr);
   gap: 16px;
   padding: 16px 0;
   border-bottom: 1px solid var(--on-dark-line);
-  font-size: 0.94rem;
+  font-size: 1.05rem;
 }
 
 .bk-facts dt {
-  font: 500 0.78rem/1.9 var(--sans);
+  font: 600 0.85rem/1.9 var(--sans);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--on-dark-2);

@@ -11,7 +11,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  font: 500 0.78rem/1.4 var(--sans);
+  font: 500 0.88rem/1.4 var(--sans);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--fg-2);
@@ -78,7 +78,7 @@
 }
 
 .facts dt {
-  font: 600 0.78rem/1 var(--sans);
+  font: 600 0.85rem/1 var(--sans);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--fg-2);
@@ -102,9 +102,10 @@
   top: 120px;
   align-self: start;
   display: grid;
-  gap: 12px;
-  font-size: 0.84rem;
-  letter-spacing: 0.04em;
+  gap: 14px;
+  font-size: 1.02rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
 }
 
 .toc a {
@@ -115,7 +116,8 @@
   transition: color 0.3s, border-color 0.3s;
 }
 
-.toc a:hover {
+.toc a:hover,
+.toc a.active {
   color: var(--accent);
   border-color: var(--accent);
 }
@@ -124,7 +126,7 @@
   padding-bottom: 56px;
   margin-bottom: 56px;
   border-bottom: 1px solid var(--line);
-  scroll-margin-top: 120px;
+  scroll-margin-top: 140px;
   display: grid;
   gap: 22px;
   min-width: 0;
@@ -140,14 +142,21 @@
   font-size: var(--fs-2);
 }
 
-.dsec p {
+.dsec p,
+.dsec .lede,
+.dsec p.lede {
+  font-size: 1.12rem;
+  line-height: 1.75;
+  color: var(--fg);
   max-width: 62ch;
 }
 
 .callout {
   border-left: 2px solid var(--gold);
   padding: 8px 0 8px 22px;
-  color: var(--fg-2);
+  color: var(--fg);
+  font-size: 1.12rem;
+  line-height: 1.75;
   max-width: 62ch;
   font-style: italic;
 }

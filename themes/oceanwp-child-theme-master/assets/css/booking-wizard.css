@@ -68,6 +68,11 @@
 
 .progress li.done {
   color: rgba(243, 238, 226, 0.75);
+  cursor: pointer;
+}
+
+.progress li.done:hover {
+  color: #FAF7F2;
 }
 
 /* Stepper Forms & Animated Steps */
@@ -116,9 +121,53 @@
 
 .step .sub {
   margin-top: 10px;
-  color: #9AA89F;
-  font-size: 1rem;
-  line-height: 1.5;
+  color: #b3c2b8;
+  font-size: 1.08rem;
+  line-height: 1.6;
+}
+
+/* Selected Service/Therapy Confirmation Badge in Step 2 */
+.bk-selected-badge {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin: 16px 0 24px;
+  padding: 8px 18px;
+  background: rgba(183, 209, 188, 0.1);
+  border: 1px solid rgba(183, 209, 188, 0.28);
+  border-radius: 999px;
+  font: 500 0.92rem/1.3 var(--sans, sans-serif);
+  color: var(--on-dark, #FAF7F2);
+}
+
+.bk-selected-badge .bk-badge-lbl {
+  color: rgba(243, 238, 226, 0.75);
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.bk-selected-badge .bk-badge-val {
+  color: var(--accent, #B7D1BC);
+  font-weight: 600;
+}
+
+.bk-selected-badge .btn-change-svc {
+  background: transparent;
+  border: none;
+  color: var(--gold-hi, #F0D6A0);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0 4px;
+  font: 600 0.82rem/1 var(--sans, sans-serif);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: opacity 0.3s;
+}
+
+.bk-selected-badge .btn-change-svc:hover {
+  opacity: 0.8;
 }
 
 /* Step 1: Service Selection Cards (Matching Reference Screenshot) */
@@ -167,9 +216,9 @@
 
 .opt small {
   font-family: var(--sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
-  font-size: 0.88rem;
+  font-size: 0.98rem;
   font-weight: 400;
-  color: #9AA89F;
+  color: #b3c2b8;
   line-height: 1.5;
   display: block;
 }
@@ -179,17 +228,20 @@
   position: absolute;
   left: 20px;
   top: 25px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.28);
-  background: transparent;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.02);
   box-sizing: border-box;
-  transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .opt:hover::before {
-  border-color: rgba(255, 255, 255, 0.55);
+  border-color: var(--accent, #B7D1BC);
 }
 
 .opt[aria-checked="true"],
@@ -201,11 +253,283 @@
 .opt[aria-checked="true"]::before,
 .opt.selected::before {
   border-color: var(--accent, #B7D1BC);
-  box-shadow: inset 0 0 0 3px #13221C, inset 0 0 0 10px var(--accent, #B7D1BC);
+  background-color: var(--accent, #B7D1BC);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230E1A16' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 12px;
+  box-shadow: 0 0 10px rgba(183, 209, 188, 0.35);
+}
+
+/* Step 2 Time Slots remain single-select radio circles */
+.times .opt::before {
+  border-radius: 50% !important;
+  background-image: none !important;
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.times .opt[aria-checked="true"]::before,
+.times .opt.selected::before {
+  background-color: transparent !important;
+  box-shadow: inset 0 0 0 3px #13221C, inset 0 0 0 10px var(--accent, #B7D1BC) !important;
 }
 
 .opt.wide {
   grid-column: 1 / -1;
+}
+
+/* Multi-select Therapies Dropdown */
+.ther-multi-wrap {
+  position: relative;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.ther-multi-trigger {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+  color: #FAF7F2;
+  font-family: inherit;
+  font-size: 1.05rem;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.25s, color 0.25s;
+}
+
+.ther-multi-trigger:hover,
+.ther-multi-trigger[aria-expanded="true"] {
+  border-bottom-color: var(--accent, #B7D1BC);
+  color: #ffffff;
+}
+
+.ther-trigger-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-right: 10px;
+}
+
+.ther-trigger-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 12px;
+  background: var(--accent, #B7D1BC);
+  color: #0E1A16;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+.ther-chevron {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.ther-multi-trigger[aria-expanded="true"] .ther-chevron {
+  transform: rotate(180deg);
+  color: var(--accent, #B7D1BC);
+}
+
+.ther-multi-dropdown {
+  display: none;
+  position: relative;
+  width: 100%;
+  margin-top: 14px;
+  margin-bottom: 14px;
+  background: #14241E;
+  border: 1px solid rgba(183, 209, 188, 0.3);
+  border-radius: 8px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.3);
+  max-height: 290px;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.ther-multi-dropdown.is-open {
+  display: flex !important;
+}
+
+.ther-dropdown-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+}
+
+.ther-dropdown-search input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #FAF7F2;
+  font-size: 0.95rem;
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.ther-dropdown-search input:focus {
+  border-color: var(--accent, #B7D1BC);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ther-dropdown-close {
+  background: var(--accent, #B7D1BC);
+  color: #0E1A16;
+  border: 0;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-family: var(--sans, sans-serif);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.ther-dropdown-close:hover {
+  background: #CEE4D2;
+}
+
+.ther-options-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+  overflow-y: auto;
+  max-height: 250px;
+}
+
+.ther-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  user-select: none;
+}
+
+.ther-option:hover,
+.ther-option.focused {
+  background: rgba(183, 209, 188, 0.1);
+}
+
+.ther-option[aria-selected="true"] {
+  background: rgba(183, 209, 188, 0.14);
+}
+
+.ther-chk {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.ther-option:hover .ther-chk {
+  border-color: var(--accent, #B7D1BC);
+}
+
+.ther-option[aria-selected="true"] .ther-chk {
+  border-color: var(--accent, #B7D1BC);
+  background-color: var(--accent, #B7D1BC);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230E1A16' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 11px;
+}
+
+.ther-opt-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.25;
+}
+
+.ther-opt-name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #FAF7F2;
+}
+
+.ther-opt-alt {
+  font-size: 0.85rem;
+  color: #a4b5aa;
+}
+
+/* Selected Chips */
+.ther-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ther-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(183, 209, 188, 0.12);
+  border: 1px solid rgba(183, 209, 188, 0.32);
+  border-radius: 999px;
+  padding: 5px 12px 5px 14px;
+  font-size: 0.92rem;
+  color: #FAF7F2;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.ther-chip:hover {
+  background: rgba(183, 209, 188, 0.18);
+  border-color: var(--accent, #B7D1BC);
+}
+
+.ther-chip-remove {
+  background: transparent;
+  border: 0;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  padding: 0;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 1;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.ther-chip-remove:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* Step 2: Date Selector (Horizontal Scroll) */
@@ -286,6 +610,55 @@
   left: 16px;
 }
 
+/* Concluded / Passed Time Slots */
+.times .opt.is-past,
+.times .opt:disabled {
+  opacity: 0.36;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.01) !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+.times .opt.is-past::before,
+.times .opt:disabled::before {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.times .opt.is-past b,
+.times .opt:disabled b {
+  color: rgba(250, 247, 242, 0.45);
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 255, 255, 0.22);
+}
+
+.times .opt.is-past small,
+.times .opt:disabled small {
+  color: rgba(154, 168, 159, 0.45);
+}
+
+.times .opt .slot-past-tag {
+  display: inline-block;
+  font-family: var(--sans, sans-serif);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #E29D9D;
+  background: rgba(226, 157, 157, 0.12);
+  border-radius: 999px;
+  padding: 2px 7px;
+  margin-top: 4px;
+  width: fit-content;
+}
+
+.date.is-closed {
+  opacity: 0.35;
+  cursor: not-allowed !important;
+}
+
 /* Step 3: Details Form Fields */
 .flds {
   display: grid;
@@ -306,10 +679,10 @@
 
 .fld label,
 .fld .lbl {
-  font: 600 0.74rem/1.3 var(--sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
-  letter-spacing: 0.18em;
+  font: 600 0.84rem/1.3 var(--sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(243, 238, 226, 0.85);
+  color: rgba(243, 238, 226, 0.9);
 }
 
 .fld .opt-l {
@@ -403,8 +776,8 @@
   grid-template-columns: 20px minmax(0, 1fr);
   gap: 12px;
   align-items: start;
-  font-size: 0.88rem;
-  color: rgba(243, 238, 226, 0.72);
+  font-size: 0.98rem;
+  color: rgba(243, 238, 226, 0.88);
   line-height: 1.55;
   cursor: pointer;
   text-transform: none !important;

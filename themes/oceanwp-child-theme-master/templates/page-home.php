@@ -52,7 +52,7 @@ $doctors    = kottakkal_get_doctors();
 
 			<div>
 				<p class="sub fade-up d1">
-					<?php esc_html_e( 'Discover a more considered approach to wellbeing through traditional Ayurvedic therapies and personalised care at Kottakkal GreenLife, Dubai.', 'oceanwp' ); ?>
+					<?php esc_html_e( 'Discover a more considered approach to wellbeing through traditional Ayurvedic therapies and personalised care at Kottakkal Green Life, Dubai.', 'oceanwp' ); ?>
 				</p>
 				<div class="ctas fade-up d2">
 					<a class="btn btn-ivory mag" href="<?php echo esc_url( home_url( '/book/' ) ); ?>">
@@ -108,7 +108,7 @@ $doctors    = kottakkal_get_doctors();
 				</h2>
 				<div class="body">
 					<p>
-						<?php esc_html_e( 'Every course of care at Kottakkal GreenLife begins with a thorough review by one of our DHA-certified Ayurvedic doctors. From there we build a plan around you, drawing on classical Kerala therapies, herbal medicine and changes to diet and daily routine.', 'oceanwp' ); ?>
+						<?php esc_html_e( 'Every course of care at Kottakkal Green Life begins with a thorough review by one of our DHA-certified Ayurvedic doctors. From there we build a plan around you, drawing on classical Kerala therapies, herbal medicine and changes to diet and daily routine.', 'oceanwp' ); ?>
 					</p>
 					<p class="muted">
 						<?php esc_html_e( 'Trained therapists carry out each treatment under the doctors’ supervision, using natural, toxin-free preparations, in a calm centre beside Al Nahda Metro Station.', 'oceanwp' ); ?>
@@ -124,7 +124,7 @@ $doctors    = kottakkal_get_doctors();
 		<!-- Animated Statistics -->
 		<div class="stats">
 			<div class="stat">
-				<b><span data-count="11">11</span></b>
+				<b><span data-count="30">30</span><sup>+</sup></b>
 				<span><?php esc_html_e( 'Classical Kerala therapies', 'oceanwp' ); ?></span>
 			</div>
 			<div class="stat">
@@ -155,15 +155,31 @@ $doctors    = kottakkal_get_doctors();
 		</div>
 
 		<!-- Filter Chips -->
-		<div class="filters" role="group" aria-label="<?php esc_attr_e( 'Filter therapies by need', 'oceanwp' ); ?>">
+		<div class="filters" role="group" aria-label="<?php esc_attr_e( 'Filter therapies by category and need', 'oceanwp' ); ?>">
 			<button type="button" class="chip active" data-f="all" aria-pressed="true">
 				<span><?php esc_html_e( 'All therapies', 'oceanwp' ); ?></span>
 				<small><?php echo count( $treatments ); ?></small>
 			</button>
+			<?php
+			$categories = function_exists( 'kottakkal_get_therapy_categories' ) ? kottakkal_get_therapy_categories() : array();
+			foreach ( $categories as $cat_id => $cat ) :
+				$count = 0;
+				foreach ( $treatments as $t ) {
+					if ( ! empty( $t['paths'] ) && in_array( $cat_id, $t['paths'], true ) ) {
+						$count++;
+					}
+				}
+				if ( $count > 0 ) :
+			?>
+				<button type="button" class="chip" data-f="<?php echo esc_attr( $cat_id ); ?>" aria-pressed="false">
+					<span><?php echo esc_html( $cat['short'] ); ?></span>
+					<small><?php echo esc_html( $count ); ?></small>
+				</button>
+			<?php endif; endforeach; ?>
 			<?php foreach ( $pathways as $p ) :
 				$count = 0;
 				foreach ( $treatments as $t ) {
-					if ( in_array( $p['id'], $t['paths'] ) ) {
+					if ( ! empty( $t['paths'] ) && in_array( $p['id'], $t['paths'], true ) ) {
 						$count++;
 					}
 				}
@@ -262,7 +278,7 @@ $doctors    = kottakkal_get_doctors();
 				<span class="label"><?php esc_html_e( 'Care pathways', 'oceanwp' ); ?></span>
 				<h2 id="pa-h"><?php esc_html_e( 'Start from what', 'oceanwp' ); ?> <em><?php esc_html_e( 'you need', 'oceanwp' ); ?></em></h2>
 			</div>
-			<p><?php esc_html_e( 'Six pathways bring together the therapies, doctors and approach for a particular concern.', 'oceanwp' ); ?></p>
+			<p><?php esc_html_e( 'Care pathways bring together the therapies, doctors and approach for a particular concern.', 'oceanwp' ); ?></p>
 		</div>
 
 		<div class="acc" id="acc">
@@ -295,60 +311,264 @@ $doctors    = kottakkal_get_doctors();
 </section>
 
 <!-- Doctors Section -->
-<section class="section" style="padding-top:0" aria-labelledby="dr-h">
+<section class="section docs-section" aria-labelledby="dr-h">
+	<!-- Ambient Wave Lines -->
+	<svg class="docs-ambient-waves" viewBox="0 0 1400 600" fill="none" preserveAspectRatio="none" aria-hidden="true">
+		<path d="M -100 120 C 300 -50 700 250 1100 80 C 1300 -10 1450 60 1550 100" stroke="rgba(74, 222, 128, 0.22)" stroke-width="1.2"/>
+		<path d="M -50 200 C 350 40 650 300 1050 140 C 1250 50 1400 120 1500 160" stroke="rgba(74, 222, 128, 0.12)" stroke-width="1"/>
+		<path d="M -100 350 C 250 220 750 480 1200 300 C 1350 240 1450 280 1550 320" stroke="rgba(74, 222, 128, 0.08)" stroke-width="1"/>
+	</svg>
+
+	<!-- Corner Foliage SVGs -->
+	<svg class="docs-corner-leaf left" viewBox="0 0 180 180" fill="none" aria-hidden="true">
+		<g opacity="0.35" filter="blur(0.5px)">
+			<path d="M -20 180 C 10 120 50 80 160 30" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"/>
+			<path d="M 15 140 C -10 115 -12 85 5 65 C 22 75 30 105 15 140 Z" fill="#10B981"/>
+			<path d="M 45 105 C 25 80 28 50 48 35 C 65 48 65 78 45 105 Z" fill="#34D399"/>
+			<path d="M 85 70 C 70 45 80 25 102 18 C 115 32 108 55 85 70 Z" fill="#6EE7B7"/>
+			<path d="M 35 150 C 55 135 75 140 78 158 C 65 165 45 160 35 150 Z" fill="#059669"/>
+			<path d="M 68 115 C 88 100 108 105 110 120 C 95 128 78 124 68 115 Z" fill="#10B981"/>
+		</g>
+	</svg>
+	<svg class="docs-corner-leaf right" viewBox="0 0 180 180" fill="none" aria-hidden="true">
+		<g opacity="0.35" filter="blur(0.5px)">
+			<path d="M 200 180 C 170 120 130 80 20 30" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"/>
+			<path d="M 165 140 C 190 115 192 85 175 65 C 158 75 150 105 165 140 Z" fill="#10B981"/>
+			<path d="M 135 105 C 155 80 152 50 132 35 C 115 48 115 78 135 105 Z" fill="#34D399"/>
+			<path d="M 95 70 C 110 45 100 25 78 18 C 65 32 72 55 95 70 Z" fill="#6EE7B7"/>
+			<path d="M 145 150 C 125 135 105 140 102 158 C 115 165 135 160 145 150 Z" fill="#059669"/>
+			<path d="M 112 115 C 92 100 72 105 70 120 C 85 128 102 124 112 115 Z" fill="#10B981"/>
+		</g>
+	</svg>
+
 	<div class="wrap">
-		<div class="shead">
-			<div>
-				<span class="label"><?php esc_html_e( 'Practitioners', 'oceanwp' ); ?></span>
-				<h2 id="dr-h"><?php esc_html_e( 'The doctors behind', 'oceanwp' ); ?> <em><?php esc_html_e( 'your care', 'oceanwp' ); ?></em></h2>
+		<!-- Section Header (Pill, High-Impact Title, Subtitle) -->
+		<div class="docs-header doc-reveal" data-reveal="up">
+			<div class="docs-pill">
+				<svg class="pill-ic" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+					<path d="M7 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm6 2a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM2.5 16.5c0-2.5 3-3.8 4.5-3.8s4.5 1.3 4.5 3.8v.5h-9v-.5Zm10 0v-.5c0-.8-.4-1.6-1.1-2.2 1.3.1 3.6.7 3.6 2.2v.5h-2.5Z"/>
+				</svg>
+				<span><?php esc_html_e( 'Our Practitioners', 'oceanwp' ); ?></span>
 			</div>
-			<p><?php esc_html_e( 'All treatments are carried out under the supervision of DHA-certified Ayurvedic doctors, working with highly trained therapists.', 'oceanwp' ); ?></p>
+			<h2 class="docs-title" id="dr-h">
+				<?php esc_html_e( 'Meet Our', 'oceanwp' ); ?> <span class="highlight-green"><?php esc_html_e( 'Expert', 'oceanwp' ); ?></span> <?php esc_html_e( 'Practitioners', 'oceanwp' ); ?>
+			</h2>
+			<p class="docs-subtitle">
+				<?php esc_html_e( 'Experienced professionals dedicated to your health and well-being', 'oceanwp' ); ?>
+			</p>
 		</div>
 
-		<div class="docs">
-			<?php foreach ( $doctors as $d ) :
-				$d_link = ! empty( $d['link'] ) ? $d['link'] : home_url( '/doctors/' . $d['slug'] . '/' );
-				$d_img  = ! empty( $d['img_url'] ) ? $d['img_url'] : '';
-				$mono_el = empty( $d_img ) ? '<span class="mono" aria-hidden="true">' . esc_html( $d['mono'] ) . '</span>' : '';
+		<?php
+		// Ordered explicitly: 1st Naseeba, 2nd Ajitha, 3rd Minupriya
+		$home_practitioners = array(
+			array(
+				'slug'        => 'naseeba',
+				'name'        => 'Dr. Naseeba Abdul Rafeeque',
+				'badge_type'  => 'director',
+				'badge_text'  => 'Medical Director',
+				'extra_badge' => '',
+				'subtitle'    => 'DHA- and MOH-certified Ayurvedic practitioner',
+				'has_cross'   => true,
+				'img_file'    => 'doc-naseeba-hd.png',
+				'link'        => home_url( '/doctors/naseeba/' ),
+				'book_link'   => home_url( '/book/?doctor=naseeba' ),
+				'book_label'  => 'Book with Naseeba',
+				'creds'       => array(
+					array(
+						'icon' => 'hospital',
+						'text' => 'KMCT Ayurveda Medical College, Calicut',
+					),
+					array(
+						'icon' => 'globe',
+						'text' => "10+ years' clinical experience in India and the UAE",
+					),
+				),
+			),
+			array(
+				'slug'        => 'ajitha',
+				'name'        => 'Dr. Ajitha Babu',
+				'badge_type'  => 'practitioner',
+				'badge_text'  => 'Ayurveda Practitioner',
+				'extra_badge' => '',
+				'subtitle'    => 'Ayurvedic Practitioner',
+				'has_cross'   => false,
+				'img_file'    => 'doc-ajitha-hd.png',
+				'link'        => home_url( '/doctors/ajitha/' ),
+				'book_link'   => home_url( '/book/?doctor=ajitha' ),
+				'book_label'  => 'Book with Ajitha',
+				'creds'       => array(
+					array(
+						'icon' => 'cap',
+						'text' => 'SN Ayurveda Medical College, Kollam (KUHS)',
+					),
+					array(
+						'icon' => 'mortar',
+						'text' => "6+ years' experience in India",
+					),
+					array(
+						'icon' => 'award',
+						'text' => 'Certified yoga trainer (Yoga Alliance International, CIY)',
+					),
+				),
+			),
+			array(
+				'slug'        => 'minupriya',
+				'name'        => 'Dr. Minupriya',
+				'badge_type'  => 'practitioner',
+				'badge_text'  => 'Ayurvedic Practitioner',
+				'extra_badge' => '10+ Years Experience',
+				'subtitle'    => 'Ayurvedic Practitioner',
+				'has_cross'   => false,
+				'img_file'    => 'doc-minupriya-hd.png',
+				'link'        => home_url( '/doctors/minupriya/' ),
+				'book_link'   => home_url( '/book/?doctor=minupriya' ),
+				'book_label'  => 'Book with Minupriya',
+				'creds'       => array(
+					array(
+						'icon' => 'clock',
+						'text' => '10+ Years of Clinical Experience',
+					),
+					array(
+						'icon' => 'cap',
+						'text' => 'Rajiv Gandhi University of Health Sciences, Bangalore',
+					),
+					array(
+						'icon' => 'stethoscope',
+						'text' => "10+ years' clinical experience across India and the UAE",
+					),
+				),
+			),
+		);
+		?>
+
+		<!-- Three Practitioner Cards -->
+		<div class="docs-grid">
+			<?php foreach ( $home_practitioners as $doc ) :
+				$doc_img_path = get_stylesheet_directory() . '/assets/img/' . $doc['img_file'];
+				$doc_img_url  = file_exists( $doc_img_path )
+					? get_stylesheet_directory_uri() . '/assets/img/' . $doc['img_file']
+					: get_stylesheet_directory_uri() . '/assets/img/doc-' . $doc['slug'] . '.png';
 			?>
-				<article class="dcard">
-					<a class="frame" href="<?php echo esc_url( $d_link ); ?>" aria-label="<?php echo esc_attr( $d['name'] ); ?>, full profile">
-						<?php echo kottakkal_render_plate( 'doc-' . $d['id'], 'doc', $d['tone'], '', null, $mono_el, $d_img ); ?>
-						<span class="reveal" aria-hidden="true">
-							<?php foreach ( $d['specs'] as $spec ) : ?>
-								<span><?php echo esc_html( $spec ); ?></span>
-							<?php endforeach; ?>
-						</span>
+				<article class="dcard doc-reveal" data-doctor="<?php echo esc_attr( $doc['slug'] ); ?>">
+					<!-- Right Arch Portal Backdrop (Exact Reference Matched) -->
+					<div class="dcard-arch-portal" aria-hidden="true">
+						<?php if ( ! empty( $doc['has_cross'] ) ) : ?>
+							<svg class="dcard-cross-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+								<path d="M18 4h12a2 2 0 0 1 2 2v12h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H32v12a2 2 0 0 1-2 2H18a2 2 0 0 1-2-2V34H4a2 2 0 0 1-2-2V20a2 2 0 0 1 2-2h12V6a2 2 0 0 1 2-2z" stroke="rgba(167, 243, 208, 0.45)" stroke-width="2.5" fill="rgba(52, 211, 153, 0.1)"/>
+							</svg>
+						<?php endif; ?>
+					</div>
+
+					<!-- Doctor Cutout Portrait (Takes Full Arch Area, Fully Highlighted & Prominent) -->
+					<a class="dcard-photo-wrap" href="<?php echo esc_url( $doc['link'] ); ?>" aria-label="<?php echo esc_attr( $doc['name'] ); ?>, full profile">
+						<img class="dcard-photo-v2" src="<?php echo esc_url( $doc_img_url ); ?>" alt="<?php echo esc_attr( $doc['name'] ); ?>" loading="lazy" decoding="async">
 					</a>
 
-					<div>
-						<span class="role"><?php echo esc_html( $d['role'] ); ?></span>
-						<h3><?php echo esc_html( $d['name'] ); ?></h3>
-						<ul>
-							<?php foreach ( $d['creds'] as $cred ) : ?>
-								<li><?php echo esc_html( $cred ); ?></li>
+					<!-- Left Column: Details -->
+					<div class="dcard-content">
+						<div class="dcard-badges">
+							<?php if ( $doc['badge_type'] === 'director' ) : ?>
+								<span class="dcard-badge badge-director">
+									<svg class="ic-star" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.5l1.9 4.2 4.6.4-3.5 3.1 1 4.5L8 11.3l-4 2.4 1-4.5-3.5-3.1 4.6-.4L8 1.5z"/></svg>
+									<span><?php echo esc_html( $doc['badge_text'] ); ?></span>
+								</span>
+							<?php else : ?>
+								<span class="dcard-badge badge-practitioner">
+									<svg class="ic-leaf" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M14.5 1.5C9 1.5 5 5 4.5 9.5 4 13.5 1.5 14.5 1.5 14.5s4-.5 6-3.5c2.5-3.5 4.5-6 7-9.5z"/></svg>
+									<span><?php echo esc_html( $doc['badge_text'] ); ?></span>
+								</span>
+							<?php endif; ?>
+
+							<?php if ( ! empty( $doc['extra_badge'] ) ) : ?>
+								<span class="dcard-badge badge-experience">
+									<span><?php echo esc_html( $doc['extra_badge'] ); ?></span>
+								</span>
+							<?php endif; ?>
+						</div>
+
+						<h3 class="dcard-name">
+							<a href="<?php echo esc_url( $doc['link'] ); ?>"><?php echo esc_html( $doc['name'] ); ?></a>
+						</h3>
+
+						<p class="dcard-sub"><?php echo esc_html( $doc['subtitle'] ); ?></p>
+
+						<!-- Green Accent Line Requested by User -->
+						<div class="dcard-accent-line" aria-hidden="true"></div>
+
+						<ul class="dcard-creds-v2">
+							<?php foreach ( $doc['creds'] as $c_item ) : ?>
+								<li>
+									<span class="cred-ic-v2" aria-hidden="true">
+										<?php if ( $c_item['icon'] === 'mortar' ) : ?>
+											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m19 5-3.5 7.5"/><path d="M4.5 12.5C4 16.5 7.5 20 12 20s8-3.5 7.5-7.5H4.5z"/><path d="M7 20v1.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V20"/></svg>
+										<?php elseif ( $c_item['icon'] === 'award' ) : ?>
+											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="m8.5 13-1.5 8 5-3 5 3-1.5-8"/></svg>
+										<?php elseif ( $c_item['icon'] === 'clock' ) : ?>
+											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+										<?php elseif ( $c_item['icon'] === 'cap' ) : ?>
+											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+										<?php elseif ( $c_item['icon'] === 'stethoscope' ) : ?>
+											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.8 2.5A2.3 2.3 0 0 1 7 4.8V9a5 5 0 0 0 10 0V4.8a2.3 2.3 0 0 1 2.2-2.3M12 14v4a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-1"/><circle cx="18" cy="17" r="2"/></svg>
+										<?php elseif ( $c_item['icon'] === 'hospital' ) : ?>
+											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M12 7v4M10 9h4M9 22v-4h6v4"/></svg>
+										<?php elseif ( $c_item['icon'] === 'globe' ) : ?>
+											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+										<?php else : ?>
+											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/></svg>
+										<?php endif; ?>
+									</span>
+									<span class="cred-lbl"><?php echo esc_html( $c_item['text'] ); ?></span>
+								</li>
 							<?php endforeach; ?>
 						</ul>
-						<div class="acts">
-							<a class="btn btn-solid mag" href="<?php echo esc_url( home_url( '/book/' ) ); ?>">
-								<?php printf( esc_html__( 'Book with %s', 'oceanwp' ), esc_html( explode( ' ', $d['name'] )[1] ?? $d['name'] ) ); ?>
-								<svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5"/></svg>
-							</a>
-							<a class="link" href="<?php echo esc_url( $d_link ); ?>">
-								<?php esc_html_e( 'Full profile', 'oceanwp' ); ?>
-								<svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5"/></svg>
-							</a>
-						</div>
 					</div>
+
+					<!-- Bottom Action: Mint Book Pill Button & View Full Profile Link -->
+					<div class="dcard-footer">
+						<a class="btn-book-v2" href="<?php echo esc_url( $doc['book_link'] ); ?>">
+							<span class="btn-book-label">
+								<svg class="ic-cal" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+									<rect x="3" y="4" width="14" height="13" rx="2"/>
+									<line x1="3" y1="8" x2="17" y2="8"/>
+									<line x1="7" y1="2" x2="7" y2="5"/>
+									<line x1="13" y1="2" x2="13" y2="5"/>
+								</svg>
+								<span><?php echo esc_html( $doc['book_label'] ); ?></span>
+							</span>
+							<span class="btn-book-circle" aria-hidden="true">
+								<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 8h9M8 4l4 4-4 4"/></svg>
+							</span>
+						</a>
+
+						<a class="link-profile-v2" href="<?php echo esc_url( $doc['link'] ); ?>">
+							<span><?php esc_html_e( 'View Full Profile', 'oceanwp' ); ?></span>
+							<span class="arr" aria-hidden="true">→</span>
+						</a>
+					</div>
+
+					<!-- Corner Botanical Leaf Decoration -->
+					<svg class="dcard-corner-leaves" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+						<path d="M 5 75 C 12 45 32 30 68 12" stroke="rgba(74, 222, 128, 0.45)" stroke-width="1.6" stroke-linecap="round"/>
+						<path d="M 18 56 C 8 48 6 36 12 28 C 20 33 24 45 18 56 Z" fill="rgba(74, 222, 128, 0.3)"/>
+						<path d="M 28 42 C 20 32 20 22 28 15 C 35 20 36 31 28 42 Z" fill="rgba(74, 222, 128, 0.35)"/>
+						<path d="M 42 28 C 36 18 40 10 48 7 C 54 13 51 23 42 28 Z" fill="rgba(74, 222, 128, 0.4)"/>
+						<path d="M 24 60 C 32 54 40 56 42 63 C 36 66 28 64 24 60 Z" fill="rgba(74, 222, 128, 0.22)"/>
+						<path d="M 36 46 C 44 40 52 42 54 48 C 47 51 40 50 36 46 Z" fill="rgba(74, 222, 128, 0.25)"/>
+					</svg>
 				</article>
 			<?php endforeach; ?>
 		</div>
 
-		<div style="margin-top:44px">
-			<a class="btn btn-line mag" href="<?php echo esc_url( home_url( '/doctors/' ) ); ?>">
-				<?php esc_html_e( 'Meet our practitioners', 'oceanwp' ); ?>
-				<svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5"/></svg>
+		<!-- Centered Bottom Button: Meet Our Practitioners -->
+		<div class="docs-bottom-action doc-reveal" data-reveal="up">
+			<div class="docs-action-line" aria-hidden="true"></div>
+			<a class="btn-meet-practitioners" href="<?php echo esc_url( home_url( '/doctors/' ) ); ?>">
+				<span><?php esc_html_e( 'Meet Our Practitioners', 'oceanwp' ); ?></span>
+				<svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+					<path d="M2 8h11M9 4l4 4-4 4"/>
+				</svg>
 			</a>
+			<div class="docs-action-line" aria-hidden="true"></div>
 		</div>
 	</div>
 </section>
@@ -375,20 +595,137 @@ $doctors    = kottakkal_get_doctors();
 </section>
 
 <!-- Testimonials Section -->
-<section class="section" aria-label="<?php esc_attr_e( 'Patient stories', 'oceanwp' ); ?>" style="border-top:1px solid var(--line)">
-	<div class="wrap voices">
-		<span class="qm" aria-hidden="true">“</span>
-		<div>
-			<span class="label"><?php esc_html_e( 'Patient stories', 'oceanwp' ); ?></span>
-			<div style="margin-top:24px">
-				<h2 style="font-size:var(--fs-2); max-width:18ch">
+<section class="section home-testi-sec" aria-label="<?php esc_attr_e( 'Patient stories', 'oceanwp' ); ?>" style="border-top:1px solid var(--line); position:relative; overflow:hidden;">
+	<div class="wrap">
+		<div class="home-testi-head" style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:20px; margin-bottom:2.5rem;">
+			<div>
+				<div style="display:inline-flex; align-items:center; gap:8px; padding:5px 14px; border-radius:999px; background:rgba(212,175,55,0.1); border:1px solid rgba(212,175,55,0.25); color:var(--gold-ink); font-size:0.8rem; font-weight:600; margin-bottom:12px;">
+					<span style="color:#ffb703; letter-spacing:2px;">★★★★★</span>
+					<span><?php esc_html_e( '4.9 / 5 · Verified Google Reviews', 'oceanwp' ); ?></span>
+				</div>
+				<span class="label" style="display:block;"><?php esc_html_e( 'Patient stories', 'oceanwp' ); ?></span>
+				<h2 style="font-size:var(--fs-2); margin-top:8px;">
 					<?php esc_html_e( 'In our patients’', 'oceanwp' ); ?> <em><?php esc_html_e( 'own words', 'oceanwp' ); ?></em>
 				</h2>
-				<p class="muted" style="margin-top:22px; max-width:58ch">
-					<?php esc_html_e( 'We are gathering written stories from patients who have agreed to share their experience. They will appear here, with their permission, once each is approved for publication.', 'oceanwp' ); ?>
-				</p>
-				<span class="pending"><?php esc_html_e( 'Approved patient stories coming soon', 'oceanwp' ); ?></span>
 			</div>
+			<div>
+				<a class="btn btn-solid mag" href="<?php echo esc_url( home_url( '/testimonials/' ) ); ?>">
+					<?php esc_html_e( 'Read all patient testimonials', 'oceanwp' ); ?>
+					<svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5"/></svg>
+				</a>
+			</div>
+		</div>
+
+		<!-- 3 Curated Authentic Testimonials -->
+		<?php
+		$home_testimonials = array_slice( kottakkal_get_testimonials(), 0, 3 );
+		?>
+		<div class="home-testi-grid">
+			<?php foreach ( $home_testimonials as $t ) : ?>
+				<article class="home-testi-card">
+					<div>
+						<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+							<span class="htc-stars">★★★★★</span>
+							<span style="font-size:0.75rem; color:rgba(244,238,225,0.6);"><?php echo esc_html( $t['source'] ); ?></span>
+						</div>
+						<p class="htc-quote">
+							“<?php echo esc_html( wp_trim_words( $t['quote'], 38, '…' ) ); ?>”
+						</p>
+					</div>
+					<div>
+						<span style="display:inline-block; padding:3px 10px; border-radius:999px; background:rgba(46,125,96,0.2); border:1px solid rgba(46,125,96,0.35); color:#a3e6cb; font-size:0.72rem; font-weight:500; margin-bottom:1rem;">
+							<?php echo esc_html( $t['context'] ); ?>
+						</span>
+						<div class="htc-foot">
+							<div class="htc-author">
+								<span style="width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg, rgba(212,175,55,0.25) 0%, rgba(14,46,33,0.8) 100%); border:1px solid rgba(212,175,55,0.35); display:inline-flex; align-items:center; justify-content:center; font-family:var(--display); font-size:0.85rem; font-weight:600; color:var(--gold-ink); flex-shrink:0;">
+									<?php echo esc_html( $t['initials'] ); ?>
+								</span>
+								<div style="min-width:0;">
+									<h4 style="font-family:var(--display); font-size:0.96rem; font-weight:600; color:var(--cream); margin:0; line-height:1.2; word-break:break-word;"><?php echo esc_html( $t['name'] ); ?></h4>
+									<span style="font-size:0.72rem; color:#55e6a5; display:block;"><?php esc_html_e( 'Verified Patient', 'oceanwp' ); ?></span>
+								</div>
+							</div>
+							<a href="<?php echo esc_url( home_url( '/testimonials/' ) ); ?>" style="font-size:0.78rem; color:var(--gold-ink); text-decoration:none; display:inline-flex; align-items:center; gap:4px; font-weight:500; white-space:nowrap;">
+								<?php esc_html_e( 'Read story', 'oceanwp' ); ?> →
+							</a>
+						</div>
+					</div>
+				</article>
+			<?php endforeach; ?>
+		</div>
+	</div>
+</section>
+
+<!-- Gallery Showcase Preview Section -->
+<section class="section home-gal-sec" aria-label="<?php esc_attr_e( 'Clinic Gallery', 'oceanwp' ); ?>" style="border-top:1px solid var(--line); position:relative;">
+	<div class="wrap">
+		<div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:20px; margin-bottom:2.5rem;">
+			<div>
+				<span class="label"><?php esc_html_e( 'Visual Archive', 'oceanwp' ); ?></span>
+				<h2 style="font-size:var(--fs-2); margin-top:8px;">
+					<?php esc_html_e( 'Inside our centre,', 'oceanwp' ); ?> <em><?php esc_html_e( 'moments of healing & community', 'oceanwp' ); ?></em>
+				</h2>
+				<p class="muted" style="margin-top:12px; max-width:58ch;">
+					<?php esc_html_e( 'Glimpses into classical Kerala therapies, herbal preparations, festive celebrations, and milestones from our centre in Al Qusais, Dubai.', 'oceanwp' ); ?>
+				</p>
+			</div>
+			<div>
+				<a class="btn btn-line mag" href="<?php echo esc_url( home_url( '/gallery/' ) ); ?>">
+					<?php esc_html_e( 'Explore full gallery (110+ photos)', 'oceanwp' ); ?>
+					<svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5"/></svg>
+				</a>
+			</div>
+		</div>
+
+		<!-- 4 Curated Authentic Gallery Photos -->
+		<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:20px;">
+			<?php
+			$all_gal_secs = function_exists( 'kottakkal_get_gallery' ) ? kottakkal_get_gallery() : array();
+			$home_gal_previews = array();
+			if ( ! empty( $all_gal_secs ) ) {
+				foreach ( $all_gal_secs as $sec ) {
+					if ( ! empty( $sec['images'][0] ) ) {
+						$home_gal_previews[] = array(
+							'src'     => $sec['images'][0]['src'],
+							'caption' => $sec['title'],
+						);
+					}
+					if ( count( $home_gal_previews ) >= 4 ) {
+						break;
+					}
+				}
+			}
+			if ( empty( $home_gal_previews ) ) {
+				$home_gal_previews = array(
+					array(
+						'src'     => $theme_uri . '/assets/img/gallery/healing-therapy-treatment-01.png',
+						'caption' => 'Classical Herbal Therapy',
+					),
+					array(
+						'src'     => $theme_uri . '/assets/img/gallery/healing-therapy-treatment-03.png',
+						'caption' => 'Traditional Shirodhara Preparation',
+					),
+					array(
+						'src'     => $theme_uri . '/assets/img/gallery/onam-celebration-01.png',
+						'caption' => 'Floral Pookkalam & Onam Celebration',
+					),
+					array(
+						'src'     => $theme_uri . '/assets/img/gallery/anniversary-01.png',
+						'caption' => 'Clinic Anniversary & Care Team',
+					),
+				);
+			}
+			foreach ( $home_gal_previews as $p_img ) : ?>
+				<a href="<?php echo esc_url( home_url( '/gallery/' ) ); ?>" style="display:block; border-radius:14px; overflow:hidden; position:relative; aspect-ratio:4/3; border:1px solid rgba(212,175,55,0.18); text-decoration:none;" class="home-gal-thumb">
+					<img src="<?php echo esc_url( $p_img['src'] ); ?>" alt="<?php echo esc_attr( $p_img['caption'] ); ?>" loading="lazy" style="width:100%; height:100%; object-fit:cover; display:block;">
+					<div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(5,16,12,0) 40%, rgba(5,16,12,0.85) 100%); display:flex; align-items:flex-end; padding:16px;">
+						<span style="font-size:0.78rem; font-weight:500; color:var(--sand); background:rgba(5,16,12,0.7); padding:4px 10px; border-radius:999px; border:1px solid rgba(212,175,55,0.25);">
+							<?php echo esc_html( $p_img['caption'] ); ?>
+						</span>
+					</div>
+				</a>
+			<?php endforeach; ?>
 		</div>
 	</div>
 </section>

@@ -24,7 +24,7 @@ $contact = kottakkal_get_contact_info();
 				<span aria-hidden="true">/</span>
 				<span aria-current="page"><?php esc_html_e( 'About us', 'oceanwp' ); ?></span>
 			</nav>
-			<span class="label"><?php esc_html_e( 'About Kottakkal GreenLife', 'oceanwp' ); ?></span>
+			<span class="label"><?php esc_html_e( 'About Kottakkal Green Life', 'oceanwp' ); ?></span>
 			<h1><?php esc_html_e( 'Igniting life', 'oceanwp' ); ?> <em><?php esc_html_e( 'with nature', 'oceanwp' ); ?></em></h1>
 			<p class="lede">
 				<?php esc_html_e( 'An Ayurvedic centre in the heart of Dubai, founded on a family’s Ayurvedic lineage and run by DHA-certified doctors and experienced therapists.', 'oceanwp' ); ?>
@@ -58,7 +58,7 @@ $contact = kottakkal_get_contact_info();
 		<div>
 			<div class="dsec" id="a1">
 				<h2><?php esc_html_e( 'Who we are', 'oceanwp' ); ?></h2>
-				<p class="lede">
+				<p>
 					<?php esc_html_e( 'Kottakkal Green Life Ayurvedic Center LLC is a centre for comprehensive Ayurvedic care in Al Qusais 1, Dubai, beside Al Nahda Metro Station.', 'oceanwp' ); ?>
 				</p>
 				<p>
@@ -71,15 +71,42 @@ $contact = kottakkal_get_contact_info();
 
 			<div class="dsec" id="a2">
 				<h2><?php esc_html_e( 'A message from our CEO', 'oceanwp' ); ?></h2>
-				<p class="lede">
-					<?php esc_html_e( 'Somarajan AR describes a centre inspired by his family’s Ayurvedic lineage and its contributions to Ayurveda, brought to the heart of Dubai.', 'oceanwp' ); ?>
-				</p>
-				<p>
-					<?php esc_html_e( 'He speaks of authentic treatment methods drawn from the classical texts, practised with honesty and care, and credits the centre’s doctors and therapists as the heart of its work. His message is published in English and Arabic.', 'oceanwp' ); ?>
-				</p>
-				<p dir="rtl" lang="ar" class="muted">
-					<?php esc_html_e( 'رسالة من الرئيس التنفيذي، سوماراجان أ.ر.', 'oceanwp' ); ?>
-				</p>
+
+				<div class="ceo-message-grid">
+					<div class="ceo-portrait-wrap">
+						<div class="ceo-frame">
+							<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/ceo-somarajan.png' ); ?>" alt="<?php esc_attr_e( 'Somarajan AR - CEO & Managing Director', 'oceanwp' ); ?>" width="731" height="1024" loading="lazy">
+						</div>
+						<div class="ceo-meta">
+							<b class="ceo-name">Somarajan AR</b>
+							<span class="ceo-title"><?php esc_html_e( 'Founder & Managing Director', 'oceanwp' ); ?></span>
+							<span class="ceo-subtitle"><?php esc_html_e( 'Kottakkal Green Life Ayurvedic Center LLC', 'oceanwp' ); ?></span>
+						</div>
+					</div>
+
+					<div class="ceo-text-content">
+						<p class="lede">
+							<?php esc_html_e( 'Somarajan AR describes a centre inspired by his family’s Ayurvedic lineage and its contributions to Ayurveda, brought to the heart of Dubai.', 'oceanwp' ); ?>
+						</p>
+						<p>
+							<?php esc_html_e( 'He speaks of authentic treatment methods drawn from the classical texts, practised with honesty and care, and credits the centre’s doctors and therapists as the heart of its work. His message is published in English and Arabic.', 'oceanwp' ); ?>
+						</p>
+						<p dir="rtl" lang="ar" class="muted">
+							<?php esc_html_e( 'رسالة من الرئيس التنفيذي، سوماراجان أ.ر.', 'oceanwp' ); ?>
+						</p>
+
+						<div class="about-award-card">
+							<img class="award-img" src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/badges/badge-incredible-workplaces.png' ); ?>" alt="<?php esc_attr_e( 'Incredible Workplaces Certified 2026 UAE', 'oceanwp' ); ?>" width="84" height="75" loading="lazy">
+							<div class="award-content">
+								<span class="award-badge-pill"><?php esc_html_e( 'Accreditation & Culture', 'oceanwp' ); ?></span>
+								<h3 class="award-heading"><?php esc_html_e( 'Certified Incredible Workplace 2026 · UAE', 'oceanwp' ); ?></h3>
+								<p class="award-text">
+									<?php esc_html_e( 'Kottakkal Green Life Ayurvedic Center is proud to be certified as an Incredible Workplace in the UAE, recognising our commitment to creating an empowering, caring environment for our DHA-certified doctors, therapists, and healthcare team.', 'oceanwp' ); ?>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<div class="dsec" id="a3">

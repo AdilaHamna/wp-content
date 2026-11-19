@@ -43,8 +43,8 @@
   --fs-1: clamp(2.2rem, 1.4rem + 3vw, 4rem);
   --fs-2: clamp(1.8rem, 1.3rem + 1.8vw, 2.8rem);
   --fs-3: clamp(1.35rem, 1.1rem + 1vw, 2rem);
-  --fs-body: 1rem;
-  --fs-label: 0.75rem;
+  --fs-body: 1.08rem;
+  --fs-label: 0.85rem;
   --wrap: 1320px;
   --gutter: clamp(16px, 4.6vw, 64px);
   --section: clamp(80px, 10vw, 150px);
@@ -200,7 +200,7 @@ p {
 }
 
 .label {
-  font: 600 0.78rem/1.2 var(--sans);
+  font: 600 0.85rem/1.2 var(--sans);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--gold-ink);
@@ -227,6 +227,23 @@ p {
   color: var(--fg);
   max-width: 56ch;
   font-weight: 400;
+}
+
+.dsec p,
+.dsec .lede,
+.dsec p.lede {
+  font-size: 1.12rem;
+  line-height: 1.75;
+}
+
+.callout {
+  border-left: 2px solid var(--gold);
+  padding: 8px 0 8px 22px;
+  color: var(--fg);
+  font-size: 1.12rem;
+  line-height: 1.75;
+  max-width: 62ch;
+  font-style: italic;
 }
 
 .muted {
@@ -275,16 +292,18 @@ p {
   justify-content: center;
   gap: 14px;
   min-height: 54px;
-  padding: 0 30px;
+  padding: 10px 30px;
   border: 1px solid transparent;
   border-radius: 999px;
-  font: 600 0.82rem/1 var(--sans);
+  font: 600 0.82rem/1.45 var(--sans);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
+  text-align: center;
   cursor: pointer;
   overflow: hidden;
   isolation: isolate;
+  box-sizing: border-box;
   transition: color 0.5s var(--ease), border-color 0.5s var(--ease), background 0.5s var(--ease);
 }
 
@@ -528,7 +547,7 @@ p {
 }
 
 .nav > a, .nav > button {
-  font: 500 0.84rem/1 var(--sans);
+  font: 500 0.92rem/1 var(--sans);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: inherit;
@@ -577,7 +596,7 @@ p {
 .hdr .btn {
   min-height: 46px;
   padding: 0 22px;
-  font-size: 0.78rem;
+  font-size: 0.86rem;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -837,61 +856,101 @@ p {
   filter: saturate(0.88) contrast(1.03);
 }
 
-/* Doctor Portrait Framing (upper body & head alignment) */
+/* ==========================================================================
+   Luxury Botanical Doctor Portrait Framing & Canvas
+   ========================================================================== */
+.plate.plate-doctor {
+  background:
+    radial-gradient(ellipse 80% 65% at 50% 36%, rgba(42, 92, 70, 0.52) 0%, rgba(20, 50, 38, 0.85) 46%, rgba(10, 22, 17, 0.98) 85%),
+    radial-gradient(circle at 50% 26%, rgba(223, 194, 137, 0.24) 0%, transparent 54%),
+    #0C1914 !important;
+  border-radius: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.plate.plate-doctor::before {
+  display: none !important;
+}
+
+/* Radiant Emerald-Gold Halo Highlight on Hover */
+.plate.plate-doctor::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 34%, rgba(223, 194, 137, 0.28) 0%, rgba(42, 92, 70, 0.32) 46%, transparent 72%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.5s ease;
+}
+
+.docfull .frame:hover .plate.plate-doctor::after,
+.plate.plate-doctor:hover::after {
+  opacity: 1;
+}
+
+/* Doctor Portrait Art Container with Generous Headroom from Arched Border */
+.plate.plate-doctor .art {
+  position: absolute;
+  top: clamp(16px, 3vw, 28px);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 2;
+  pointer-events: none;
+}
+
 .plate.plate-doctor img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  transform: translate3d(0, 0, 0);
+  transform-origin: center bottom;
+  filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.65));
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  pointer-events: auto;
+}
+
+/* Interactive Hover: Silky Smooth Gentle Elevation ("little up only") */
+.docfull .frame:hover .plate.plate-doctor img,
+.plate.plate-doctor:hover img {
+  transform: translate3d(0, -6px, 0);
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.78)) brightness(1.04);
+}
+
+/* Mini doc avatar on care pathways */
+.minidoc .plate.plate-doctor {
+  border-radius: 50% !important;
+  background: radial-gradient(circle at 50% 35%, rgba(45, 96, 73, 0.65) 0%, rgba(12, 25, 20, 0.98) 100%) !important;
+}
+.minidoc .plate.plate-doctor .art {
+  top: 0 !important;
+}
+.minidoc .plate.plate-doctor img {
+  object-fit: cover;
   object-position: center 8%;
-  filter: saturate(0.96) contrast(1.02);
+  transform: scale(1.25) translateY(4%);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.45));
 }
 
-.dcard .plate-doctor img {
-  object-position: center 10%;
-}
-
-.docfull .plate-doctor img {
-  object-position: center 6%;
-}
-
-.minidoc .plate-doctor img {
-  object-position: center 10%;
-}
-
-.plate.plate-doc-ajitha img {
-  object-position: center 4%;
-}
-
-.plate.plate-doc-naseeba img {
-  object-position: center 3%;
-}
-
-.dcard .plate-doc-ajitha img {
-  object-position: center 2%;
-}
-
-.dcard .plate-doc-naseeba img {
-  object-position: center 1%;
-}
-
-.docfull .plate-doc-ajitha img {
-  object-position: center 6%;
-}
-
-.docfull .plate-doc-naseeba img {
-  object-position: center 4%;
-}
-
-.plate.plate-doc-rajesh img,
-.plate.plate-doc-arun img {
-  object-position: center 12%;
-}
-
-.dcard .plate-doc-rajesh img,
-.dcard .plate-doc-arun img {
-  object-position: center 0%;
-}
-
-.docfull .plate-doc-rajesh img,
-.docfull .plate-doc-arun img {
-  object-position: center 12%;
+@media (prefers-reduced-motion: reduce) {
+  .doc-reveal,
+  .dcard.doc-reveal,
+  .docfull {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 .plate:has(img)::before {
@@ -1021,7 +1080,7 @@ p {
   place-items: center;
   text-align: center;
   text-decoration: none;
-  font: 600 0.78rem/1.5 var(--sans);
+  font: 600 0.85rem/1.5 var(--sans);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   transition: background 0.5s var(--ease), transform 0.5s var(--ease);
@@ -1041,7 +1100,7 @@ p {
 }
 
 .foot h4 {
-  font: 600 0.78rem/1 var(--sans);
+  font: 600 0.85rem/1 var(--sans);
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--gold-hi);
@@ -1054,7 +1113,7 @@ p {
   padding: 0;
   display: grid;
   gap: 10px;
-  font-size: 0.94rem;
+  font-size: 1.02rem;
 }
 
 .foot a {
@@ -1075,7 +1134,8 @@ p {
 .foot p.intro-t {
   margin-top: 20px;
   max-width: 34ch;
-  font-size: 0.94rem;
+  font-size: 1.02rem;
+  line-height: 1.6;
 }
 
 .socials {
@@ -1115,6 +1175,57 @@ p {
   margin-bottom: 10px;
 }
 
+/* Footer Therapies Sub-Columns */
+.foot-therapies-wrap {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.foot-t-col {
+  min-width: 0;
+}
+
+.foot-t-col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  font-size: 1.02rem;
+  line-height: 1.38;
+}
+
+.foot-t-col .foot-all-link {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.foot-t-col .foot-all-link a {
+  display: inline-block;
+  color: var(--gold-ink);
+  font-weight: 600;
+  font-size: 1.02rem;
+  letter-spacing: 0.02em;
+  line-height: 1.38;
+  transition: color 0.3s ease;
+}
+
+.foot-t-col .foot-all-link a:hover {
+  color: #ffffff;
+}
+
+@media (max-width: 480px) {
+  .foot-therapies-wrap {
+    gap: 16px;
+  }
+  .foot-t-col ul {
+    font-size: 0.94rem;
+    gap: 10px;
+  }
+}
+
 .wordmark {
   font: 400 clamp(4.5rem, 1rem + 15vw, 17rem)/0.8 'Fraunces', 'Playfair Display', Georgia, serif;
   letter-spacing: -0.05em;
@@ -1132,11 +1243,26 @@ p {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: center;
   gap: 14px 28px;
   padding-top: 16px;
   padding-bottom: 24px;
   border-top: none;
-  font-size: 0.8rem;
+  font-size: 0.92rem;
+  color: var(--on-dark-2);
+}
+
+.legal-row .foot-credit {
+  color: var(--on-dark-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legal-row .agency-name {
+  color: var(--gold-hi);
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
 .legal-row nav {
@@ -1146,8 +1272,8 @@ p {
 }
 
 .disc {
-  font-size: 0.8rem;
-  line-height: 1.6;
+  font-size: 0.92rem;
+  line-height: 1.7;
   width: 100%;
   max-width: 100%;
   padding-top: 24px;
@@ -1233,6 +1359,24 @@ p {
   color: #d8eee4;
   letter-spacing: 0.01em;
   margin-top: 2px;
+}
+
+.foot-badge-capsule .fbc-icon.fbc-iw {
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.foot-badge-capsule.foot-badge-iw .fbc-val {
+  font-size: clamp(13.5px, 1.2vw, 16px);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.foot-badge-capsule.foot-badge-iw .fbc-sub {
+  color: var(--gold-hi);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  font-size: clamp(10px, 0.82vw, 11.5px);
 }
 
 @media (max-width: 900px) {
@@ -1356,7 +1500,7 @@ p {
 }
 
 .ct-row dt {
-  font: 500 0.78rem/1.9 var(--sans);
+  font: 600 0.85rem/1.9 var(--sans);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--gold-ink);
@@ -1369,7 +1513,7 @@ p {
 
 .ct-row .big {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  font-size: clamp(1.05rem, 0.95rem + 0.35vw, 1.25rem);
+  font-size: clamp(1.08rem, 0.98rem + 0.35vw, 1.3rem);
   font-weight: 500;
   line-height: 1.35;
   color: var(--heading);
@@ -1379,9 +1523,9 @@ p {
 }
 
 .ct-row dd .muted {
-  font-size: 0.88rem;
-  line-height: 1.5;
-  color: var(--fg-2);
+  font-size: 1.02rem;
+  line-height: 1.55;
+  color: var(--fg);
   display: inline-block;
   margin-top: 4px;
 }
@@ -1395,7 +1539,7 @@ a.big:hover {
   background: none;
   border-radius: 99px;
   padding: 8px 13px;
-  font: 500 0.78rem/1 var(--sans);
+  font: 600 0.82rem/1 var(--sans);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--fg-2);
@@ -1628,11 +1772,313 @@ a.big:hover {
     grid-template-columns: minmax(0, 1fr);
   }
   .btn {
-    padding: 0 22px;
-    letter-spacing: 0.14em;
+    padding: 10px 22px;
+    letter-spacing: 0.12em;
+    line-height: 1.45;
   }
   .bk-facts div {
     grid-template-columns: minmax(0, 1fr);
     gap: 4px;
   }
 }
+
+/* ==========================================================================
+   Global Horizontally Scrollable Filter Tabs & Chips
+   ========================================================================== */
+.filters {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  padding: 6px 4px 16px 4px;
+  margin-bottom: 34px;
+  width: 100%;
+  max-width: 100%;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(74, 222, 128, 0.4) transparent;
+}
+
+.filters.is-dragging {
+  cursor: grabbing !important;
+  scroll-behavior: auto !important;
+}
+
+.filters::-webkit-scrollbar {
+  height: 5px;
+}
+
+.filters::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  margin: 0 4px;
+}
+
+.filters::-webkit-scrollbar-thumb {
+  background: rgba(74, 222, 128, 0.35);
+  border-radius: 999px;
+  transition: background 0.3s ease;
+}
+
+.filters::-webkit-scrollbar-thumb:hover {
+  background: rgba(74, 222, 128, 0.7);
+}
+
+.filters .chip {
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+}
+
+/* ==========================================================================
+   Home Page Testimonials & Gallery Showcase
+   ========================================================================== */
+.home-testi-sec {
+  border-top: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+
+.home-testi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.home-testi-card {
+  background: linear-gradient(175deg, rgba(14, 46, 33, 0.6) 0%, rgba(7, 24, 19, 0.85) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  border-radius: 16px;
+  padding: clamp(1.25rem, 5vw, 2rem) clamp(1rem, 4vw, 1.75rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.home-testi-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(212, 175, 55, 0.38);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), 0 0 20px rgba(212, 175, 55, 0.08);
+}
+
+.home-testi-card .htc-stars {
+  color: #f7b731;
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+}
+
+.home-testi-card .htc-quote {
+  font-size: 0.94rem;
+  line-height: 1.65;
+  color: rgba(244, 238, 225, 0.92);
+  margin-bottom: 1.25rem;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.home-testi-card .htc-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.12);
+}
+
+.home-testi-card .htc-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+@media (max-width: 480px) {
+  .home-testi-sec {
+    padding-top: 3rem;
+    padding-bottom: 3.5rem;
+  }
+  .home-testi-head {
+    margin-bottom: 1.75rem !important;
+    gap: 14px !important;
+  }
+  .home-testi-head .btn,
+  .home-gal-sec .btn {
+    width: 100%;
+    justify-content: center;
+    line-height: 1.45;
+    padding: 12px 20px;
+  }
+  .home-testi-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .home-testi-card {
+    padding: 1.25rem 1rem;
+  }
+  .home-testi-card .htc-quote {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .home-testi-card {
+    padding: 1.15rem 0.85rem;
+  }
+  .home-testi-card .htc-quote {
+    font-size: 0.85rem;
+    line-height: 1.55;
+  }
+  .home-testi-card .htc-author h4 {
+    font-size: 0.88rem !important;
+  }
+}
+
+/* ==========================================================================
+   Floating WhatsApp Button
+   ========================================================================== */
+.floating-whatsapp {
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: #ffffff;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.42), 0 4px 12px rgba(0, 0, 0, 0.35);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.floating-whatsapp:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 12px 32px rgba(37, 211, 102, 0.6), 0 6px 16px rgba(0, 0, 0, 0.4);
+  color: #ffffff;
+}
+
+.floating-whatsapp:active {
+  transform: scale(0.96);
+}
+
+.floating-whatsapp .fwa-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.floating-whatsapp .fwa-icon-wrap svg {
+  width: 30px;
+  height: 30px;
+  fill: #ffffff;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.floating-whatsapp .fwa-pulse {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: rgba(37, 211, 102, 0.4);
+  z-index: 1;
+  animation: fwaPulse 2.4s infinite ease-out;
+  pointer-events: none;
+}
+
+@keyframes fwaPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+
+.floating-whatsapp .fwa-tooltip {
+  position: absolute;
+  right: calc(100% + 14px);
+  white-space: nowrap;
+  background: rgba(7, 24, 19, 0.95);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.floating-whatsapp:hover .fwa-tooltip {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (max-width: 860px) {
+  .floating-whatsapp {
+    right: 18px;
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+    width: 52px;
+    height: 52px;
+  }
+  .floating-whatsapp .fwa-icon-wrap svg {
+    width: 26px;
+    height: 26px;
+  }
+  .floating-whatsapp .fwa-tooltip {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .floating-whatsapp {
+    right: 12px;
+    bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+    width: 48px;
+    height: 48px;
+  }
+  .floating-whatsapp .fwa-icon-wrap svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+

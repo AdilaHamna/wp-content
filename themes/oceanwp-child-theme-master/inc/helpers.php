@@ -29,209 +29,723 @@ function kottakkal_get_contact_info() {
 }
 
 /**
- * Default Treatments Data
+ * Default Treatments Data (Classical 34 Therapies across Categories strictly matching official center document)
  */
 function kottakkal_get_default_treatments() {
 	return array(
+		// -------------------------------------------------------------
+		// GROUP 1: PANCHAKARMA — Main 5 Shodhana (1-5)
+		// -------------------------------------------------------------
+		array(
+			'id'      => 'vamana',
+			'slug'    => 'vamana',
+			'name'    => 'Vamana',
+			'alt'     => 'Therapeutic Emesis · Kapha Elimination',
+			'meaning' => 'Vamana, therapeutic emesis to remove excess Kapha',
+			'ing'     => 'Medicated emetic decoctions',
+			'ill'     => 'drop',
+			'tone'    => 'clay',
+			'short'   => 'Therapeutic emesis to remove excess Kapha from the respiratory and upper gastrointestinal tract.',
+			'purpose' => 'Vamana is the primary Shodhana (purificatory) procedure for Kapha disorders. After preparatory oleation (Snehana) and sweating (Swedana), induced emesis eliminates deep-seated toxins from the respiratory and gastrointestinal tract.',
+			'process' => 'Administered in the early morning under continuous physician supervision. The patient drinks specially prepared herbal decoctions until natural, gentle therapeutic elimination occurs, followed by dietary rehabilitation (Samsarjana Krama).',
+			'facts'   => array(
+				array( 'Duration', '2 to 3 hours (Procedure day)' ),
+				array( 'Dosha Target', 'Aggravated Kapha dosha' ),
+				array( 'Indications', 'Bronchial asthma, chronic allergies, psoriasis, obesity, hyperacidity' ),
+			),
+			'paths'   => array( 'panchakarma', 'weight', 'beauty', 'degenerative' ),
+		),
+		array(
+			'id'      => 'virechana',
+			'slug'    => 'virechana',
+			'name'    => 'Virechana',
+			'alt'     => 'Therapeutic Purgation · Pitta Elimination',
+			'meaning' => 'Virechana, therapeutic purgation to eliminate excess Pitta',
+			'ing'     => 'Medicated herbal purgatives',
+			'ill'     => 'stream',
+			'tone'    => 'saffron',
+			'short'   => 'Therapeutic purgation to eliminate excess Pitta and clear heat toxins from the liver and gut.',
+			'purpose' => 'The supreme purification treatment for Pitta-dominant ailments. It purges toxins from the liver, gallbladder, and small intestine, clearing internal heat, skin eruptions, and digestive inflammation.',
+			'process' => 'Following preparatory internal oleation with medicated ghee and steam therapy, an individualized herbal formulation is administered. Safe, controlled elimination cleanses the gut and bloodstream, followed by restorative diet.',
+			'facts'   => array(
+				array( 'Duration', 'Full day protocol with physician supervision' ),
+				array( 'Dosha Target', 'Aggravated Pitta dosha' ),
+				array( 'Indications', 'Acidity, gastritis, dermatitis, eczema, liver sluggishness, chronic allergies' ),
+			),
+			'paths'   => array( 'panchakarma', 'beauty', 'weight', 'relax' ),
+		),
+		array(
+			'id'      => 'basti',
+			'slug'    => 'basti',
+			'name'    => 'Basti',
+			'alt'     => 'Medicated Enemas · King of Panchakarma',
+			'meaning' => 'Basti, medicated enemas to balance Vata dosha',
+			'ing'     => 'Herbal decoctions (Niruha) & Medicated oils (Anuvasana)',
+			'ill'     => 'drop',
+			'tone'    => 'oil',
+			'short'   => 'Medicated enemas to balance Vata dosha for sciatica, arthritis, lower back pain, and paralysis.',
+			'purpose' => 'Revered as the King of Panchakarma and Ardha Chikitsa (half of all treatment). Administered into the colon—the primary seat of Vata—it lubricates the spine, eases neuromuscular disorders, and treats joint degeneration.',
+			'process' => 'Depending on the prescribed protocol, warm herbal decoctions (Niruha) or soothing medicated oils (Anuvasana / Matra Basti) are administered into the colon with gentle abdominal massage to rebuild vitality.',
+			'facts'   => array(
+				array( 'Variants', 'Niruha Basti (Decoction), Anuvasana (Oil), Matra (Daily oil)' ),
+				array( 'Dosha Target', 'Aggravated Vata dosha' ),
+				array( 'Indications', 'Sciatica, osteoarthritis, lumbar spondylosis, paralysis, constipation' ),
+			),
+			'paths'   => array( 'panchakarma', 'joint', 'degenerative', 'relax' ),
+		),
+		array(
+			'id'      => 'nasyam',
+			'slug'    => 'nasyam',
+			'name'    => 'Nasya',
+			'alt'     => 'Nasal Medicine Administration · Panchakarma Shodhana',
+			'meaning' => 'Nasya, administration of medicines through the nasal route',
+			'ing'     => 'Classical medicated herbal oils (Anu Thailam)',
+			'ill'     => 'nasya',
+			'tone'    => 'sage',
+			'short'   => 'Administration of medicines through the nasal route for sinus congestion, migraine, cervical spondylosis, and hair fall.',
+			'purpose' => 'One of the five classical Panchakarma procedures. Cleanses and nourishes all structures above the collarbone, relieving chronic sinusitis, migraine, cervical stiffness, hair fall, and facial paralysis.',
+			'process' => 'The session begins with an invigorating facial massage with warm herbal oils and mild steam to open the sinuses. Measured drops of warm medicated oil are administered into each nostril while the patient inhales gently, followed by medicated gargling.',
+			'facts'   => array(
+				array( 'Duration', '30 to 45 minutes' ),
+				array( 'Route', 'Nasal instillation with facial steam' ),
+				array( 'Indications', 'Sinusitis, migraine, cervical stiffness, hair loss, facial palsy, tension headaches' ),
+			),
+			'paths'   => array( 'panchakarma', 'relax', 'beauty', 'joint' ),
+			'img'     => 'assets/img/t-nasyam.jpg',
+		),
+		array(
+			'id'      => 'raktamokshana',
+			'slug'    => 'raktamokshana',
+			'name'    => 'Raktamokshana',
+			'alt'     => 'Controlled Bloodletting · Blood Detoxification',
+			'meaning' => 'Raktamokshana, controlled bloodletting to support detoxification',
+			'ing'     => 'Medicinal leeches (Jalouka) & Siravyadha',
+			'ill'     => 'leafy',
+			'tone'    => 'forest',
+			'short'   => 'Controlled bloodletting using medicinal leeches (Jalouka) or micro-techniques to clear deep vascular toxins.',
+			'purpose' => 'Controlled blood purification procedure specifically indicated for stubborn skin conditions and vascular stagnation where vitiated Pitta and Rakta accumulate in localized tissues.',
+			'process' => 'Carried out under sterile clinical conditions by qualified Ayurvedic physicians. Medicinal leeches naturally extract impure blood while secreting beneficial bioactive enzymes that reduce inflammation.',
+			'facts'   => array(
+				array( 'Modality', 'Jalouka Avacharana (Leech therapy) & Siravyadha' ),
+				array( 'Focus', 'Microvascular purification & localized anti-inflammatory action' ),
+				array( 'Indications', 'Psoriasis, eczema, varicose veins, localized blood stagnation, non-healing ulcers' ),
+			),
+			'paths'   => array( 'panchakarma', 'beauty', 'degenerative' ),
+		),
+
+		// -------------------------------------------------------------
+		// GROUP 2: TREATMENTS — Classical & External Therapies (6-32)
+		// -------------------------------------------------------------
 		array(
 			'id'      => 'abhyangam',
 			'slug'    => 'abhyangam',
 			'name'    => 'Abhyangam',
-			'alt'     => 'Ayurvedic oil massage',
-			'ing'     => 'Medicated herbal oil',
+			'alt'     => 'Full Body Medicated Warm Oil Massage',
+			'meaning' => 'Abhyangam, full-body rhythmic warm oil massage',
+			'ing'     => 'Medicated warm herbal oil',
 			'ill'     => 'drop',
 			'tone'    => 'oil',
-			'short'   => 'A full-body massage with warm medicated herbal oils, worked in slow, rhythmic strokes.',
-			'purpose' => 'A traditional Kerala massage used to ease muscle tension and physical and mental strain, support circulation and bring the doshas into balance. Under a physician’s guidance the oils can be chosen to support plans for joint and muscle complaints, injuries and degenerative conditions.',
-			'process' => 'After your consultation, your therapist warms the medicated oil chosen for you and works the whole body with slow, gentle strokes.',
+			'short'   => 'A full-body massage with warm medicated herbal oils, worked in rhythmic, synchronised strokes.',
+			'purpose' => 'The foundational Ayurvedic oleation therapy. Eases muscular tension, lubricates joints, stimulates lymphatic flow, improves circulation, promotes deep sleep, and pacifies Vata dosha.',
+			'process' => 'Therapists apply warm medicated oils matched to your constitution, massaging from head to toe through the classical seven standard positions.',
 			'facts'   => array(
 				array( 'Duration', '45 to 60 minutes' ),
-				array( 'Medium', 'Medicated herbal oils' ),
+				array( 'Medium', 'Medicated herbal oils matched to dosha' ),
+				array( 'Indications', 'Fatigue, stress, generalized body ache, dry skin, joint stiffness, poor circulation' ),
 			),
-			'paths'   => array( 'joint', 'relax', 'degenerative' ),
+			'paths'   => array( 'abhyanga-sweda', 'joint', 'relax', 'degenerative' ),
 			'img'     => 'assets/img/t-abhyangam.jpg',
 		),
 		array(
 			'id'      => 'pottali-sweda',
 			'slug'    => 'pottali-sweda',
-			'name'    => 'Pottali Sweda',
-			'alt'     => 'Herbal pouch sudation',
-			'ing'     => 'Fresh herbal leaves',
+			'name'    => 'Kizhi',
+			'alt'     => 'Herbal Bolus Fomentation · Ela Kizhi & Podi Kizhi',
+			'meaning' => 'Kizhi, heated herbal bolus poultice fomentation',
+			'ing'     => 'Fresh medicinal leaves, herbal powders & medicated oil',
 			'ill'     => 'pouch',
 			'tone'    => 'forest',
-			'short'   => 'Warm cotton pouches of medicinal leaves, powders and oil, pressed over the body to induce gentle sweating.',
-			'purpose' => 'A form of sudation therapy often recommended for persistent muscular and joint pain, and used in plans for body rejuvenation.',
-			'process' => 'Fresh herbal leaves and medicinal powders are mixed with a prepared oil and tied in cotton cloth to form a kizhi. The pouches are heated and applied with measured pressure so the herbs are absorbed through the skin.',
+			'short'   => 'Warm boluses packed with fresh medicinal leaves and herbal powders tapped across the body for pain and inflammation.',
+			'purpose' => 'A revered Kerala fomentation therapy (Patra Pinda & Churna Pinda Sweda). Heated herbal pouches are rhythmicly tapped over the body to relieve acute joint inflammation, muscular spasms, and back pain.',
+			'process' => 'Fresh herbal leaves or medicinal powders are fried in medicated oils, tied in cotton pouches, heated in warm herbal oil, and applied with rhythmic tapping and massage across the body.',
 			'facts'   => array(
-				array( 'Medium', 'Herbs, powders and oil in cloth pouches' ),
+				array( 'Duration', '45 to 60 minutes' ),
+				array( 'Variants', 'Ela Kizhi (Herbal Leaves) & Podi Kizhi (Herbal Powders)' ),
+				array( 'Indications', 'Osteoarthritis, cervical and lumbar spondylosis, back spasms, sports injuries' ),
 			),
-			'paths'   => array( 'joint' ),
+			'paths'   => array( 'abhyanga-sweda', 'joint', 'degenerative' ),
 			'img'     => 'assets/img/t-pottali-sweda.jpg',
-		),
-		array(
-			'id'      => 'shirodara',
-			'slug'    => 'shirodara',
-			'name'    => 'Shirodhara',
-			'alt'     => 'Continuous oil stream',
-			'meaning' => 'Shiro, the head · Dhara, a flow',
-			'ing'     => 'Lukewarm herbal oil',
-			'ill'     => 'stream',
-			'tone'    => 'saffron',
-			'short'   => 'A steady, rhythmic stream of lukewarm herbal oil poured across the forehead.',
-			'purpose' => 'Valued for deep relaxation, and traditionally used in plans for stress, anxiety, poor sleep and migraine.',
-			'process' => 'You lie comfortably while lukewarm medicated oil, often sesame oil processed with Ayurvedic herbs, flows in a steady stream onto the forehead. The liquid and the length of the session are tailored to you.',
-			'facts'   => array(
-				array( 'Duration', '30 to 90 minutes' ),
-				array( 'Medium', 'Lukewarm medicated oil' ),
-			),
-			'paths'   => array( 'relax' ),
-			'img'     => 'assets/img/t-shirodara.jpg',
-		),
-		array(
-			'id'      => 'njavara-kizhi',
-			'slug'    => 'njavara-kizhi',
-			'name'    => 'Njavara Kizhi',
-			'alt'     => 'Shashtikashali Pinda Sweda',
-			'meaning' => 'Njavara, a rice that grows in sixty days',
-			'ing'     => 'Njavara rice',
-			'ill'     => 'rice',
-			'tone'    => 'ivory',
-			'short'   => 'Boluses of Njavara rice, cooked in herbal preparations and dipped in medicated oil, massaged over the body.',
-			'purpose' => 'A nourishing (brimhana) therapy, traditionally used for joint stiffness and back conditions such as sciatica, scoliosis and kyphosis, for arthritis, and to support skin and muscle tone.',
-			'process' => 'The treatment moves through preparation, the main procedure and aftercare, working through seven standard positions, and closes with an herbal oil massage.',
-			'facts'   => array(
-				array( 'Medium', 'Medicated Njavara rice' ),
-				array( 'Positions', 'Seven standard postures' ),
-			),
-			'paths'   => array( 'joint', 'degenerative' ),
-			'img'     => 'assets/img/t-njavara-kizhi.jpg',
-		),
-		array(
-			'id'      => 'kativasthi',
-			'slug'    => 'kativasthi',
-			'name'    => 'Kativasthi',
-			'alt'     => 'Lower-back oil therapy',
-			'ing'     => 'Black gram ring, warm oil',
-			'ill'     => 'ring',
-			'tone'    => 'clay',
-			'short'   => 'Warm medicated oil held over the lower back inside a ring of black gram dough.',
-			'purpose' => 'Used for lower-back complaints including lumbar spondylosis, intervertebral disc prolapse, lumbago and sciatica. It is intended to ease pain and stiffness, lubricate the joints and calm vata in the lumbosacral area.',
-			'process' => 'A ring of dough made from black gram or whole flour is shaped on the lower back and filled with warm herbal oil or decoction, kept at temperature through the session.',
-			'facts'   => array(
-				array( 'Duration', 'Around 30 minutes' ),
-				array( 'Area', 'Lower back' ),
-			),
-			'paths'   => array( 'joint' ),
-			'img'     => 'assets/img/t-kativasthi.jpg',
 		),
 		array(
 			'id'      => 'pizhichil',
 			'slug'    => 'pizhichil',
 			'name'    => 'Pizhichil',
-			'alt'     => 'Therapeutic oil pouring',
-			'meaning' => 'Honoured in Kerala as the king of therapies',
-			'ing'     => 'Medicated oil, poured',
+			'alt'     => 'Royal Medicated Oil Bath · Snehana & Swedana',
+			'meaning' => 'Pizhichil, squeezing continuous streams of warm medicated oil',
+			'ing'     => '3+ litres warm medicated herbal oil',
 			'ill'     => 'pour',
 			'tone'    => 'night',
-			'short'   => 'Streams of lukewarm medicated oil poured over the body while therapists massage in rhythm.',
-			'purpose' => 'Combines oleation (snehana) and sudation (swedana). Traditionally used for muscle fatigue, long-standing body pain, stress and vata-related conditions such as arthritis and rheumatic complaints.',
-			'process' => 'More than three litres of warm medicated oil are poured continuously from head to feet as the body is gently massaged. It is often part of a Panchakarma programme.',
+			'short'   => 'Continuous stream of warm medicated oil squeezed rhythmically over the entire body by synchronised therapists.',
+			'purpose' => 'Known as the King of Ayurvedic therapies and the royal bath of Kerala. Combines deep oiling with gentle sweating to restore neuromuscular vitality, hemiplegia, and severe arthritic stiffness.',
+			'process' => 'Two therapists continuously squeeze warm medicated oil from cotton cloths over your entire body in synchronised rhythm, followed by a warm herbal bath.',
 			'facts'   => array(
-				array( 'Medium', '3+ litres of medicated oil' ),
-				array( 'Programme', 'Often part of Panchakarma' ),
+				array( 'Duration', '60 to 75 minutes' ),
+				array( 'Medium', '3+ litres of continuous warm herbal oil' ),
+				array( 'Indications', 'Post-stroke paralysis, hemiplegia, rheumatoid arthritis, muscle wasting, nervous debility' ),
 			),
-			'paths'   => array( 'joint', 'degenerative', 'relax' ),
+			'paths'   => array( 'abhyanga-sweda', 'joint', 'degenerative', 'relax' ),
 			'img'     => 'assets/img/t-pizhichil.jpg',
 		),
 		array(
-			'id'      => 'nasyam',
-			'slug'    => 'nasyam',
-			'name'    => 'Nasyam',
-			'alt'     => 'Nasal therapy',
-			'ing'     => 'Herbal oil drops',
-			'ill'     => 'nasya',
-			'tone'    => 'sage',
-			'short'   => 'Medicated oils or herbal preparations administered through the nostrils.',
-			'purpose' => 'One of the five Panchakarma procedures. Traditionally used for complaints of the head and neck such as headache, sinus congestion and cervical stiffness, and to support restful sleep.',
-			'process' => 'A practitioner applies measured amounts of medicated oil or herbal extract into each nostril.',
+			'id'      => 'kati-greeva-pichu',
+			'slug'    => 'kati-greeva-pichu',
+			'name'    => 'Pichu',
+			'alt'     => 'Medicated Oil Pad Retention Therapy',
+			'meaning' => 'Pichu, sterile cotton pad soaked in warm medicated oil',
+			'ing'     => 'Sterile cotton pad, warm herbal oil',
+			'ill'     => 'drop',
+			'tone'    => 'oil',
+			'short'   => 'Oil-soaked sterile cotton pad retained over the neck, lower back, or head for prolonged absorption and soothing nerve relief.',
+			'purpose' => 'A gentle and intensely soothing palliative treatment. A sterile cotton pad saturated with warm medicated oil is placed over an afflicted spinal joint, neck, lower back, or vertex to ease nerve irritation and stiffness.',
+			'process' => 'A thick sterile cotton pad is submerged in hot medicated oil, placed directly over the affected spinal or neck segment, and continuously replenished with warm oil for 30 to 45 minutes.',
 			'facts'   => array(
-				array( 'Programme', 'Part of Panchakarma' ),
+				array( 'Duration', '30 to 45 minutes' ),
+				array( 'Areas', 'Neck (Greeva), Lower back (Kati), Crown (Shiro), or joints' ),
+				array( 'Indications', 'Cervical pain, lumbar stiffness, sciatica nerve irritation, localized muscle spasms' ),
 			),
-			'paths'   => array( 'relax' ),
-			'img'     => 'assets/img/t-nasyam.jpg',
+			'paths'   => array( 'abhyanga-sweda', 'joint', 'relax' ),
 		),
 		array(
-			'id'      => 'tarpanam',
-			'slug'    => 'tarpanam',
-			'name'    => 'Tarpanam',
-			'alt'     => 'Netra Tarpanam · eye therapy',
-			'ing'     => 'Medicated ghee',
-			'ill'     => 'eye',
-			'tone'    => 'saffron',
-			'short'   => 'A small well of dough around the eyes is filled with warm medicated ghee, bathing the eyes as you blink.',
-			'purpose' => 'Used to soothe dry, tired and strained eyes, including strain from long screen time and environmental irritants.',
-			'process' => 'A practitioner builds a well around each eye and fills it with medicated ghee. Lukewarm ghee or other oils may be chosen depending on your constitution.',
-			'caution' => 'Netra Tarpanam is not recommended for people with cataracts or an eye infection. Your doctor will suggest an alternative.',
+			'id'      => 'veshtanam',
+			'slug'    => 'veshtanam',
+			'name'    => 'Veshtanam',
+			'alt'     => 'Herbal Bandaging & Compression Therapy',
+			'meaning' => 'Veshtanam, therapeutic herbal wrapping and bandaging',
+			'ing'     => 'Medicated herbal pastes, cotton wrapping & warm herbal oils',
+			'ill'     => 'pouch',
+			'tone'    => 'clay',
+			'short'   => 'Therapeutic herbal wrapping and bandaging to stabilize painful joints, relieve edema, and reduce stiffness.',
+			'purpose' => 'A classical Ayurvedic therapeutic bandaging technique. Warm medicated paste and herbal oils are applied over afflicted joints, wrapped securely with medicinal cotton bandages to provide sustained compression, reduce swelling, and immobilize painful joints.',
+			'process' => 'Warm medicinal pastes prepared with classical anti-inflammatory herbs, rock salt, and oils are applied smoothly across painful joint complexes and secured with firm cotton bandages for sustained relief.',
 			'facts'   => array(
-				array( 'Medium', 'Medicated ghee' ),
-				array( 'Area', 'Eyes' ),
+				array( 'Duration', '30 to 45 minutes application, left wrapped as prescribed' ),
+				array( 'Focus', 'Joint compression, pain stabilization and effusion relief' ),
+				array( 'Indications', 'Joint effusion, ligament sprains, tennis elbow, chronic arthritis, localized edema' ),
 			),
-			'paths'   => array( 'beauty' ),
-			'img'     => 'assets/img/t-tarpanam.jpg',
+			'paths'   => array( 'abhyanga-sweda', 'joint', 'degenerative' ),
+		),
+		array(
+			'id'      => 'shirodara',
+			'slug'    => 'shirodara',
+			'name'    => 'Shirodhara',
+			'alt'     => 'Continuous Medicated Oil Stream on Forehead',
+			'meaning' => 'Shirodhara, continuous stream of warm herbal oil over the forehead',
+			'ing'     => 'Warm medicated herbal oil',
+			'ill'     => 'stream',
+			'tone'    => 'saffron',
+			'short'   => 'Continuous stream of warm herbal oil poured across the forehead for anxiety, insomnia, migraine, and mental stress.',
+			'purpose' => 'The world-renowned crown jewel of Ayurvedic relaxation. Harmonizes brainwaves, calms the central nervous system, regulates sleep patterns, and clears mental tension.',
+			'process' => 'You lie comfortably while lukewarm medicated oil flows in a gentle, oscillating stream from a copper vessel onto the third-eye forehead area, followed by a scalp and hair wrap.',
+			'facts'   => array(
+				array( 'Duration', '45 to 60 minutes' ),
+				array( 'Medium', 'Medicated herbal oils' ),
+				array( 'Indications', 'Anxiety, insomnia, chronic headaches, hypertension, mental fatigue, stress' ),
+			),
+			'paths'   => array( 'dhara-head', 'relax', 'beauty' ),
+			'img'     => 'assets/img/t-shirodara.jpg',
+		),
+		array(
+			'id'      => 'dhoomapana',
+			'slug'    => 'dhoomapana',
+			'name'    => 'Dhoomapanam',
+			'alt'     => 'Therapeutic Herbal Smoke Inhalation',
+			'meaning' => 'Dhoomapanam, inhalation of therapeutic medicinal herbal smoke',
+			'ing'     => 'Medicinal herbal stick with Guggulu & Haridra',
+			'ill'     => 'powder',
+			'tone'    => 'clay',
+			'short'   => 'Inhalation of therapeutic medicinal herbal smoke through the nostrils to clear sinuses and heavy mucus.',
+			'purpose' => 'Clears accumulated phlegm from the head, opens blocked sinuses, relieves heavy head and chronic cough, and disinfects the upper respiratory tract.',
+			'process' => 'A specialized medicinal herbal roll is lit inside an apparatus; the soothing medicated smoke is inhaled through one nostril at a time and strictly exhaled through the mouth.',
+			'facts'   => array(
+				array( 'Duration', '15 minutes' ),
+				array( 'Medium', 'Medicated herbal smoking wick (Prayogika Dhooma)' ),
+				array( 'Indications', 'Chronic sinusitis, heavy head, allergic rhinitis, sticky phlegm, throat congestion' ),
+			),
+			'paths'   => array( 'other-therapies', 'relax', 'degenerative' ),
+		),
+		array(
+			'id'      => 'uro-basti',
+			'slug'    => 'uro-basti',
+			'name'    => 'Uro Vasthi',
+			'alt'     => 'Chest & Heart Region Oil Pool Therapy · Hrid Basti',
+			'meaning' => 'Uro Vasthi, medicated oil retention over the chest and cardiac center',
+			'ing'     => 'Warm soothing herbal oils inside black gram ring',
+			'ill'     => 'ring',
+			'tone'    => 'forest',
+			'short'   => 'Warm medicated oil pooled gently over the chest area within a dough reservoir to relieve tightness and anxiety.',
+			'purpose' => 'A restorative therapy that calms emotional stress, releases chest wall tension, eases breathing, and nourishes the cardiovascular and respiratory musculature.',
+			'process' => 'A dough well is positioned comfortably over the cardiac center on the chest. Lukewarm herbal oil is held in the reservoir for 25 to 30 minutes, followed by gentle, rhythmic strokes over the ribcage.',
+			'facts'   => array(
+				array( 'Duration', '30 minutes' ),
+				array( 'Area', 'Sternum and cardiac region' ),
+				array( 'Indications', 'Chest tightness, muscular spasms, anxiety, palpitations, shallow breathing' ),
+			),
+			'paths'   => array( 'bahya-basti', 'relax', 'degenerative' ),
+		),
+		array(
+			'id'      => 'greeva-basti',
+			'slug'    => 'greeva-basti',
+			'name'    => 'Greeva Vasthi',
+			'alt'     => 'Cervical Spine & Neck Oil Pool Therapy',
+			'meaning' => 'Greeva Vasthi, retention of warm medicated oil on cervical spine',
+			'ing'     => 'Warm medicated herbal oil inside dough well',
+			'ill'     => 'ring',
+			'tone'    => 'oil',
+			'short'   => 'Warm medicated oil pooled at the back of the neck for cervical spondylosis, neck stiffness, and computer neck.',
+			'purpose' => 'Designed for neck stiffness, cervical spondylosis, radiating arm numbness, and chronic postural strain from long desk hours.',
+			'process' => 'A black gram dough reservoir is sealed over the cervical spine. Warm medicated oil is pooled and maintained at temperature for 30 minutes, loosening tight trapezius and paraspinal muscles.',
+			'facts'   => array(
+				array( 'Duration', '30 to 40 minutes' ),
+				array( 'Area', 'Cervical spine and neck' ),
+				array( 'Indications', 'Cervical spondylosis, stiff neck, shoulder radiation, tension headache, tech neck' ),
+			),
+			'paths'   => array( 'bahya-basti', 'joint', 'relax' ),
+		),
+		array(
+			'id'      => 'kativasthi',
+			'slug'    => 'kativasthi',
+			'name'    => 'Kati Vasthi',
+			'alt'     => 'Lower Back Oil Pool Therapy · Kativasthi',
+			'meaning' => 'Kati Vasthi, warm medicated oil pooled over the lumbosacral spine',
+			'ing'     => 'Black gram ring, warm herbal oil',
+			'ill'     => 'ring',
+			'tone'    => 'clay',
+			'short'   => 'Warm medicated oil pooled over the lower back for sciatica, lumbar spondylosis, and chronic back pain.',
+			'purpose' => 'Relieves chronic lower back pain, disc compression, lumbago, and sciatica. The continuous warm oil deeply lubricates the intervertebral discs and relaxes spinal musculature.',
+			'process' => 'A ring of black gram dough is affixed over the lumbosacral region. Warm medicated oil is poured and replaced continuously to maintain a therapeutic heat level, followed by gentle lower back massage.',
+			'facts'   => array(
+				array( 'Duration', '30 to 45 minutes' ),
+				array( 'Area', 'Lower back & lumbar spine' ),
+				array( 'Indications', 'Sciatica, lumbar spondylosis, slipped disc (IVDP), muscle spasm, chronic lumbago' ),
+			),
+			'paths'   => array( 'bahya-basti', 'joint', 'degenerative' ),
+			'img'     => 'assets/img/t-kativasthi.jpg',
+		),
+		array(
+			'id'      => 'prishta-basti',
+			'slug'    => 'prishta-basti',
+			'name'    => 'Prista Vasthi',
+			'alt'     => 'Full Vertebral Spine Oil Pool Therapy',
+			'meaning' => 'Prista Vasthi, warm medicated oil retained along the entire vertebral column',
+			'ing'     => 'Warm medicated herbal oils inside spinal dough reservoir',
+			'ill'     => 'ring',
+			'tone'    => 'night',
+			'short'   => 'Warm medicated oil retained along the entire vertebral column for chronic back stiffness and spinal health.',
+			'purpose' => 'Nourishes the entire vertebral column from the upper thoracic down to the sacrum. Deeply relaxes spinal ligaments, corrects spinal fatigue, and supports chronic postural backache.',
+			'process' => 'An elongated reservoir of dough is built along the spine. Warm herbal oil is poured throughout the reservoir to bathe the spinal vertebrae simultaneously, ending with a soothing full-back massage.',
+			'facts'   => array(
+				array( 'Duration', '40 to 50 minutes' ),
+				array( 'Area', 'Entire spinal column' ),
+				array( 'Indications', 'Whole-back pain, spinal stiffness, posture fatigue, degenerative spinal changes' ),
+			),
+			'paths'   => array( 'bahya-basti', 'joint', 'degenerative' ),
+		),
+		array(
+			'id'      => 'janu-basti',
+			'slug'    => 'janu-basti',
+			'name'    => 'Jaanu Vasthi',
+			'alt'     => 'Knee Joint Oil Pool Therapy',
+			'meaning' => 'Jaanu Vasthi, retention of warm medicated oil over the knee joint',
+			'ing'     => 'Warm medicated herbal oil inside black gram ring',
+			'ill'     => 'ring',
+			'tone'    => 'clay',
+			'short'   => 'Warm medicated oil retained over the knee joint inside an herbal dough reservoir for osteoarthritis and stiffness.',
+			'purpose' => 'Specially formulated to relieve chronic knee pain, rebuild synovial fluid lubrication, ease osteoarthritic friction, and strengthen the patellar ligaments.',
+			'process' => 'A reservoir of black gram dough is formed securely around the knee joint. Warm herbal oil is poured into the well and maintained at a constant soothing temperature for 30 minutes, followed by gentle knee mobilization.',
+			'facts'   => array(
+				array( 'Duration', '30 to 45 minutes' ),
+				array( 'Area', 'Knee joints' ),
+				array( 'Indications', 'Knee osteoarthritis, cartilage wear, ligament strain, crepitus, stiffness' ),
+			),
+			'paths'   => array( 'bahya-basti', 'joint', 'degenerative' ),
+		),
+		array(
+			'id'      => 'shiro-basti',
+			'slug'    => 'shiro-basti',
+			'name'    => 'Shiro Vasthi',
+			'alt'     => 'Crown Medicated Oil Pool Therapy',
+			'meaning' => 'Shiro Vasthi, warm medicated oil pooled inside a fitted leather cap',
+			'ing'     => 'Warm medicated herbal oil inside leather cap',
+			'ill'     => 'stream',
+			'tone'    => 'saffron',
+			'short'   => 'Medicated warm oil pooled over the scalp inside a specialised cap reservoir for neurological conditions and insomnia.',
+			'purpose' => 'Considered the most intensive head therapy in classical Ayurveda. Used for cranial nerve weakness, severe migraines, facial paralysis, chronic sleep disturbances, and neurological rehabilitation.',
+			'process' => 'A tall, fitted cylindrical leather cap is secured around the patient\'s head and sealed with black gram paste. Medicated herbal oil is poured inside and maintained at skin temperature until therapeutic signs appear.',
+			'facts'   => array(
+				array( 'Duration', '30 to 45 minutes' ),
+				array( 'Apparatus', 'Traditional leather crown reservoir' ),
+				array( 'Indications', 'Facial palsy, trigeminal neuralgia, chronic insomnia, severe migraine, craniosacral disorders' ),
+			),
+			'paths'   => array( 'bahya-basti', 'relax', 'degenerative' ),
+		),
+		array(
+			'id'      => 'ksheera-dhara',
+			'slug'    => 'ksheera-dhara',
+			'name'    => 'Ksheera Dhara',
+			'alt'     => 'Medicated Herbal Milk Stream Therapy',
+			'meaning' => 'Ksheera Dhara, continuous stream of warm medicated herbal milk',
+			'ing'     => 'Cow\'s milk boiled with Dashamoola or Bala',
+			'ill'     => 'stream',
+			'tone'    => 'ivory',
+			'short'   => 'Continuous stream of medicated milk poured over the forehead or body for Pitta headaches, insomnia, and burning sensation.',
+			'purpose' => 'Combines deep relaxation with tissue nourishment. Soothes agitated cranial nerves, relieves intense burning sensations, and combats chronic sleep deprivation.',
+			'process' => 'Medicated herbal milk is maintained at a comfortable lukewarm temperature and poured in an unbroken stream over the forehead or afflicted body parts, creating a deeply tranquil state.',
+			'facts'   => array(
+				array( 'Duration', '45 minutes' ),
+				array( 'Medium', 'Cow\'s milk infused with medicinal herbs' ),
+				array( 'Indications', 'Pitta headaches, severe insomnia, peripheral neuropathy burning, emotional irritability' ),
+			),
+			'paths'   => array( 'dhara-head', 'relax', 'degenerative' ),
+		),
+		array(
+			'id'      => 'ksheera-dhooma',
+			'slug'    => 'ksheera-dhooma',
+			'name'    => 'Ksheera Dhoopanam',
+			'alt'     => 'Medicated Milk Steam Therapy · Ksheera Dhooma',
+			'meaning' => 'Ksheera Dhoopanam, medicated herbal milk steam therapy',
+			'ing'     => 'Cow\'s milk boiled with Dashamoola and Bala',
+			'ill'     => 'stream',
+			'tone'    => 'ivory',
+			'short'   => 'Medicated milk steam directed onto the face and neck for facial paralysis, speech disorders, and nerve stiffness.',
+			'purpose' => 'Gently stimulates and rejuvenates the facial nerves and muscles without the drying effect of ordinary steam, restoring muscle tone and facial symmetry.',
+			'process' => 'Medicated milk is heated in a specialized vessel; the therapeutic steam is directed through a controlled nozzle over the paralyzed or stiffened facial segments, accompanied by gentle facial marma touch.',
+			'facts'   => array(
+				array( 'Duration', '20 to 30 minutes' ),
+				array( 'Medium', 'Medicated herbal milk vapor' ),
+				array( 'Indications', 'Facial palsy (Bell\'s palsy), trigeminal neuralgia, speech disorders, cervical stiffness' ),
+			),
+			'paths'   => array( 'other-therapies', 'degenerative', 'relax' ),
+		),
+		array(
+			'id'      => 'dhanyamla-dhara',
+			'slug'    => 'dhanyamla-dhara',
+			'name'    => 'Dhanyamla Dhara',
+			'alt'     => 'Fermented Herbal Liquid Pouring',
+			'meaning' => 'Dhanyamla Dhara, continuous pouring of warm fermented medicinal wash',
+			'ing'     => 'Fermented infusion of cereals, horse gram, ginger',
+			'ill'     => 'stream',
+			'tone'    => 'saffron',
+			'short'   => 'Continuous stream of warm fermented herbal liquid poured over the body to dramatically reduce deep inflammation and swelling.',
+			'purpose' => 'Uniquely effective for reducing systemic inflammation, painful swelling, and metabolic stiffness where oils are contraindicated (Amavata).',
+			'process' => 'Warm, tangy fermented medicinal cereal wash (Dhanyamlam) is poured in continuous streams over the affected joints or whole body by trained therapists, breaking down joint edema.',
+			'facts'   => array(
+				array( 'Duration', '45 to 60 minutes' ),
+				array( 'Nature', 'Anti-inflammatory, non-oily pouring' ),
+				array( 'Indications', 'Rheumatoid arthritis, generalized swelling, hemiplegia, metabolic obesity, inflammatory joint pain' ),
+			),
+			'paths'   => array( 'dhara-head', 'joint', 'degenerative', 'weight' ),
+		),
+		array(
+			'id'      => 'takra-dhara',
+			'slug'    => 'takra-dhara',
+			'name'    => 'Thakra Dhara',
+			'alt'     => 'Medicated Buttermilk Stream Therapy',
+			'meaning' => 'Thakra Dhara, continuous stream of cooling medicated buttermilk',
+			'ing'     => 'Medicated buttermilk with Musta & Amalaki',
+			'ill'     => 'stream',
+			'tone'    => 'ivory',
+			'short'   => 'Cooling medicated buttermilk poured over the forehead for psoriasis, headache, stress, and hair loss.',
+			'purpose' => 'Specifically formulated for Pitta and heat-induced disorders. Highly cooling for the brain, nervous system, and scalp, providing intense relief for chronic skin conditions and migraines.',
+			'process' => 'Fresh buttermilk churned with decoctions of Musta (nutgrass) and Amalaki (Indian gooseberry) is continuously poured over the forehead in rhythmic patterns, followed by gentle herbal hair cleansing.',
+			'facts'   => array(
+				array( 'Duration', '45 minutes' ),
+				array( 'Nature', 'Sheeta (Deep cooling therapy)' ),
+				array( 'Indications', 'Psoriasis, eczema, stress headaches, premature greying, insomnia, Pitta aggravation' ),
+			),
+			'paths'   => array( 'dhara-head', 'beauty', 'relax' ),
+		),
+		array(
+			'id'      => 'sarvanga-lepanam',
+			'slug'    => 'sarvanga-lepanam',
+			'name'    => 'Sarvanga Lepanam',
+			'alt'     => 'Full Body Medicated Herbal Application',
+			'meaning' => 'Sarvanga Lepanam, whole-body application of medicinal herbal paste',
+			'ing'     => 'Herbal pastes, turmeric, neem, sandalwood & Triphala',
+			'ill'     => 'leafy',
+			'tone'    => 'forest',
+			'short'   => 'Full-body application of active medicinal herbal paste for skin detoxification, psoriasis, eczema, and inflammation.',
+			'purpose' => 'A full-body therapeutic herbal paste application. Treats extensive dermatological conditions, cools systemic inflammatory heat, relieves itching and scaling in psoriasis and eczema, and restores skin barrier health.',
+			'process' => 'Freshly prepared medicated herbal pastes blended with cooling botanicals are smoothed across the entire body. Left until semi-dry, it draws out dermal toxins and soothes persistent dermatitis.',
+			'facts'   => array(
+				array( 'Duration', '45 to 60 minutes' ),
+				array( 'Coverage', 'Full body application' ),
+				array( 'Indications', 'Psoriasis, eczema, allergic dermatitis, burning skin sensations, systemic toxic heat' ),
+			),
+			'paths'   => array( 'other-therapies', 'beauty', 'degenerative' ),
 		),
 		array(
 			'id'      => 'udhwarthanam',
 			'slug'    => 'udhwarthanam',
 			'name'    => 'Udwarthanam',
-			'alt'     => 'Herbal powder massage',
-			'ing'     => 'Herbal powders',
+			'alt'     => 'Dry Herbal Powder Massage · Udwarthanam',
+			'meaning' => 'Udwarthanam, upward dry herbal powder scrub massage',
+			'ing'     => 'Medicated dry herbal powders',
 			'ill'     => 'powder',
 			'tone'    => 'clay',
-			'short'   => 'A brisk, upward massage with medicated herbal powders, followed by a bath.',
-			'purpose' => 'Often part of weight management plans. Also used to improve circulation and skin tone, reduce fluid retention and support joint mobility.',
-			'process' => 'Herbal powder or paste is rubbed in upward strokes with firm pressure. Any oil is chosen with your skin history and allergies in mind. It is usually advised as a course, sometimes alongside herbal steam and internal medicines.',
+			'short'   => 'Dry powder massage applied in upward strokes for obesity, cellulite reduction, and metabolic sluggishness.',
+			'purpose' => 'Breaks down subcutaneous fat deposits, stimulates circulation, reduces cellulite, improves skin luster, and expels excess Kapha and water retention.',
+			'process' => 'Therapists vigorously rub dry or paste-form herbal powders in upward, rhythmic strokes over the entire body, creating friction that stimulates fat metabolism, followed by a warm herbal bath.',
 			'facts'   => array(
-				array( 'Medium', 'Herbal powders' ),
-				array( 'Format', 'Usually a course' ),
+				array( 'Duration', '45 to 60 minutes' ),
+				array( 'Medium', 'Coarse medicinal herbal powders' ),
+				array( 'Indications', 'Obesity, cellulite, fluid retention, skin dullness, sluggish metabolism' ),
 			),
-			'paths'   => array( 'weight' ),
+			'paths'   => array( 'abhyanga-sweda', 'weight', 'beauty' ),
 			'img'     => 'assets/img/t-udhwarthanam.jpg',
+		),
+		array(
+			'id'      => 'tarpanam',
+			'slug'    => 'tarpanam',
+			'name'    => 'Tarpanam',
+			'alt'     => 'Ocular Ghee Bath · Netra Tarpanam',
+			'meaning' => 'Tarpanam, revitalizing medicated ghee pool for the eyes',
+			'ing'     => 'Pure medicated cow\'s ghee (Triphala Ghritam)',
+			'ill'     => 'eye',
+			'tone'    => 'saffron',
+			'short'   => 'Warm medicated ghee pooled gently over the eyes inside dough wells for dry eyes, computer strain, and eye fatigue.',
+			'purpose' => 'Soothes dry, tired, burning eyes caused by extended screen use and harsh air conditioning. Nourishes the optic nerves and clarifies vision.',
+			'process' => 'Dough enclosures are crafted around both ocular orbits. Warm medicated Triphala ghee is poured over closed eyelids; the patient then blinks rhythmically under the ghee bath before the eyes are cleansed.',
+			'facts'   => array(
+				array( 'Duration', '25 to 30 minutes' ),
+				array( 'Area', 'Eyes' ),
+				array( 'Indications', 'Computer vision syndrome, dry eyes, eye fatigue, burning sensations, refractive fatigue' ),
+			),
+			'paths'   => array( 'other-therapies', 'beauty', 'relax' ),
+			'img'     => 'assets/img/t-tarpanam.jpg',
+		),
+		array(
+			'id'      => 'akshi-seka',
+			'slug'    => 'akshi-seka',
+			'name'    => 'Netra Sekam',
+			'alt'     => 'Medicated Herbal Eye Wash · Akshi Seka',
+			'meaning' => 'Netra Sekam, continuous gentle washing of the eyes with herbal decoctions',
+			'ing'     => 'Sterile herbal decoction of Triphala and Lodhra',
+			'ill'     => 'eye',
+			'tone'    => 'sage',
+			'short'   => 'Continuous gentle washing of the eyes with warm herbal decoctions for eye redness, discharge, and allergic strain.',
+			'purpose' => 'Cleanses and cools irritated ocular tissues, clears discharge, relieves burning sensations, and reduces allergic conjunctival inflammation.',
+			'process' => 'The patient lies comfortably while warm, freshly filtered sterile herbal decoction is poured in a continuous thin stream across closed and lightly open eyes from a height of few inches for 10 minutes.',
+			'facts'   => array(
+				array( 'Duration', '20 minutes' ),
+				array( 'Area', 'Eyes' ),
+				array( 'Indications', 'Conjunctivitis, ocular burning, discharge, allergic eye irritation, digital eye strain' ),
+			),
+			'paths'   => array( 'other-therapies', 'beauty', 'relax' ),
+		),
+		array(
+			'id'      => 'karnapoorana',
+			'slug'    => 'karnapoorana',
+			'name'    => 'Karna Pooranam',
+			'alt'     => 'Medicated Ear Filling Therapy',
+			'meaning' => 'Karna Pooranam, filling the ear canals with warm medicated oil',
+			'ing'     => 'Warm medicated herbal oils (Bilva Thailam)',
+			'ill'     => 'drop',
+			'tone'    => 'oil',
+			'short'   => 'Gentle filling of the ear canals with warm medicated herbal oil for tinnitus, ear pain, and jaw stiffness.',
+			'purpose' => 'Soothes the acoustic nerve, relieves ringing in the ears (tinnitus), eases earache, cleanses accumulated wax, and releases tension from the temporomandibular joint (TMJ).',
+			'process' => 'Following gentle massage around the ears and jaw, warm medicated oil is slowly instilled into one ear canal and retained for 10 to 15 minutes before the procedure is repeated on the other side.',
+			'facts'   => array(
+				array( 'Duration', '20 to 30 minutes' ),
+				array( 'Area', 'Ear canals and surrounding marma points' ),
+				array( 'Indications', 'Tinnitus, ear dryness, jaw stiffness (TMJ), neck tension, dizziness, Vata ear disorders' ),
+			),
+			'paths'   => array( 'other-therapies', 'relax', 'degenerative' ),
+		),
+		array(
+			'id'      => 'prachanam',
+			'slug'    => 'prachanam',
+			'name'    => 'Prachanam',
+			'alt'     => 'Ayurvedic Micro-Bloodletting · Pracchana Karma',
+			'meaning' => 'Prachanam, micro-bloodletting and scalp detoxification',
+			'ing'     => 'Sterile surgical micro-needles & healing herbal extracts',
+			'ill'     => 'leafy',
+			'tone'    => 'forest',
+			'short'   => 'Targeted micro-puncturing therapy for alopecia areata, stubborn localized skin lesions, and hair follicle rejuvenation.',
+			'purpose' => 'A specialized para-surgical blood purification procedure (Pracchana). Induces localized micro-circulation, clears stagnant cellular toxins, stimulates dormant hair follicles in Alopecia Areata, and treats localized eczema patches.',
+			'process' => 'Using specialized sterile techniques, minute superficial micro-punctures are made over the affected scalp area or localized skin patch, followed by healing herbal application.',
+			'facts'   => array(
+				array( 'Modality', 'Sterile classical micro-puncturing & herbal application' ),
+				array( 'Focus', 'Hair follicle reactivation and localized toxic blood release' ),
+				array( 'Indications', 'Alopecia Areata, patchy hair loss, localized eczema, stubborn lichenified lesions' ),
+			),
+			'paths'   => array( 'other-therapies', 'beauty', 'degenerative' ),
+		),
+		array(
+			'id'      => 'njavara-kizhi',
+			'slug'    => 'njavara-kizhi',
+			'name'    => 'Njavara Theppu & Kizhi',
+			'alt'     => 'Medicated Rice Bolus Rejuvenation & Paste Application',
+			'meaning' => 'Njavara Theppu & Kizhi, 60-day medicinal rice bolus massage and paste wrap',
+			'ing'     => 'Njavara rice, Bala decoction & milk',
+			'ill'     => 'rice',
+			'tone'    => 'ivory',
+			'short'   => 'Warm boluses of cooked Njavara rice dipped in herbal milk decoction for muscle wasting, weakness, and paralysis.',
+			'purpose' => 'A deeply nourishing (Brimhana) therapy. Regenerates wasted muscles, strengthens nerve conduction, improves skin texture, and restores vitality after illness.',
+			'process' => 'Special Njavara rice cooked in Bala decoction and milk is tied into linen pouches, dipped in hot herbal milk, and massaged over the body, concluding with the paste applied directly to skin.',
+			'facts'   => array(
+				array( 'Duration', '45 to 60 minutes' ),
+				array( 'Medium', 'Medicated Njavara rice & herbal milk' ),
+				array( 'Indications', 'Muscle wasting, post-stroke paralysis, neuropathy, arthritis, anti-aging rejuvenation' ),
+			),
+			'paths'   => array( 'abhyanga-sweda', 'joint', 'degenerative' ),
+			'img'     => 'assets/img/t-njavara-kizhi.jpg',
+		),
+		array(
+			'id'      => 'face-pack',
+			'slug'    => 'face-pack',
+			'name'    => 'Mukha Lepanam',
+			'alt'     => 'Herbal, Fruit & Njavara Facial Therapy',
+			'meaning' => 'Mukha Lepanam, authentic Ayurvedic facial pack application',
+			'ing'     => 'Herbal pastes, fruit extracts, Njavara rice & turmeric',
+			'ill'     => 'turmeric',
+			'tone'    => 'ivory',
+			'short'   => 'Authentic Ayurvedic facial therapy combining freshly blended herbs, fruit extracts, and Njavara paste for radiant skin.',
+			'purpose' => 'A traditional Ayurvedic facial therapy offering three specialized variations: Herbal Lepam (for acne and blemishes), Fruit Lepam (for natural glow and rejuvenation), and Njavara Lepam (for deep nourishment and skin elasticity).',
+			'process' => 'A freshly blended herbal or fruit paste matched to the skin constitution is smoothed over the face and neck, allowed to nourish the dermal layers, and gently washed with herbal hydrosols.',
+			'facts'   => array(
+				array( 'Duration', '45 minutes' ),
+				array( 'Variants', 'Herbal, Fruit, and Njavara Rice facial formulations' ),
+				array( 'Indications', 'Acne, pigmentation, dullness, fine lines, sun damage, sensitive skin' ),
+			),
+			'paths'   => array( 'other-therapies', 'beauty' ),
+			'img'     => 'assets/img/t-face-pack.jpg',
 		),
 		array(
 			'id'      => 'thalapothichil',
 			'slug'    => 'thalapothichil',
 			'name'    => 'Thalapothichil',
-			'alt'     => 'Herbal head covering',
-			'meaning' => 'Thala, the head · Pothichil, a covering',
-			'ing'     => 'Banana leaf, herbal paste',
+			'alt'     => 'Cooling Medicated Scalp Pack · Shiro Lepa',
+			'meaning' => 'Thalapothichil, medicinal herbal paste wrap over the scalp',
+			'ing'     => 'Amalaki herbal paste, banana leaf wrap',
 			'ill'     => 'banana',
 			'tone'    => 'forest',
-			'short'   => 'A cooling herbal paste applied to the scalp and wrapped with banana leaf or cloth.',
-			'purpose' => 'A cooling, nourishing therapy used for pitta imbalances of the head and mind, for stress, and for scalp and hair health.',
-			'process' => 'A paste prepared from Ayurvedic herbs is massaged gently into the scalp, then the head is wrapped so the herbs can be absorbed.',
+			'short'   => 'Herbal paste pack applied over the scalp and wrapped with banana leaves for deep mental cooling, stress, and insomnia.',
+			'purpose' => 'A premier Kerala therapy that brings peace to an overheated mind. Balances Pitta, soothes neurological agitation, controls scalp dermatitis, and restores deep restorative sleep.',
+			'process' => 'A thick layer of freshly prepared herbal paste is applied over the scalp, covered with a banana leaf or lotus leaf, and held in place with a cotton headband for 45 minutes while medicated oil pools in the crown center.',
 			'facts'   => array(
-				array( 'Medium', 'Herbal paste, banana leaf' ),
-				array( 'Area', 'Scalp and head' ),
+				array( 'Duration', '45 to 60 minutes' ),
+				array( 'Wrap', 'Natural medicinal banana leaf' ),
+				array( 'Indications', 'Severe stress, chronic insomnia, hair loss, scalp dermatitis, anxiety' ),
 			),
-			'paths'   => array( 'beauty', 'relax' ),
+			'paths'   => array( 'dhara-head', 'beauty', 'relax' ),
 			'img'     => 'assets/img/t-thalapothichil.jpg',
 		),
 		array(
-			'id'      => 'face-pack',
-			'slug'    => 'face-pack',
-			'name'    => 'Face Pack',
-			'alt'     => 'Ayurvedic herbal facial · Mukha Lepam',
-			'ing'     => 'Turmeric and rice',
+			'id'      => 'soundarya-wrap',
+			'slug'    => 'soundarya-wrap',
+			'name'    => 'Soundarya Wrap',
+			'alt'     => 'Ayurvedic Herbal Beauty Body Wrap',
+			'meaning' => 'Soundarya Wrap, luxury herbal beauty and body contouring wrap',
+			'ing'     => 'Exotic herbal pastes, sandalwood, saffron, turmeric & milk',
 			'ill'     => 'turmeric',
-			'tone'    => 'ivory',
-			'short'   => 'An herbal facial of massage, rice scrub, turmeric and a face pack of selected herbs.',
-			'purpose' => 'Addresses concerns such as under-eye darkness, dark spots and loss of firmness, and helps restore moisture to the skin.',
-			'process' => 'The facial combines massage, a rice scrub, turmeric and a face pack prepared from herbs chosen for your skin.',
+			'tone'    => 'saffron',
+			'short'   => 'Luxurious whole-body herbal cocoon wrap with exotic botanical pastes to tone, exfoliate, and deeply revitalize the skin.',
+			'purpose' => 'A signature Ayurvedic beauty and body contouring wrap. Exfoliates dead cells, tones sagging tissues, restores skin moisture, enhances complexion radiance, and promotes profound relaxation.',
+			'process' => 'The body is exfoliated with delicate botanical scrubs, coated in pure sandalwood, turmeric, saffron, and herbal milk, and wrapped in warm therapeutic compresses for deep nourishment.',
 			'facts'   => array(
-				array( 'Medium', 'Herbal pastes, rice, turmeric' ),
+				array( 'Duration', '60 minutes' ),
+				array( 'Medium', 'Sandalwood, saffron, medicinal herbs, and natural body wrap' ),
+				array( 'Indications', 'Uneven skin tone, dull skin, loss of firmness, stress exhaustion, bridal wellness' ),
 			),
-			'paths'   => array( 'beauty' ),
-			'img'     => 'assets/img/t-face-pack.jpg',
+			'paths'   => array( 'other-therapies', 'beauty', 'relax' ),
+		),
+
+		// -------------------------------------------------------------
+		// GROUP 3: SPECIAL THERAPIES (33-34)
+		// -------------------------------------------------------------
+		array(
+			'id'      => 'post-natal-care',
+			'slug'    => 'post-natal-care',
+			'name'    => 'Post Natal Care (Soothika Paricharya)',
+			'alt'     => 'Soothika Paricharya & Bala Cikitsa · 7, 14 & 21 Days',
+			'meaning' => 'Soothika Paricharya, classical postpartum recovery and newborn care',
+			'ing'     => 'Specialized postpartum herbal oils, Kashayam, and Kashaya Dhara',
+			'ill'     => 'leafy',
+			'tone'    => 'sage',
+			'short'   => 'Comprehensive mother and baby Ayurvedic care packages spanning 07, 14, and 21 days for post-delivery recovery.',
+			'purpose' => 'Dedicated maternal and newborn wellness rooted in classical Soothika Paricharya and Bala Cikitsa. Strengthens pelvic muscles, restores abdominal tone, relieves fatigue, enhances lactation, and prevents postpartum depression.',
+			'process' => 'Available in dedicated 07-day, 14-day, and 21-day clinical packages under the supervision of female Ayurvedic doctors, combining Abhyangam, Kashaya Dhara, abdominal wrapping, and newborn care.',
+			'facts'   => array(
+				array( 'Programmes', '07 Days, 14 Days, and 21 Days Specialized Care' ),
+				array( 'Focus', 'Uterine involution, abdominal tone, lactation support, joint recovery' ),
+				array( 'Indications', 'Post-delivery recovery, backache, pelvic fatigue, lactation enhancement' ),
+			),
+			'paths'   => array( 'special', 'postnatal', 'relax', 'joint' ),
+			'img'     => 'assets/img/p-postnatal.jpg',
+		),
+		array(
+			'id'      => 'skin-hair-care',
+			'slug'    => 'skin-hair-care',
+			'name'    => 'Skin & Hair Care Treatments',
+			'alt'     => 'Specialized Ayurvedic Care for Psoriasis, Eczema & Alopecia',
+			'meaning' => 'Comprehensive Ayurvedic clinical protocols for chronic skin and scalp disorders',
+			'ing'     => 'Psoriasis & eczema specific Kashayams, Thailams, Lepam & Dhara',
+			'ill'     => 'leafy',
+			'tone'    => 'forest',
+			'short'   => 'Clinical Ayurvedic protocols for chronic skin disorders and severe hair loss, restoring dosha balance and skin health.',
+			'purpose' => 'A multi-stage therapeutic clinical program specifically formulated for chronic conditions: Psoriasis, Eczema, Atopic Dermatitis, Seborrheic Dermatitis, and Alopecia Areata. Four core therapeutic pillars: 1. Deep Detoxification, 2. Restoring Dosha Balance, 3. Gentle Skin Exfoliation, 4. Restoring Normal Skin Health.',
+			'process' => 'Our clinical protocol addresses root-cause vitiation of Pitta, Kapha, and Rakta through a structured 4-pillar pathway combining Takra Dhara, Sarvanga Lepanam, Prachanam, internal herbs, and dietary guidance.',
+			'facts'   => array(
+				array( 'Focus Conditions', 'Psoriasis, Eczema, Atopic Dermatitis, Seborrheic Dermatitis, Alopecia Areata' ),
+				array( '4-Pillar Protocol', '1. Detoxification · 2. Dosha Balance · 3. Exfoliation · 4. Health Restoration' ),
+				array( 'Therapies', 'Takra Dhara, Sarvanga Lepanam, Prachanam, Nasyam, Blood Cleansing' ),
+			),
+			'paths'   => array( 'special', 'beauty', 'degenerative' ),
+			'img'     => 'assets/img/p-beauty.jpg',
+		),
+	);
+}
+
+/**
+ * Classical Therapy Categories
+ */
+function kottakkal_get_therapy_categories() {
+	return array(
+		'panchakarma'     => array(
+			'id'    => 'panchakarma',
+			'name'  => __( 'Panchakarma (Main 5 Shodhana)', 'oceanwp' ),
+			'short' => __( 'Panchakarma', 'oceanwp' ),
+			'desc'  => __( 'The classical fivefold bio-cleansing and metabolic detoxification therapies.', 'oceanwp' ),
+		),
+		'bahya-basti'     => array(
+			'id'    => 'bahya-basti',
+			'name'  => __( 'Local Vasthi (Oil Pool Therapies)', 'oceanwp' ),
+			'short' => __( 'Local Vasthi', 'oceanwp' ),
+			'desc'  => __( 'External pooling of warm medicated herbal oils in specially molded dough reservoirs.', 'oceanwp' ),
+		),
+		'abhyanga-sweda'  => array(
+			'id'    => 'abhyanga-sweda',
+			'name'  => __( 'Massage, Kizhi & Body Therapies', 'oceanwp' ),
+			'short' => __( 'Massage & Kizhi', 'oceanwp' ),
+			'desc'  => __( 'Classical warm herbal oil massages, Kizhi pouch fomentations, Pizhichil, and therapeutic Pichu.', 'oceanwp' ),
+		),
+		'dhara-head'      => array(
+			'id'    => 'dhara-head',
+			'name'  => __( 'Dhara & Head Therapies', 'oceanwp' ),
+			'short' => __( 'Dhara & Head', 'oceanwp' ),
+			'desc'  => __( 'Continuous streams of medicated oils, buttermilk, and milk across the forehead and scalp packs.', 'oceanwp' ),
+		),
+		'other-therapies' => array(
+			'id'    => 'other-therapies',
+			'name'  => __( 'Eye, ENT, Lepanam & Wraps', 'oceanwp' ),
+			'short' => __( 'Eye, ENT & Wraps', 'oceanwp' ),
+			'desc'  => __( 'Tarpanam, Netra Sekam, Karna Pooranam, Dhoomapanam, Lepanam, and Soundarya Wrap.', 'oceanwp' ),
+		),
+		'special'         => array(
+			'id'    => 'special',
+			'name'  => __( 'Special Therapies & Programs', 'oceanwp' ),
+			'short' => __( 'Special Therapies', 'oceanwp' ),
+			'desc'  => __( 'Post Natal Care (Soothika Paricharya) and Specialized Skin & Hair Care programs.', 'oceanwp' ),
 		),
 	);
 }
@@ -253,7 +767,7 @@ function kottakkal_get_default_pathways() {
 			'overview'  => 'Joint and muscle pain can cause swelling, discomfort and loss of movement. Our doctors see people with conditions such as frozen shoulder, tennis elbow, heel pain, back pain and sciatica, and with injuries that are slow to settle. Marma Chikitsa, a gentle touch therapy working on vital points of the body, is also offered.',
 			'approach'  => 'Your plan may combine Panchakarma procedures, detoxification, dietary adjustments and herbal medicines, chosen after consultation to address the underlying imbalance as well as the symptoms.',
 			'therapies' => array( 'kativasthi', 'njavara-kizhi', 'pottali-sweda', 'pizhichil', 'abhyangam' ),
-			'docs'      => array( 'naseeba', 'ajitha', 'rajesh' ),
+			'docs'      => array( 'naseeba', 'ajitha', 'minupriya', 'rajesh' ),
 			'img'       => 'assets/img/p-joint.jpg',
 		),
 		array(
@@ -328,8 +842,38 @@ function kottakkal_get_default_pathways() {
 			'overview'  => 'For people with degenerative and auto-immune conditions, we build an individual plan aimed at managing symptoms and improving day-to-day quality of life.',
 			'approach'  => 'Each plan follows a thorough review and is adjusted over time. Ayurvedic care here works alongside, not instead of, the treatment you receive from your medical doctor. Please bring details of your current medicines to your consultation.',
 			'therapies' => array( 'pizhichil', 'njavara-kizhi', 'abhyangam' ),
-			'docs'      => array( 'rajesh', 'naseeba' ),
+			'docs'      => array( 'minupriya', 'rajesh', 'naseeba' ),
 			'img'       => 'assets/img/p-degenerative.jpg',
+		),
+		array(
+			'id'        => 'injury-management',
+			'slug'      => 'injury-management',
+			'name'      => 'Injury Management',
+			'short'     => 'Injury Management',
+			'need'      => 'Pain, recovery & injury care',
+			'ill'       => 'ring',
+			'tone'      => 'clay',
+			'intro'     => 'Holistic Ayurvedic care for managing injuries and reducing stress and inflammation.',
+			'overview'  => 'Kottakkal Green Life Ayurvedic Clinic in Dubai is renowned for its expertise in managing injuries through traditional Ayurvedic treatments. Emphasizing natural remedies and dietary guidelines, our approach is holistic, addressing not just the symptoms but the underlying imbalance in the body.',
+			'approach'  => 'By harnessing the power of Ayurveda we support the body\'s innate healing mechanisms, reducing stress and inflammation while promoting overall well-being. Our personalized treatments aim to restore harmony and vitality, providing patients with long-lasting relief and a renewed sense of health and wellness.',
+			'therapies' => array( 'veshtanam', 'kati-greeva-pichu', 'pottali-sweda', 'abhyangam', 'kativasthi' ),
+			'docs'      => array( 'minupriya', 'naseeba', 'ajitha' ),
+			'img'       => 'assets/img/p-injury.jpg',
+		),
+		array(
+			'id'        => 'marma-chikitsa',
+			'slug'      => 'marma-chikitsa',
+			'name'      => 'Marma Chikitsa',
+			'short'     => 'Marma Chikitsa',
+			'need'      => 'Vital energy points & healing touch',
+			'ill'       => 'stream',
+			'tone'      => 'forest',
+			'intro'     => 'Ancient therapeutic touch targeting vital energy points to harmonize and rejuvenate the entire being.',
+			'overview'  => 'Step into our holistic Ayurvedic Clinic in Dubai and delve into the ancient healing art of Marma Chikitsa. This Therapeutic practice offers profound benefits for both physical and mental well-being. Originating from ancient Indian tradition, Marma Chikitsa targets vital energy points in the body to harmonize and rejuvenate the entire being.',
+			'approach'  => 'Experience the gentle yet powerful touch therapy, tailored to your individual needs, as our skilled practitioners guide you towards balance and vitality. Embrace this unique opportunity to restore harmony and vitality and embark on a journey towards holistic wellness at our serene clinic.',
+			'therapies' => array( 'abhyangam', 'pizhichil', 'shirodara', 'nasyam' ),
+			'docs'      => array( 'ajitha', 'naseeba', 'minupriya' ),
+			'img'       => 'assets/img/p-marma.jpg',
 		),
 	);
 }
@@ -346,7 +890,7 @@ function kottakkal_get_default_doctors() {
 			'mono'   => 'NR',
 			'role'   => 'Medical Director',
 			'tone'   => 'forest',
-			'img_url' => get_stylesheet_directory_uri() . '/assets/img/doc-naseeba.jpg',
+			'img_url' => get_stylesheet_directory_uri() . '/assets/img/doc-naseeba.png',
 			'creds'  => array(
 				'DHA- and MOH-certified Ayurvedic practitioner',
 				'KMCT Ayurveda Medical College, Calicut',
@@ -374,7 +918,7 @@ function kottakkal_get_default_doctors() {
 			'mono'   => 'AB',
 			'role'   => 'Ayurveda Practitioner',
 			'tone'   => 'night',
-			'img_url' => get_stylesheet_directory_uri() . '/assets/img/doc-ajitha.jpg',
+			'img_url' => get_stylesheet_directory_uri() . '/assets/img/doc-ajitha.png',
 			'creds'  => array(
 				'SN Ayurveda Medical College, Kollam (KUHS)',
 				'6+ years’ experience in India',
@@ -396,31 +940,34 @@ function kottakkal_get_default_doctors() {
 			),
 		),
 		array(
-			'id'      => 'rajesh',
-			'slug'    => 'rajesh',
-			'name'    => 'Dr. Rajesh Kumar',
-			'mono'    => 'RK',
-			'role'    => 'Consultant Ayurvedic Physician',
+			'id'      => 'minupriya',
+			'slug'    => 'minupriya',
+			'name'    => 'Dr. Minupriya',
+			'mono'    => 'MP',
+			'role'    => 'Ayurvedic Practitioner | 10+ Years of Clinical Experience',
 			'tone'    => 'clay',
-			'img_url' => get_stylesheet_directory_uri() . '/assets/img/doc-rajesh.jpg',
+			'img_url' => get_stylesheet_directory_uri() . '/assets/img/doc-minupriya.png',
 			'creds'   => array(
-				'DHA-licensed Ayurvedic Practitioner',
-				'Government Ayurveda College, Trivandrum (BAMS)',
-				'8+ years’ clinical practice in Kerala and Dubai',
+				'Ayurvedic Practitioner',
+				'10+ Years of Clinical Experience',
+				'Rajiv Gandhi University of Health Sciences, Bangalore',
+				'10+ years’ clinical experience across India and the UAE',
 			),
-			'short'   => 'Specialises in musculoskeletal disorders, spine health, chronic pain relief, and constitutional detoxification.',
+			'short'   => 'Experienced in gastrointestinal health, skin diseases, respiratory disorders, musculoskeletal pain, and lifestyle management.',
 			'specs'   => array(
-				'Musculoskeletal & Spine Health',
-				'Panchakarma Detoxification',
-				'Chronic Pain & Arthritis',
-				'Digestive & Metabolic Health',
-				'Stress & Insomnia Relief',
-				'Preventive Wellness Counselling',
+				'Gastrointestinal disorders and digestive health',
+				'Skin diseases and dermatological conditions',
+				'Respiratory disorders and respiratory health',
+				'Musculoskeletal disorders and pain management',
+				'Lifestyle-related health conditions',
+				'Personalized diet and lifestyle management',
 			),
 			'bio'     => array(
-				'Dr. Rajesh Kumar is a DHA-licensed Ayurvedic practitioner with over eight years of clinical practice in classical Kerala Ayurveda therapies and holistic patient care.',
-				'A graduate of Government Ayurveda College, Trivandrum, he brings deep clinical expertise in managing musculoskeletal disorders, chronic back and neck conditions, and lifestyle-induced stress.',
-				'His clinical philosophy centers on root-cause healing, combining authentic therapeutic treatments with practical diet and lifestyle guidance to achieve sustainable health and vitality.',
+				'Dr. Minupriya is an experienced Ayurvedic Practitioner with over 10 years of clinical experience across India and the UAE. A graduate of Rajiv Gandhi University of Health Sciences, Bangalore, she brings extensive knowledge and expertise in providing personalized Ayurvedic care focused on holistic healing and long-term wellness.',
+				'With a patient-centered and root-cause approach, Dr. Minupriya combines classical Ayurvedic principles and authentic therapeutic practices with individualized diet and lifestyle modifications to address patients\' specific health concerns and promote overall well-being.',
+				'### Her Philosophy',
+				'Dr. Minupriya believes in holistic healing through authentic Ayurveda, compassionate care, and personalized treatment approaches. Her mission is to help patients overcome pain, restore balance, and achieve sustainable improvements in their health and quality of life through natural healing and long-term wellness practices.',
+				'*Begin Your Wellness Journey with Dr. Minupriya at Kottakkal Green Life Ayurvedic Center, Dubai.*',
 			),
 		),
 	);
@@ -459,6 +1006,25 @@ function kottakkal_get_treatments() {
 			$paths = is_array( $paths_meta ) ? $paths_meta : array_filter( array_map( 'trim', explode( ',', (string) $paths_meta ) ) );
 
 			$feat_img = get_the_post_thumbnail_url( $p->ID, 'large' );
+			if ( empty( $feat_img ) ) {
+				$feat_img = get_post_meta( $p->ID, '_kottakkal_photo', true );
+			}
+			if ( empty( $feat_img ) ) {
+				$photo_id = get_post_meta( $p->ID, '_kottakkal_photo_id', true );
+				if ( $photo_id ) {
+					$feat_img = wp_get_attachment_image_url( $photo_id, 'large' );
+				}
+			}
+			if ( empty( $feat_img ) ) {
+				$slug = $p->post_name;
+				$theme_dir = get_stylesheet_directory();
+				$theme_uri = get_stylesheet_directory_uri();
+				if ( ! empty( $slug ) && file_exists( $theme_dir . '/assets/img/t-' . $slug . '.jpg' ) ) {
+					$feat_img = $theme_uri . '/assets/img/t-' . $slug . '.jpg';
+				} elseif ( ! empty( $slug ) && file_exists( $theme_dir . '/assets/img/t-' . $slug . '.png' ) ) {
+					$feat_img = $theme_uri . '/assets/img/t-' . $slug . '.png';
+				}
+			}
 
 			$items[] = array(
 				'id'      => $p->post_name,
@@ -555,23 +1121,44 @@ function kottakkal_get_doctors() {
 			$creds = get_post_meta( $p->ID, '_kottakkal_creds', true );
 			$specs = get_post_meta( $p->ID, '_kottakkal_specs', true );
 
-			// Check custom photo field first, then photo_id, then standard featured image, then local asset
-			$feat_img = get_post_meta( $p->ID, '_kottakkal_photo', true );
-			if ( empty( $feat_img ) ) {
-				$photo_id = get_post_meta( $p->ID, '_kottakkal_photo_id', true );
-				if ( ! empty( $photo_id ) ) {
-					$feat_img = wp_get_attachment_image_url( $photo_id, 'large' );
+			// Prefer transparent cutout PNG from theme if available
+			$theme_dir = get_stylesheet_directory();
+			$theme_uri = get_stylesheet_directory_uri();
+			if ( file_exists( $theme_dir . '/assets/img/doc-' . $p->post_name . '-hd.png' ) ) {
+				$feat_img = $theme_uri . '/assets/img/doc-' . $p->post_name . '-hd.png';
+			} elseif ( file_exists( $theme_dir . '/assets/img/doc-' . $p->post_name . '.png' ) ) {
+				$feat_img = $theme_uri . '/assets/img/doc-' . $p->post_name . '.png';
+			} else {
+				// Check custom photo field first, then photo_id, then standard featured image, then local asset
+				$feat_img = get_post_meta( $p->ID, '_kottakkal_photo', true );
+				if ( empty( $feat_img ) ) {
+					$photo_id = get_post_meta( $p->ID, '_kottakkal_photo_id', true );
+					if ( ! empty( $photo_id ) ) {
+						$feat_img = wp_get_attachment_image_url( $photo_id, 'large' );
+					}
 				}
-			}
-			if ( empty( $feat_img ) ) {
-				$feat_img = get_the_post_thumbnail_url( $p->ID, 'large' );
-			}
-			if ( empty( $feat_img ) ) {
-				$theme_dir = get_stylesheet_directory();
-				$theme_uri = get_stylesheet_directory_uri();
-				if ( file_exists( $theme_dir . '/assets/img/doc-' . $p->post_name . '.jpg' ) ) {
+				if ( empty( $feat_img ) ) {
+					$feat_img = get_the_post_thumbnail_url( $p->ID, 'large' );
+				}
+				if ( empty( $feat_img ) && file_exists( $theme_dir . '/assets/img/doc-' . $p->post_name . '.jpg' ) ) {
 					$feat_img = $theme_uri . '/assets/img/doc-' . $p->post_name . '.jpg';
 				}
+			}
+
+			$creds_list = is_array( $creds ) ? $creds : array_filter( array_map( 'trim', explode( "\n", (string) $creds ) ) );
+			if ( $p->post_name === 'minupriya' ) {
+				$parsed_creds = array();
+				foreach ( $creds_list as $c_item ) {
+					if ( str_contains( $c_item, '|' ) ) {
+						$parts = array_map( 'trim', explode( '|', $c_item ) );
+						foreach ( $parts as $prt ) {
+							if ( ! empty( $prt ) ) $parsed_creds[] = $prt;
+						}
+					} else {
+						$parsed_creds[] = $c_item;
+					}
+				}
+				$creds_list = $parsed_creds;
 			}
 
 			$items[] = array(
@@ -581,7 +1168,7 @@ function kottakkal_get_doctors() {
 				'mono'    => get_post_meta( $p->ID, '_kottakkal_mono', true ) ?: substr( $p->post_title, 0, 2 ),
 				'role'    => get_post_meta( $p->ID, '_kottakkal_role', true ) ?: 'Ayurveda Practitioner',
 				'tone'    => get_post_meta( $p->ID, '_kottakkal_tone', true ) ?: 'forest',
-				'creds'   => is_array( $creds ) ? $creds : array_filter( array_map( 'trim', explode( "\n", (string) $creds ) ) ),
+				'creds'   => $creds_list,
 				'short'   => $p->post_excerpt ?: wp_trim_words( $p->post_content, 20 ),
 				'specs'   => is_array( $specs ) ? $specs : array_filter( array_map( 'trim', explode( ',', (string) $specs ) ) ),
 				'bio'     => array_filter( explode( "\n\n", $p->post_content ) ),
@@ -590,6 +1177,20 @@ function kottakkal_get_doctors() {
 				'link'    => get_permalink( $p->ID ),
 			);
 		}
+
+		// Explicit doctor display order: 1st Naseeba, 2nd Ajitha, 3rd Minupriya
+		$order_map = array(
+			'naseeba'   => 1,
+			'ajitha'    => 2,
+			'minupriya' => 3,
+		);
+
+		usort( $items, function( $a, $b ) use ( $order_map ) {
+			$score_a = $order_map[ $a['slug'] ] ?? ( $order_map[ $a['id'] ] ?? 99 );
+			$score_b = $order_map[ $b['slug'] ] ?? ( $order_map[ $b['id'] ] ?? 99 );
+			return $score_a <=> $score_b;
+		} );
+
 		return $items;
 	}
 
@@ -598,6 +1199,406 @@ function kottakkal_get_doctors() {
 		$d['link'] = home_url( '/doctors/' . $d['slug'] . '/' );
 	}
 	return $defaults;
+}
+
+/**
+ * Default Testimonials Data (Authentic Patient Reviews from Kottakkal Green Life)
+ */
+function kottakkal_get_default_testimonials() {
+	return array(
+		array(
+			'id'        => 'bhaskaran-rajeev',
+			'name'      => 'Bhaskaran Rajeev',
+			'initials'  => 'BR',
+			'rating'    => 5,
+			'source'    => 'Google Reviews',
+			'context'   => 'Shoulder Pain Relief',
+			'doctor'    => '',
+			'therapist' => 'Abit',
+			'duration'  => '12 Days Treatment',
+			'category'  => 'pain',
+			'quote'     => 'I recently consulted for Ayurvedic treatment for my shoulder pain, and I am extremely satisfied with the results. Within just 12 days of treatment, I experienced remarkable relief. My sincere thanks to the entire staff for their professionalism, care, and dedication. A special appreciation to Abit, the therapist, for his excellent treatment and attentive approach throughout the sessions. Truly grateful for the wonderful service and highly recommend Kottakkal Green Life for the better health and Care.',
+			'poster'    => 'assets/img/testimonials/Testimonial01.jpg',
+		),
+		array(
+			'id'        => 'capt-balbir-kumar',
+			'name'      => 'Capt Balbir Prasad Kumar',
+			'initials'  => 'BK',
+			'rating'    => 5,
+			'source'    => 'Google Reviews',
+			'context'   => 'Shoulder Pain Relief',
+			'doctor'    => 'Dr. Naseeba Abdul Rafeeque',
+			'therapist' => 'Mr. Vaishak',
+			'duration'  => '9 Days Treatment',
+			'category'  => 'pain',
+			'quote'     => 'I had a great experience at Kottakal Green Life Ayurvedic Center in Al Qusais 1. I am sincerely grateful to Dr. Naseeba for her perfect diagnosis and close monitoring of my shoulder pain treatment. My assigned therapist, Mr. Vaishak, was excellent, and I saw daily improvement through the 9-day treatment with varied therapies. I am now finally rid of the pain and discomfort. I highly recommend this clinic, and I\'d also like to thank the front desk staff for their continuous follow-up on appointments and sessions.',
+			'poster'    => 'assets/img/testimonials/Testimonial02.jpg',
+		),
+		array(
+			'id'        => 'anagha-mathew',
+			'name'      => 'Anagha Mathew',
+			'initials'  => 'AM',
+			'rating'    => 5,
+			'source'    => 'Google Reviews',
+			'context'   => 'Effective Ayurvedic Care',
+			'doctor'    => 'Dr. Naseeba Abdul Rafeeque',
+			'therapist' => 'Sunu & Sareena',
+			'duration'  => 'Therapeutic Sessions',
+			'category'  => 'therapies',
+			'quote'     => 'I had a wonderful experience at Kottakkal Ayurveda, Al Qusais. The treatment was very effective, and I could really feel the difference after the sessions. The staff are professional, caring, and truly dedicated to their patients. Special thanks DR NASEEBA for her excellent guidance and personalized care, and to therapists SUNU and SAREENA for their amazing therapy sessions and kindness throughout the treatment. Highly recommend Kottakkal Ayurveda for anyone looking for authentic and effective Ayurvedic treatment in Dubai!',
+			'poster'    => 'assets/img/testimonials/Testimonial09.jpg',
+		),
+		array(
+			'id'        => 'faisal-nv',
+			'name'      => 'Faisal NV',
+			'initials'  => 'FN',
+			'rating'    => 5,
+			'source'    => 'Google Reviews',
+			'context'   => 'Fast Back Pain Remedy',
+			'doctor'    => 'Dr. Naseeba Abdul Rafeeque',
+			'therapist' => 'Akhil',
+			'duration'  => 'Targeted Care',
+			'category'  => 'pain',
+			'quote'     => 'I recently had Ayurvedic treatment with Dr. Naseeba Abdul Rafeeque and therapist Akhil, and I\'m very satisfied with the care I received. They both did their best and provided excellent treatment for my back pain. The remedy was fast and effective. Highly recommended for anyone looking for quality Ayurvedic care.',
+			'poster'    => 'assets/img/testimonials/Testimonial07.jpg',
+		),
+		array(
+			'id'        => 'thanseena-shahul',
+			'name'      => 'Thanseena Shahul',
+			'initials'  => 'TS',
+			'rating'    => 5,
+			'source'    => 'Google Reviews',
+			'context'   => 'Severe Neck Pain Relief',
+			'doctor'    => 'Dr. Naseeba Abdul Rafeeque',
+			'therapist' => 'Sunu',
+			'duration'  => '8 Days Treatment',
+			'category'  => 'pain',
+			'quote'     => 'I had a wonderful experience with Dr. Naseeba and Sunu from kottakal green life ayurveda.. i had treatment for 8 days for severe neck pain and it got relieved in few days. Thank you for your service.',
+			'poster'    => 'assets/img/testimonials/Testimonial06.jpg',
+		),
+		array(
+			'id'        => 'suma-vipin',
+			'name'      => 'Suma Vipin',
+			'initials'  => 'SV',
+			'rating'    => 5,
+			'source'    => 'Google Reviews',
+			'context'   => 'Ayurvedic Massage & Atmosphere',
+			'doctor'    => 'Senior Ayurvedic Doctor',
+			'therapist' => 'Sarika',
+			'duration'  => 'Massage Therapy',
+			'category'  => 'massage',
+			'quote'     => 'The Ayurvedha clinic, led by a knowledgeable doctor, provides a peaceful atmosphere and genuinely effective treatments. Special thanks to Sarika. She is exceptionally skilled in her massage techniques and understands exactly what the body needs. Her calm, friendly behavior makes the whole experience even more comfortable. I would recommend her to anyone looking for a high-quality Ayurvedic massage.',
+			'poster'    => 'assets/img/testimonials/Testimonial03.jpg',
+		),
+		array(
+			'id'        => 'ranjish-rajan',
+			'name'      => 'Ranjish Rajan',
+			'initials'  => 'RR',
+			'rating'    => 5,
+			'source'    => 'Google Reviews',
+			'context'   => 'Accurate Diagnosis & Medicines',
+			'doctor'    => 'Dr. Naseeba Abdul Rafeeque',
+			'therapist' => 'Mr. Arun',
+			'duration'  => 'Consultation & Treatment',
+			'category'  => 'consultation',
+			'quote'     => 'I met Dr Naseeba. A very knowledgeable Doctor with good experience. She was quick to identify the issue and prescribed the therapy and medicines. I feel much better now. My therapist Mr Arun was very informative and made the treatment a good experience.',
+			'poster'    => 'assets/img/testimonials/Testimonial10.jpg',
+		),
+		array(
+			'id'        => 'veeraraghavan-nantha-kumar',
+			'name'      => 'Veeraraghavan Nantha kumar',
+			'initials'  => 'VN',
+			'rating'    => 5,
+			'source'    => 'Google Reviews',
+			'context'   => '1-Hour Ayurvedic Massage',
+			'doctor'    => '',
+			'therapist' => 'Abith',
+			'duration'  => 'Massage Session',
+			'category'  => 'massage',
+			'quote'     => 'Abith - He has done 1 hr Ayurvedic massage treatment today. He is very knowledgeable and did an excellent massage. Very communicative with me to give advise and benefits of the treatment.',
+			'poster'    => 'assets/img/testimonials/Testimonial05.jpg',
+		),
+	);
+}
+
+/**
+ * Fetch testimonials (From CPT 'testimonial' if posts exist, else fallback to defaults)
+ */
+function kottakkal_get_testimonials() {
+	$posts = get_posts( array(
+		'post_type'      => 'testimonial',
+		'posts_per_page' => -1,
+		'post_status'    => 'publish',
+		'orderby'        => 'menu_order date',
+		'order'          => 'ASC',
+	) );
+
+	if ( ! empty( $posts ) ) {
+		$items = array();
+		foreach ( $posts as $p ) {
+			$poster_rel = get_post_meta( $p->ID, '_kottakkal_poster', true );
+			$thumb_id   = get_post_thumbnail_id( $p->ID );
+			$poster_url = $thumb_id ? wp_get_attachment_image_url( $thumb_id, 'full' ) : ( $poster_rel ? get_stylesheet_directory_uri() . '/' . $poster_rel : '' );
+
+			$name = $p->post_title;
+			$words = explode( ' ', trim( $name ) );
+			$initials = '';
+			foreach ( $words as $w ) {
+				if ( ! empty( $w ) ) {
+					$initials .= strtoupper( mb_substr( $w, 0, 1 ) );
+				}
+				if ( strlen( $initials ) >= 2 ) break;
+			}
+
+			$items[] = array(
+				'id'        => $p->post_name,
+				'name'      => $name,
+				'initials'  => $initials ?: 'PT',
+				'rating'    => intval( get_post_meta( $p->ID, '_kottakkal_rating', true ) ?: 5 ),
+				'source'    => get_post_meta( $p->ID, '_kottakkal_source', true ) ?: 'Google Reviews',
+				'context'   => get_post_meta( $p->ID, '_kottakkal_context', true ) ?: 'Ayurvedic Treatment',
+				'doctor'    => get_post_meta( $p->ID, '_kottakkal_doctor', true ),
+				'therapist' => get_post_meta( $p->ID, '_kottakkal_therapist', true ),
+				'duration'  => get_post_meta( $p->ID, '_kottakkal_duration', true ),
+				'category'  => get_post_meta( $p->ID, '_kottakkal_category', true ) ?: 'pain',
+				'quote'     => $p->post_content,
+				'poster'    => $poster_rel,
+				'poster_url'=> $poster_url,
+				'post_id'   => $p->ID,
+			);
+		}
+		return $items;
+	}
+
+	$defaults = kottakkal_get_default_testimonials();
+	foreach ( $defaults as &$d ) {
+		$d['poster_url'] = get_stylesheet_directory_uri() . '/' . $d['poster'];
+	}
+	return $defaults;
+}
+
+/**
+ * Fetch gallery collections and images (CPT 'gallery_album' if posts exist, else fallback to JSON)
+ */
+function kottakkal_get_gallery() {
+	$theme_dir = get_stylesheet_directory();
+	$theme_uri = get_stylesheet_directory_uri();
+
+	$posts = get_posts( array(
+		'post_type'      => 'gallery_album',
+		'posts_per_page' => -1,
+		'post_status'    => 'publish',
+		'orderby'        => 'menu_order ID',
+		'order'          => 'ASC',
+	) );
+
+	if ( ! empty( $posts ) ) {
+		$collections = array();
+		foreach ( $posts as $p ) {
+			$type = get_post_meta( $p->ID, '_kottakkal_gallery_type', true ) ?: 'photos';
+			if ( $type === 'videos' ) {
+				continue; // Skip video collections in photo gallery query
+			}
+
+			$raw_imgs = get_post_meta( $p->ID, '_kottakkal_gallery_images', true );
+			if ( ! is_array( $raw_imgs ) ) {
+				$raw_imgs = json_decode( (string) $raw_imgs, true ) ?: array();
+			}
+
+			$formatted_images = array();
+			foreach ( $raw_imgs as $idx => $img ) {
+				$src = '';
+				if ( ! empty( $img['url'] ) ) {
+					$src = $img['url'];
+				} elseif ( ! empty( $img['id'] ) ) {
+					$src = wp_get_attachment_image_url( $img['id'], 'full' );
+				} elseif ( ! empty( $img['relPath'] ) ) {
+					$local_file = $theme_dir . '/' . $img['relPath'];
+					if ( file_exists( $local_file ) ) {
+						$src = $theme_uri . '/' . $img['relPath'];
+					} elseif ( ! empty( $img['remoteUrl'] ) ) {
+						$src = $img['remoteUrl'];
+					}
+				}
+
+				if ( $src ) {
+					$formatted_images[] = array(
+						'src'   => $src,
+						'alt'   => $img['alt'] ?? ( $p->post_title . ' - Photo ' . ( $idx + 1 ) ),
+						'title' => $img['title'] ?? ( $p->post_title . ' - Photo ' . ( $idx + 1 ) ),
+					);
+				}
+			}
+
+			$collections[] = array(
+				'title'  => $p->post_title,
+				'slug'   => $p->post_name,
+				'count'  => count( $formatted_images ),
+				'images' => $formatted_images,
+			);
+		}
+
+		if ( ! empty( $collections ) ) {
+			return $collections;
+		}
+	}
+
+	$json_file = $theme_dir . '/inc/gallery-data.json';
+	if ( file_exists( $json_file ) ) {
+		$raw = json_decode( file_get_contents( $json_file ), true );
+		if ( is_array( $raw ) ) {
+			foreach ( $raw as &$sec ) {
+				foreach ( $sec['images'] as &$img ) {
+					$local_file = $theme_dir . '/' . $img['relPath'];
+					if ( file_exists( $local_file ) ) {
+						$img['src'] = $theme_uri . '/' . $img['relPath'];
+					} else {
+						$img['src'] = $img['remoteUrl'];
+					}
+				}
+			}
+			return $raw;
+		}
+	}
+
+	return array();
+}
+
+/**
+ * Fetch Official YouTube / TV Media Videos (From Kottakkal Green Life on Janam TV IN FOCUS)
+ */
+function kottakkal_get_gallery_videos() {
+	$posts = get_posts( array(
+		'post_type'      => 'gallery_album',
+		'posts_per_page' => -1,
+		'post_status'    => 'publish',
+		'orderby'        => 'menu_order ID',
+		'order'          => 'ASC',
+	) );
+
+	if ( ! empty( $posts ) ) {
+		$videos = array();
+		foreach ( $posts as $p ) {
+			$type = get_post_meta( $p->ID, '_kottakkal_gallery_type', true );
+			if ( $type !== 'videos' ) {
+				continue;
+			}
+
+			$raw_vids = get_post_meta( $p->ID, '_kottakkal_gallery_videos', true );
+			if ( ! is_array( $raw_vids ) ) {
+				$raw_vids = json_decode( (string) $raw_vids, true ) ?: array();
+			}
+
+			foreach ( $raw_vids as $v ) {
+				$vid_id = $v['id'] ?? '';
+				if ( empty( $vid_id ) && ! empty( $v['watch_url'] ) ) {
+					if ( preg_match( '/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i', $v['watch_url'], $m ) ) {
+						$vid_id = $m[1];
+					}
+				}
+
+				if ( ! empty( $vid_id ) ) {
+					$videos[] = array(
+						'id'        => $vid_id,
+						'title'     => $v['title'] ?? 'Ayurvedic Health Care',
+						'channel'   => $v['channel'] ?? 'Janam TV',
+						'program'   => $v['program'] ?? 'INFOCUS',
+						'subtitle'  => $v['subtitle'] ?? '',
+						'watch_url' => 'https://www.youtube.com/watch?v=' . $vid_id,
+						'embed_url' => 'https://www.youtube-nocookie.com/embed/' . $vid_id . '?autoplay=1&rel=0',
+						'thumb'     => 'https://img.youtube.com/vi/' . $vid_id . '/hqdefault.jpg',
+					);
+				}
+			}
+		}
+
+		if ( ! empty( $videos ) ) {
+			return $videos;
+		}
+	}
+
+	return array(
+		array(
+			'id'        => 'pYi8o-ErDJ4',
+			'title'     => 'വേനലിൽ ആരോഗ്യം സൂക്ഷിക്കാം',
+			'channel'   => 'Janam TV',
+			'program'   => 'INFOCUS',
+			'subtitle'  => 'Summer Health Care & Heat Balancing in Ayurveda',
+			'watch_url' => 'https://www.youtube.com/watch?v=pYi8o-ErDJ4',
+			'embed_url' => 'https://www.youtube-nocookie.com/embed/pYi8o-ErDJ4?autoplay=1&rel=0',
+			'thumb'     => 'https://img.youtube.com/vi/pYi8o-ErDJ4/hqdefault.jpg',
+		),
+		array(
+			'id'        => '7W60L1bvmpE',
+			'title'     => 'സോറിയാസിസിന് ആയുർവേദ പരിഹാരം',
+			'channel'   => 'Janam TV',
+			'program'   => 'INFOCUS',
+			'subtitle'  => 'Ayurvedic Treatment & Holistic Solutions for Psoriasis',
+			'watch_url' => 'https://www.youtube.com/watch?v=7W60L1bvmpE',
+			'embed_url' => 'https://www.youtube-nocookie.com/embed/7W60L1bvmpE?autoplay=1&rel=0',
+			'thumb'     => 'https://img.youtube.com/vi/7W60L1bvmpE/hqdefault.jpg',
+		),
+		array(
+			'id'        => '3qSgZVJUHV4',
+			'title'     => 'ഏത് വേനലിലും മുഖം തിളങ്ങും ഈ ഫ്രൂട്ട് ഫേഷ്യൽ ചെയ്താൽ',
+			'channel'   => 'Janam TV',
+			'program'   => 'INFOCUS',
+			'subtitle'  => 'Ayurvedic Herbal Fruit Facial & Glowing Skin Therapy',
+			'watch_url' => 'https://www.youtube.com/watch?v=3qSgZVJUHV4',
+			'embed_url' => 'https://www.youtube-nocookie.com/embed/3qSgZVJUHV4?autoplay=1&rel=0',
+			'thumb'     => 'https://img.youtube.com/vi/3qSgZVJUHV4/hqdefault.jpg',
+		),
+		array(
+			'id'        => 'SVl4SQnKQ4E',
+			'title'     => 'മുടി തഴച്ചു വളരാൻ ആയുർവേദം',
+			'channel'   => 'Janam TV',
+			'program'   => 'IN FOCUS',
+			'subtitle'  => 'Ayurvedic Remedies for Hair Fall & Luxurious Hair Growth',
+			'watch_url' => 'https://www.youtube.com/watch?v=SVl4SQnKQ4E',
+			'embed_url' => 'https://www.youtube-nocookie.com/embed/SVl4SQnKQ4E?autoplay=1&rel=0',
+			'thumb'     => 'https://img.youtube.com/vi/SVl4SQnKQ4E/hqdefault.jpg',
+		),
+		array(
+			'id'        => 'n_gdTEJQewk',
+			'title'     => 'സ്ട്രെസ് കുറക്കാൻ ആയുർവേദം',
+			'channel'   => 'Janam TV',
+			'program'   => 'IN FOCUS',
+			'subtitle'  => 'Relieving Stress, Tension & Anxiety through Shirodhara',
+			'watch_url' => 'https://www.youtube.com/watch?v=n_gdTEJQewk',
+			'embed_url' => 'https://www.youtube-nocookie.com/embed/n_gdTEJQewk?autoplay=1&rel=0',
+			'thumb'     => 'https://img.youtube.com/vi/n_gdTEJQewk/hqdefault.jpg',
+		),
+		array(
+			'id'        => 'oPms0WRtKq0',
+			'title'     => 'നോമ്പുകാലത്ത് കഴിക്കേണ്ടത്?',
+			'channel'   => 'Janam TV',
+			'program'   => 'INFOCUS',
+			'subtitle'  => 'Fasting Diet, Nutrition & Vitality Guidelines in Ayurveda',
+			'watch_url' => 'https://www.youtube.com/watch?v=oPms0WRtKq0',
+			'embed_url' => 'https://www.youtube-nocookie.com/embed/oPms0WRtKq0?autoplay=1&rel=0',
+			'thumb'     => 'https://img.youtube.com/vi/oPms0WRtKq0/hqdefault.jpg',
+		),
+		array(
+			'id'        => 'UY8lndUPCJ8',
+			'title'     => 'രോഗങ്ങളില്ലാതെ ജീവിക്കാൻ ആയുർവേദം',
+			'channel'   => 'Janam TV',
+			'program'   => 'INFOCUS',
+			'subtitle'  => 'Preventative Wellness & Living Disease-Free with Ayurveda',
+			'watch_url' => 'https://www.youtube.com/watch?v=UY8lndUPCJ8',
+			'embed_url' => 'https://www.youtube-nocookie.com/embed/UY8lndUPCJ8?autoplay=1&rel=0',
+			'thumb'     => 'https://img.youtube.com/vi/UY8lndUPCJ8/hqdefault.jpg',
+		),
+		array(
+			'id'        => 'iOxrBiIjgx8',
+			'title'     => 'കണ്ണാണ് കരുതലുണ്ടാവണം',
+			'channel'   => 'Janam TV',
+			'program'   => 'INFOCUS',
+			'subtitle'  => 'Traditional Ayurvedic Eye Care & Netra Tarpana Therapies',
+			'watch_url' => 'https://www.youtube.com/watch?v=iOxrBiIjgx8',
+			'embed_url' => 'https://www.youtube-nocookie.com/embed/iOxrBiIjgx8?autoplay=1&rel=0',
+			'thumb'     => 'https://img.youtube.com/vi/iOxrBiIjgx8/hqdefault.jpg',
+		),
+	);
 }
 
 /**
@@ -689,7 +1690,11 @@ function kottakkal_render_plate( $key, $ill, $tone = 'oil', $cap = '', $ratio = 
 			'intro-b'         => 'assets/img/intro-b.jpg',
 			'p-beauty'        => 'assets/img/p-beauty.jpg',
 			'p-degenerative'  => 'assets/img/p-degenerative.jpg',
+			'p-injury'        => 'assets/img/p-injury.jpg',
+			'p-injury-management' => 'assets/img/p-injury.jpg',
 			'p-joint'         => 'assets/img/p-joint.jpg',
+			'p-marma'         => 'assets/img/p-marma.jpg',
+			'p-marma-chikitsa' => 'assets/img/p-marma.jpg',
 			'p-postnatal'     => 'assets/img/p-postnatal.jpg',
 			'p-relax'         => 'assets/img/p-relax.jpg',
 			'p-weight'        => 'assets/img/p-weight.jpg',
@@ -707,14 +1712,27 @@ function kottakkal_render_plate( $key, $ill, $tone = 'oil', $cap = '', $ratio = 
 			't-tarpanam'      => 'assets/img/t-tarpanam.jpg',
 			't-thalapothichil' => 'assets/img/t-thalapothichil.jpg',
 			't-udhwarthanam'  => 'assets/img/t-udhwarthanam.jpg',
-			'doc-naseeba'     => 'assets/img/doc-naseeba.jpg',
-			'doc-ajitha'      => 'assets/img/doc-ajitha.jpg',
+			'doc-naseeba'     => file_exists( $theme_dir . '/assets/img/doc-naseeba-hd.png' ) ? 'assets/img/doc-naseeba-hd.png' : ( file_exists( $theme_dir . '/assets/img/doc-naseeba.png' ) ? 'assets/img/doc-naseeba.png' : 'assets/img/doc-naseeba.jpg' ),
+			'doc-ajitha'      => file_exists( $theme_dir . '/assets/img/doc-ajitha-hd.png' ) ? 'assets/img/doc-ajitha-hd.png' : ( file_exists( $theme_dir . '/assets/img/doc-ajitha.png' ) ? 'assets/img/doc-ajitha.png' : 'assets/img/doc-ajitha.jpg' ),
+			'doc-minupriya'   => file_exists( $theme_dir . '/assets/img/doc-minupriya-hd.png' ) ? 'assets/img/doc-minupriya-hd.png' : ( file_exists( $theme_dir . '/assets/img/doc-minupriya.png' ) ? 'assets/img/doc-minupriya.png' : 'assets/img/doc-minupriya.jpg' ),
 			'doc-rajesh'      => 'assets/img/doc-rajesh.jpg',
 			'doc-arun'        => 'assets/img/doc-arun.jpg',
 		);
 
 		if ( isset( $map[ $key ] ) && file_exists( $theme_dir . '/' . $map[ $key ] ) ) {
 			$photo_url = $theme_uri . '/' . $map[ $key ];
+		}
+	}
+
+	// For any doctor plate, ensure transparent PNG cutout is used whenever available (prefer enhanced HD)
+	if ( ( str_starts_with( (string) $key, 'doc-' ) || $ill === 'doc' ) && ! empty( $photo_url ) ) {
+		$doc_slug = str_replace( 'doc-', '', (string) $key );
+		if ( ! empty( $doc_slug ) ) {
+			if ( file_exists( $theme_dir . '/assets/img/doc-' . $doc_slug . '-hd.png' ) ) {
+				$photo_url = $theme_uri . '/assets/img/doc-' . $doc_slug . '-hd.png';
+			} elseif ( file_exists( $theme_dir . '/assets/img/doc-' . $doc_slug . '.png' ) ) {
+				$photo_url = $theme_uri . '/assets/img/doc-' . $doc_slug . '.png';
+			}
 		}
 	}
 
@@ -735,4 +1753,49 @@ function kottakkal_render_plate( $key, $ill, $tone = 'oil', $cap = '', $ratio = 
 	$doc_cls  = ( str_starts_with( (string) $key, 'doc-' ) || $ill === 'doc' ) ? ' plate-doctor plate-' . sanitize_html_class( $key ) : '';
 
 	return '<div class="plate p-' . esc_attr( $tone ) . $lite . $doc_cls . '"' . $ratio_attr . '><div class="art">' . $inner . '</div>' . $extra . $cap_html . '</div>';
+}
+
+/**
+ * Return an SVG icon for doctor credentials matching the editorial reference design
+ */
+function kottakkal_get_cred_icon( $cred_text ) {
+	$text = strtolower( (string) $cred_text );
+
+	// Shield: DHA / MOH / Licensing
+	if ( str_contains( $text, 'dha' ) || str_contains( $text, 'moh' ) ) {
+		return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>';
+	}
+
+	// Building / Hospital / Medical College (e.g. KMCT)
+	if ( str_contains( $text, 'kmct' ) ) {
+		return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M16 6h.01M8 10h.01M16 10h.01M8 14h.01M16 14h.01M12 6v4M10 8h4"/></svg>';
+	}
+
+	// Graduation Cap: Medical College / University / KUHS / Rajiv Gandhi
+	if ( str_contains( $text, 'college' ) || str_contains( $text, 'university' ) || str_contains( $text, 'kuhs' ) || str_contains( $text, 'bangalore' ) || str_contains( $text, 'degree' ) ) {
+		return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>';
+	}
+
+	// Lotus / Flower: Yoga, Trainer, Ayurvedic Practitioner
+	if ( str_contains( $text, 'yoga' ) || str_contains( $text, 'practitioner' ) || str_contains( $text, 'trainer' ) ) {
+		return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c-1.5 3-4 6-4 9a4 4 0 0 0 8 0c0-3-2.5-6-4-9z"/><path d="M6.5 11c-2 2-3.5 4.5-3.5 6.5a4.5 4.5 0 0 0 8.5 2"/><path d="M17.5 11c2 2 3.5 4.5 3.5 6.5a4.5 4.5 0 0 1-8.5 2"/></svg>';
+	}
+
+	// Users / Group: across UAE / India / clinical experience
+	if ( str_contains( $text, 'across' ) || str_contains( $text, 'uae' ) ) {
+		return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+	}
+
+	// Calendar / Schedule: 10+ Years of Clinical Experience
+	if ( str_contains( $text, '10+' ) ) {
+		return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+	}
+
+	// Briefcase: Experience in India / General experience
+	if ( str_contains( $text, 'experience' ) || str_contains( $text, 'year' ) ) {
+		return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>';
+	}
+
+	// Default: Leaf icon
+	return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>';
 }

@@ -77,11 +77,20 @@ $pathways    = kottakkal_get_pathways();
 	<div class="mega" id="mega">
 		<div class="wrap mega-in">
 			<div class="mega-col">
-				<h4><?php esc_html_e( 'Therapies', 'oceanwp' ); ?></h4>
+				<h4><?php esc_html_e( 'Panchakarma (5 Shodhana)', 'oceanwp' ); ?></h4>
 				<ul>
 					<?php
-					$first_col = array_slice( $treatments, 0, 6 );
-					foreach ( $first_col as $idx => $t ) :
+					$panchakarma_list = array();
+					foreach ( $treatments as $t ) {
+						if ( ! empty( $t['paths'] ) && in_array( 'panchakarma', $t['paths'], true ) ) {
+							$panchakarma_list[] = $t;
+						}
+						if ( count( $panchakarma_list ) >= 5 ) break;
+					}
+					if ( empty( $panchakarma_list ) ) {
+						$panchakarma_list = array_slice( $treatments, 0, 5 );
+					}
+					foreach ( $panchakarma_list as $idx => $t ) :
 						$t_link = ! empty( $t['link'] ) ? $t['link'] : home_url( '/treatments/' . $t['slug'] . '/' );
 						$t_img  = ! empty( $t['img_url'] ) ? $t['img_url'] : $theme_uri . '/' . ( ! empty( $t['img'] ) ? $t['img'] : 'assets/img/t-abhyangam.jpg' );
 					?>
@@ -96,28 +105,40 @@ $pathways    = kottakkal_get_pathways();
 			</div>
 
 			<div class="mega-col">
-				<h4>&nbsp;</h4>
+				<h4><?php esc_html_e( 'Special Therapies', 'oceanwp' ); ?></h4>
 				<ul>
 					<?php
-					$second_col = array_slice( $treatments, 6 );
-					foreach ( $second_col as $idx => $t ) :
+					$special_list = array();
+					foreach ( $treatments as $t ) {
+						if ( ! empty( $t['paths'] ) && in_array( 'special', $t['paths'], true ) ) {
+							$special_list[] = $t;
+						}
+					}
+					if ( empty( $special_list ) ) {
+						foreach ( $treatments as $t ) {
+							if ( in_array( $t['slug'], array( 'post-natal-care', 'skin-hair-care' ), true ) ) {
+								$special_list[] = $t;
+							}
+						}
+					}
+					foreach ( $special_list as $idx => $t ) :
 						$t_link = ! empty( $t['link'] ) ? $t['link'] : home_url( '/treatments/' . $t['slug'] . '/' );
-						$t_img  = ! empty( $t['img_url'] ) ? $t['img_url'] : $theme_uri . '/' . ( ! empty( $t['img'] ) ? $t['img'] : 'assets/img/t-abhyangam.jpg' );
+						$t_img  = ! empty( $t['img_url'] ) ? $t['img_url'] : $theme_uri . '/' . ( ! empty( $t['img'] ) ? $t['img'] : 'assets/img/p-postnatal.jpg' );
 					?>
-						<li style="transition-delay: <?php echo esc_attr( ( $idx + 6 ) * 40 ); ?>ms">
+						<li style="transition-delay: <?php echo esc_attr( ( $idx + 5 ) * 40 ); ?>ms">
 							<a href="<?php echo esc_url( $t_link ); ?>" data-mp="<?php echo esc_attr( $t['id'] ); ?>" data-title="<?php echo esc_attr( $t['name'] ); ?>" data-desc="<?php echo esc_attr( $t['short'] ); ?>" data-img="<?php echo esc_url( $t_img ); ?>">
 								<?php echo esc_html( $t['name'] ); ?>
 								<small><?php echo esc_html( $t['ing'] ); ?></small>
 							</a>
 						</li>
 					<?php endforeach; ?>
-					<li style="transition-delay: 480ms">
+					<li style="transition-delay: 280ms">
 						<a href="<?php echo esc_url( home_url( '/treatments/' ) ); ?>">
-							<strong><?php esc_html_e( 'All treatments', 'oceanwp' ); ?></strong>
+							<strong><?php esc_html_e( 'All 34 treatments', 'oceanwp' ); ?></strong>
 							<small>→</small>
 						</a>
 					</li>
-					<li style="transition-delay: 520ms">
+					<li style="transition-delay: 320ms">
 						<a href="<?php echo esc_url( home_url( '/specialties/' ) ); ?>">
 							<strong><?php esc_html_e( 'Care pathways', 'oceanwp' ); ?></strong>
 							<small>→</small>
@@ -130,7 +151,7 @@ $pathways    = kottakkal_get_pathways();
 				<?php
 				$preview_t = ! empty( $treatments[0] ) ? $treatments[0] : null;
 				if ( $preview_t ) :
-					echo kottakkal_render_plate( 't-' . $preview_t['id'], $preview_t['ill'], $preview_t['tone'], '', '4/5' );
+					echo kottakkal_render_plate( 't-' . $preview_t['id'], $preview_t['ill'], $preview_t['tone'], '', '4/5', '', $preview_t['img_url'] ?? '' );
 				?>
 					<p>
 						<b style="font:400 1.3rem/1.2 var(--display); color:var(--heading); display:block; margin-top:12px;">
@@ -157,8 +178,12 @@ $pathways    = kottakkal_get_pathways();
 		<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'oceanwp' ); ?></a>
 		<a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>"><?php esc_html_e( 'About us', 'oceanwp' ); ?></a>
 		<a href="<?php echo esc_url( home_url( '/treatments/' ) ); ?>"><?php esc_html_e( 'Treatments', 'oceanwp' ); ?></a>
+		<a href="<?php echo esc_url( home_url( '/treatments/#f=panchakarma' ) ); ?>" style="padding-left:1.4rem; font-size:1.05rem; opacity:0.85; color:var(--gold-ink);"><?php esc_html_e( '↳ Panchakarma (5 Shodhana)', 'oceanwp' ); ?></a>
+		<a href="<?php echo esc_url( home_url( '/treatments/#f=special' ) ); ?>" style="padding-left:1.4rem; font-size:1.05rem; opacity:0.85; color:var(--gold-ink);"><?php esc_html_e( '↳ Special Therapies (2)', 'oceanwp' ); ?></a>
 		<a href="<?php echo esc_url( home_url( '/specialties/' ) ); ?>"><?php esc_html_e( 'Care pathways', 'oceanwp' ); ?></a>
 		<a href="<?php echo esc_url( home_url( '/doctors/' ) ); ?>"><?php esc_html_e( 'Our doctors', 'oceanwp' ); ?></a>
+		<a href="<?php echo esc_url( home_url( '/testimonials/' ) ); ?>"><?php esc_html_e( 'Testimonials', 'oceanwp' ); ?></a>
+		<a href="<?php echo esc_url( home_url( '/gallery/' ) ); ?>"><?php esc_html_e( 'Gallery', 'oceanwp' ); ?></a>
 		<a href="<?php echo esc_url( home_url( '/wellness/' ) ); ?>"><?php esc_html_e( 'Wellness', 'oceanwp' ); ?></a>
 		<a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>"><?php esc_html_e( 'Contact', 'oceanwp' ); ?></a>
 	</nav>

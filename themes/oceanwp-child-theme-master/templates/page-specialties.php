@@ -26,7 +26,7 @@ $pathways = kottakkal_get_pathways();
 		<span class="label"><?php esc_html_e( 'Specialties', 'oceanwp' ); ?></span>
 		<h1><?php esc_html_e( 'Care organised', 'oceanwp' ); ?> <em><?php esc_html_e( 'around you', 'oceanwp' ); ?></em></h1>
 		<p class="lede">
-			<?php esc_html_e( 'Six pathways, each bringing together the therapies, doctors and approach relevant to a particular need.', 'oceanwp' ); ?>
+			<?php esc_html_e( 'Our care pathways bring together the therapies, doctors and approach relevant to a particular need.', 'oceanwp' ); ?>
 		</p>
 	</div>
 </section>
@@ -56,6 +56,30 @@ $pathways = kottakkal_get_pathways();
 				</a>
 			<?php endforeach; ?>
 		</div>
+
+		<script>
+		(function() {
+			var acc = document.getElementById('acc');
+			if (acc && !acc._accInitialized) {
+				acc._accInitialized = true;
+				var panes = acc.querySelectorAll('.pane');
+				panes.forEach(function(pane) {
+					pane.addEventListener('mouseenter', function() {
+						panes.forEach(function(p) { p.classList.toggle('on', p === pane); });
+					});
+					pane.addEventListener('focus', function() {
+						panes.forEach(function(p) { p.classList.toggle('on', p === pane); });
+					});
+					pane.addEventListener('click', function(e) {
+						if (window.innerWidth > 860 && !pane.classList.contains('on')) {
+							e.preventDefault();
+							panes.forEach(function(p) { p.classList.toggle('on', p === pane); });
+						}
+					});
+				});
+			}
+		})();
+		</script>
 
 		<p class="fine">
 			<?php esc_html_e( 'Ayurvedic care complements medical treatment and does not replace it. We do not promise cures; your doctor will discuss realistic goals with you.', 'oceanwp' ); ?>

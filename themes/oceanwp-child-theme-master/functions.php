@@ -97,8 +97,19 @@ function kottakkal_enqueue_scripts() {
 	}
 
 	// Legal / Policy Pages
-	if ( is_page_template( 'templates/page-legal.php' ) || is_page( array( 'privacy-policy', 'terms' ) ) ) {
+	$current_req_path = trim( (string) parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ), '/' );
+	if ( is_page_template( 'templates/page-legal.php' ) || is_page( array( 'privacy-policy', 'terms' ) ) || in_array( $current_req_path, array( 'privacy-policy', 'privacy', 'terms', 'terms-and-conditions', 'disclaimer' ), true ) ) {
 		wp_enqueue_style( 'kottakkal-legal', $theme_uri . '/assets/css/legal.css', array( 'kottakkal-main' ), $version );
+	}
+
+	// Testimonials Page
+	if ( is_page_template( 'templates/page-testimonials.php' ) || is_page( 'testimonials' ) || in_array( $current_req_path, array( 'testimonials', 'testimonial', 'reviews' ), true ) ) {
+		wp_enqueue_style( 'kottakkal-testimonials', $theme_uri . '/assets/css/testimonials.css', array( 'kottakkal-main' ), $version );
+	}
+
+	// Gallery Page
+	if ( is_page_template( 'templates/page-gallery.php' ) || is_page( 'gallery' ) || in_array( $current_req_path, array( 'gallery', 'photos', 'our-gallery' ), true ) ) {
+		wp_enqueue_style( 'kottakkal-gallery', $theme_uri . '/assets/css/gallery.css', array( 'kottakkal-main' ), $version );
 	}
 
 	// GSAP Core & ScrollTrigger for animations
@@ -185,6 +196,8 @@ function kottakkal_template_include( $template ) {
 	// 2. Care Pathways / Specialties
 	if ( preg_match( '#^specialties/([^/]+)$#', $req_path, $matches ) ) {
 		$slug = sanitize_title( $matches[1] );
+		if ( 'injury' === $slug ) $slug = 'injury-management';
+		if ( 'marma' === $slug ) $slug = 'marma-chikitsa';
 		$all_paths = kottakkal_get_pathways();
 		foreach ( $all_paths as $p ) {
 			if ( $p['slug'] === $slug || $p['id'] === $slug ) {
@@ -212,9 +225,101 @@ function kottakkal_template_include( $template ) {
 		}
 	}
 
+	// 4. Legal / Policy Pages (Fallback routing for Privacy Policy and Terms)
+	if ( in_array( $req_path, array( 'privacy-policy', 'privacy', 'terms', 'terms-and-conditions', 'disclaimer' ), true ) ) {
+		status_header( 200 );
+		global $wp_query;
+		if ( $wp_query ) {
+			$wp_query->is_404      = false;
+			$wp_query->is_page     = true;
+			$wp_query->is_singular = true;
+		}
+		$file = $theme_dir . '/templates/page-legal.php';
+		if ( file_exists( $file ) ) return $file;
+	}
+
+	// 5. Testimonials page routing
+	if ( in_array( $req_path, array( 'testimonials', 'testimonial', 'reviews' ), true ) || is_page( 'testimonials' ) ) {
+		status_header( 200 );
+		kottakkal_setup_virtual_page_post( 'testimonials', 'Testimonials' );
+		$file = $theme_dir . '/templates/page-testimonials.php';
+		if ( file_exists( $file ) ) return $file;
+	}
+
+	// 6. Gallery page routing
+	if ( in_array( $req_path, array( 'gallery', 'photos', 'our-gallery' ), true ) || is_page( 'gallery' ) ) {
+		status_header( 200 );
+		kottakkal_setup_virtual_page_post( 'gallery', 'Gallery' );
+		$file = $theme_dir . '/templates/page-gallery.php';
+		if ( file_exists( $file ) ) return $file;
+	}
+
 	return $template;
 }
 add_filter( 'template_include', 'kottakkal_template_include', 99 );
+
+/**
+ * Setup a proper WP_Post and WP_Query state for custom pages
+ */
+function kottakkal_setup_virtual_page_post( $slug, $title, $template = '' ) {
+	global $wp_query, $post;
+	if ( ! $wp_query ) return null;
+
+	$wp_query->is_404        = false;
+	$wp_query->is_attachment = false;
+	$wp_query->is_single     = false;
+	$wp_query->is_singular   = true;
+	$wp_query->is_page       = true;
+	$wp_query->is_archive    = false;
+
+	$db_post = get_page_by_path( $slug );
+	if ( $db_post instanceof WP_Post ) {
+		$wp_query->post              = $db_post;
+		$wp_query->queried_object    = $db_post;
+		$wp_query->queried_object_id = $db_post->ID;
+		$wp_query->posts             = array( $db_post );
+		$wp_query->post_count        = 1;
+		$post                        = $db_post;
+		setup_postdata( $db_post );
+		return $db_post;
+	}
+
+	$mock = new stdClass();
+	$mock->ID                    = 999900 + ( abs( crc32( $slug ) ) % 1000 );
+	$mock->post_author           = 1;
+	$mock->post_date             = current_time( 'mysql' );
+	$mock->post_date_gmt         = current_time( 'mysql', 1 );
+	$mock->post_content          = '';
+	$mock->post_title            = $title;
+	$mock->post_excerpt          = '';
+	$mock->post_status           = 'publish';
+	$mock->comment_status        = 'closed';
+	$mock->ping_status           = 'closed';
+	$mock->post_password         = '';
+	$mock->post_name             = $slug;
+	$mock->to_ping               = '';
+	$mock->pinged                = '';
+	$mock->post_modified         = current_time( 'mysql' );
+	$mock->post_modified_gmt     = current_time( 'mysql', 1 );
+	$mock->post_content_filtered = '';
+	$mock->post_parent           = 0;
+	$mock->guid                  = home_url( '/' . $slug . '/' );
+	$mock->menu_order            = 0;
+	$mock->post_type             = 'page';
+	$mock->post_mime_type        = '';
+	$mock->comment_count         = 0;
+	$mock->filter                = 'raw';
+
+	$wp_post = new WP_Post( $mock );
+	$wp_query->post              = $wp_post;
+	$wp_query->queried_object    = $wp_post;
+	$wp_query->queried_object_id = $wp_post->ID;
+	$wp_query->posts             = array( $wp_post );
+	$wp_query->post_count        = 1;
+	$post                        = $wp_post;
+	setup_postdata( $wp_post );
+	return $wp_post;
+}
 
 /**
  * Setup a proper WP_Post and WP_Query state for doctor profile pages
@@ -494,6 +599,8 @@ add_filter( 'pre_handle_404', function( $preempt, $wp_query ) {
 	// Care Pathways / Specialties
 	if ( preg_match( '#^specialties/([^/]+)$#', $req_path, $matches ) ) {
 		$slug = sanitize_title( $matches[1] );
+		if ( 'injury' === $slug ) $slug = 'injury-management';
+		if ( 'marma' === $slug ) $slug = 'marma-chikitsa';
 		$all_paths = kottakkal_get_pathways();
 		foreach ( $all_paths as $p ) {
 			if ( $p['slug'] === $slug || $p['id'] === $slug ) {
@@ -539,6 +646,8 @@ add_action( 'template_redirect', function() {
 
 	if ( preg_match( '#^specialties/([^/]+)$#', $req_path, $matches ) ) {
 		$slug = sanitize_title( $matches[1] );
+		if ( 'injury' === $slug ) $slug = 'injury-management';
+		if ( 'marma' === $slug ) $slug = 'marma-chikitsa';
 		$all_paths = kottakkal_get_pathways();
 		foreach ( $all_paths as $p ) {
 			if ( $p['slug'] === $slug || $p['id'] === $slug ) {
@@ -557,6 +666,16 @@ add_action( 'template_redirect', function() {
 				return;
 			}
 		}
+	}
+
+	if ( in_array( $req_path, array( 'testimonials', 'testimonial', 'reviews' ), true ) ) {
+		kottakkal_setup_virtual_page_post( 'testimonials', 'Testimonials' );
+		return;
+	}
+
+	if ( in_array( $req_path, array( 'gallery', 'photos', 'our-gallery' ), true ) ) {
+		kottakkal_setup_virtual_page_post( 'gallery', 'Gallery' );
+		return;
 	}
 }, 1 );
 
@@ -618,6 +737,89 @@ function kottakkal_ensure_doctors_exist() {
 add_action( 'init', 'kottakkal_ensure_doctors_exist', 25 );
 
 /**
+ * Auto-ensure Care Pathways CPT posts exist in the database with published status
+ */
+function kottakkal_ensure_pathways_exist() {
+	if ( ! post_type_exists( 'pathway' ) ) {
+		return;
+	}
+
+	$default_pathways = kottakkal_get_default_pathways();
+	$created_any      = false;
+
+	foreach ( $default_pathways as $order => $p ) {
+		$existing = get_posts( array(
+			'post_type'   => 'pathway',
+			'name'        => $p['slug'],
+			'post_status' => 'any',
+			'numberposts' => 1,
+		) );
+
+		if ( empty( $existing ) ) {
+			$pid = wp_insert_post( array(
+				'post_title'   => $p['name'],
+				'post_name'    => $p['slug'],
+				'post_content' => $p['overview'],
+				'post_excerpt' => $p['intro'],
+				'post_status'  => 'publish',
+				'post_type'    => 'pathway',
+				'menu_order'   => $order + 1,
+			) );
+
+			if ( $pid && ! is_wp_error( $pid ) ) {
+				update_post_meta( $pid, '_kottakkal_short', $p['short'] );
+				update_post_meta( $pid, '_kottakkal_need', $p['need'] );
+				update_post_meta( $pid, '_kottakkal_approach', $p['approach'] );
+				update_post_meta( $pid, '_kottakkal_tone', $p['tone'] );
+				update_post_meta( $pid, '_kottakkal_ill', $p['ill'] );
+				update_post_meta( $pid, '_kottakkal_therapies', $p['therapies'] );
+				update_post_meta( $pid, '_kottakkal_docs', $p['docs'] );
+				$created_any = true;
+			}
+		}
+	}
+
+	if ( $created_any ) {
+		flush_rewrite_rules( false );
+	}
+}
+add_action( 'init', 'kottakkal_ensure_pathways_exist', 26 );
+
+/**
+ * Auto-ensure Testimonials and Gallery pages exist in the database with published status
+ */
+function kottakkal_ensure_pages_exist() {
+	$pages = array(
+		'testimonials' => array(
+			'title'    => 'Testimonials',
+			'template' => 'templates/page-testimonials.php',
+		),
+		'gallery' => array(
+			'title'    => 'Gallery',
+			'template' => 'templates/page-gallery.php',
+		),
+	);
+
+	foreach ( $pages as $slug => $data ) {
+		$existing = get_page_by_path( $slug );
+		if ( ! $existing ) {
+			$pid = wp_insert_post( array(
+				'post_title'   => $data['title'],
+				'post_name'    => $slug,
+				'post_status'  => 'publish',
+				'post_type'    => 'page',
+			) );
+			if ( $pid && ! is_wp_error( $pid ) ) {
+				update_post_meta( $pid, '_wp_page_template', $data['template'] );
+			}
+		} else {
+			update_post_meta( $existing->ID, '_wp_page_template', $data['template'] );
+		}
+	}
+}
+add_action( 'init', 'kottakkal_ensure_pages_exist', 27 );
+
+/**
  * One-Click Setup & Content Seeder (Pages, CPT Posts & Settings)
  */
 function kottakkal_setup_site_content() {
@@ -667,6 +869,14 @@ function kottakkal_setup_site_content() {
 		'terms' => array(
 			'title'    => 'Terms and medical disclaimer',
 			'template' => 'templates/page-legal.php',
+		),
+		'testimonials' => array(
+			'title'    => 'Testimonials',
+			'template' => 'templates/page-testimonials.php',
+		),
+		'gallery' => array(
+			'title'    => 'Gallery',
+			'template' => 'templates/page-gallery.php',
 		),
 	);
 

@@ -14,6 +14,7 @@ require_once get_stylesheet_directory() . '/templates/header-custom.php';
 
 $treatments = kottakkal_get_treatments();
 $pathways   = kottakkal_get_pathways();
+$categories = function_exists( 'kottakkal_get_therapy_categories' ) ? kottakkal_get_therapy_categories() : array();
 ?>
 
 <!-- Header -->
@@ -45,15 +46,29 @@ $pathways   = kottakkal_get_pathways();
 <section class="section" style="padding-top:0">
 	<div class="wrap">
 		<!-- Filter Chips -->
-		<div class="filters" role="group" aria-label="<?php esc_attr_e( 'Filter therapies by need', 'oceanwp' ); ?>">
+		<div class="filters" role="group" aria-label="<?php esc_attr_e( 'Filter therapies by category and need', 'oceanwp' ); ?>">
 			<button type="button" class="chip active" data-f="all" aria-pressed="true">
 				<span><?php esc_html_e( 'All therapies', 'oceanwp' ); ?></span>
 				<small><?php echo count( $treatments ); ?></small>
 			</button>
+			<?php foreach ( $categories as $cat_id => $cat ) :
+				$count = 0;
+				foreach ( $treatments as $t ) {
+					if ( ! empty( $t['paths'] ) && in_array( $cat_id, $t['paths'], true ) ) {
+						$count++;
+					}
+				}
+				if ( $count > 0 ) :
+			?>
+				<button type="button" class="chip" data-f="<?php echo esc_attr( $cat_id ); ?>" aria-pressed="false">
+					<span><?php echo esc_html( $cat['short'] ); ?></span>
+					<small><?php echo esc_html( $count ); ?></small>
+				</button>
+			<?php endif; endforeach; ?>
 			<?php foreach ( $pathways as $p ) :
 				$count = 0;
 				foreach ( $treatments as $t ) {
-					if ( in_array( $p['id'], $t['paths'] ) ) {
+					if ( ! empty( $t['paths'] ) && in_array( $p['id'], $t['paths'], true ) ) {
 						$count++;
 					}
 				}

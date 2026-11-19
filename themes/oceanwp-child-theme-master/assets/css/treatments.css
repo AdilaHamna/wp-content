@@ -11,7 +11,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  font: 500 0.78rem/1.4 var(--sans);
+  font: 500 0.88rem/1.4 var(--sans);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--fg-2);
@@ -46,15 +46,55 @@
   margin-top: 34px;
 }
 
-/* Filters */
+/* Filters (Horizontally scrollable tab bar on all screens) */
 .filters {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 40px;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  padding: 6px 4px 16px 4px;
+  margin-bottom: 34px;
+  width: 100%;
+  max-width: 100%;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(74, 222, 128, 0.4) transparent;
+}
+
+.filters.is-dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
+}
+
+.filters::-webkit-scrollbar {
+  height: 5px;
+}
+
+.filters::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  margin: 0 4px;
+}
+
+.filters::-webkit-scrollbar-thumb {
+  background: rgba(74, 222, 128, 0.35);
+  border-radius: 999px;
+  transition: background 0.3s ease;
+}
+
+.filters::-webkit-scrollbar-thumb:hover {
+  background: rgba(74, 222, 128, 0.7);
 }
 
 .chip {
+  flex-shrink: 0;
+  white-space: nowrap;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -64,7 +104,7 @@
   border-radius: 999px;
   background: transparent;
   cursor: pointer;
-  font: 500 0.78rem/1 var(--sans);
+  font: 500 0.88rem/1 var(--sans);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--heading);
@@ -73,7 +113,7 @@
 }
 
 .chip small {
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   color: var(--fg-2);
   letter-spacing: 0;
   transition: color 0.4s;
@@ -134,7 +174,7 @@
 }
 
 .xcard .ing {
-  font: 600 0.78rem/1.4 var(--sans);
+  font: 600 0.85rem/1.4 var(--sans);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--gold-hi);
@@ -146,14 +186,14 @@
 }
 
 .xcard .alt {
-  font: 400 0.98rem/1.3 var(--display);
+  font: 400 1rem/1.3 var(--display);
   color: rgba(243, 238, 226, 0.72);
 }
 
 .xcard p {
-  font-size: 0.9rem;
-  line-height: 1.55;
-  color: rgba(243, 238, 226, 0.82);
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: rgba(243, 238, 226, 0.88);
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows 0.7s var(--ease), opacity 0.6s var(--ease);
@@ -171,7 +211,7 @@
 
 .xcount {
   margin-top: 28px;
-  font-size: 0.84rem;
+  font-size: 0.94rem;
   color: var(--fg-2);
 }
 

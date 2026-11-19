@@ -11,7 +11,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  font: 500 0.78rem/1.4 var(--sans);
+  font: 500 0.88rem/1.4 var(--sans);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--fg-2);
@@ -111,7 +111,7 @@
 }
 
 .pane .need {
-  font: 600 0.78rem/1 var(--sans);
+  font: 600 0.85rem/1 var(--sans);
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--gold-hi);
@@ -123,8 +123,9 @@
 }
 
 .pane p {
-  color: rgba(243, 238, 226, 0.82);
-  font-size: 0.98rem;
+  color: rgba(243, 238, 226, 0.88);
+  font-size: 1.08rem;
+  line-height: 1.65;
 }
 
 .pane .link {
@@ -133,7 +134,8 @@
 }
 
 .fine {
-  font-size: 0.84rem;
+  font-size: 1rem;
+  line-height: 1.65;
   color: var(--fg-2);
   margin-top: 28px;
   max-width: 84ch;

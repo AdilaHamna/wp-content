@@ -134,7 +134,7 @@ $all_pathways = kottakkal_get_pathways();
 		<div>
 			<div class="dsec" id="d1">
 				<h2><?php esc_html_e( 'What it is for', 'oceanwp' ); ?></h2>
-				<p class="lede"><?php echo esc_html( $treatment['purpose'] ); ?></p>
+				<p><?php echo esc_html( $treatment['purpose'] ); ?></p>
 			</div>
 
 			<div class="dsec" id="d2">

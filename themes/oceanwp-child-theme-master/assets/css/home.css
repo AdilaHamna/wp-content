@@ -315,10 +315,11 @@
   max-width: 52ch;
 }
 
-.intro .body p:first-child {
-  font-size: 1.18rem;
+.intro .body p {
+  font-size: 1.12rem;
   font-weight: 400;
-  line-height: 1.7;
+  line-height: 1.75;
+  color: var(--fg);
 }
 
 /* Statistics Counters */
@@ -356,9 +357,9 @@
 .stat > span {
   display: block;
   margin-top: 14px;
-  font-size: 0.88rem;
-  color: var(--fg-2);
-  max-width: 22ch;
+  font-size: 1.02rem;
+  color: var(--fg);
+  max-width: 24ch;
   line-height: 1.5;
 }
 
@@ -377,8 +378,10 @@
 }
 
 .shead p {
-  color: var(--fg-2);
-  max-width: 46ch;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--fg);
+  max-width: 48ch;
   justify-self: end;
 }
 
@@ -386,15 +389,55 @@
   color: var(--on-dark-2);
 }
 
-/* Therapies Explorer */
+/* Therapies Explorer (Horizontally scrollable tab bar on all screens) */
 .filters {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 40px;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  padding: 6px 4px 16px 4px;
+  margin-bottom: 34px;
+  width: 100%;
+  max-width: 100%;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(74, 222, 128, 0.4) transparent;
+}
+
+.filters.is-dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
+}
+
+.filters::-webkit-scrollbar {
+  height: 5px;
+}
+
+.filters::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  margin: 0 4px;
+}
+
+.filters::-webkit-scrollbar-thumb {
+  background: rgba(74, 222, 128, 0.35);
+  border-radius: 999px;
+  transition: background 0.3s ease;
+}
+
+.filters::-webkit-scrollbar-thumb:hover {
+  background: rgba(74, 222, 128, 0.7);
 }
 
 .chip {
+  flex-shrink: 0;
+  white-space: nowrap;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -404,7 +447,7 @@
   border-radius: 999px;
   background: transparent;
   cursor: pointer;
-  font: 500 0.78rem/1 var(--sans);
+  font: 500 0.88rem/1 var(--sans);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--heading);
@@ -413,7 +456,7 @@
 }
 
 .chip small {
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   color: var(--fg-2);
   letter-spacing: 0;
   transition: color 0.4s;
@@ -473,7 +516,7 @@
 }
 
 .xcard .ing {
-  font: 600 0.78rem/1.4 var(--sans);
+  font: 600 0.85rem/1.4 var(--sans);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--gold-hi);
@@ -485,14 +528,14 @@
 }
 
 .xcard .alt {
-  font: 400 0.98rem/1.3 var(--display);
+  font: 400 1rem/1.3 var(--display);
   color: rgba(243, 238, 226, 0.72);
 }
 
 .xcard p {
-  font-size: 0.9rem;
-  line-height: 1.55;
-  color: rgba(243, 238, 226, 0.82);
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: rgba(243, 238, 226, 0.88);
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows 0.7s var(--ease), opacity 0.6s var(--ease);
@@ -510,7 +553,7 @@
 
 .xcount {
   margin-top: 28px;
-  font-size: 0.84rem;
+  font-size: 0.94rem;
   color: var(--fg-2);
 }
 
@@ -582,7 +625,8 @@
 
 .rstep p {
   max-width: 44ch;
-  font-size: 1.05rem;
+  font-size: 1.12rem;
+  line-height: 1.75;
 }
 
 .rstep .plate {
@@ -662,7 +706,7 @@
 }
 
 .pane .need {
-  font: 600 0.78rem/1 var(--sans);
+  font: 600 0.85rem/1 var(--sans);
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--gold-hi);
@@ -674,8 +718,9 @@
 }
 
 .pane p {
-  color: rgba(243, 238, 226, 0.82);
-  font-size: 0.98rem;
+  color: rgba(243, 238, 226, 0.88);
+  font-size: 1.08rem;
+  line-height: 1.65;
 }
 
 .pane .link {
@@ -684,119 +729,762 @@
 }
 
 .fine {
-  font-size: 0.84rem;
+  font-size: 1rem;
+  line-height: 1.65;
   color: var(--fg-2);
   margin-top: 28px;
   max-width: 84ch;
 }
 
 /* Doctors Section */
-.docs {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: clamp(20px, 3.5vw, 48px);
-}
-
-.dcard {
-  display: grid;
-  gap: 26px;
-}
-
-.dcard .frame {
+/* ==========================================================================
+   Doctors Section & Cards (Emerald Luxury Editorial Layout - Reference Matched)
+   ========================================================================== */
+.docs-section {
   position: relative;
-  display: block;
+  background: #06160F;
+  padding-top: clamp(60px, 7vw, 100px);
+  padding-bottom: clamp(70px, 8vw, 110px);
   overflow: hidden;
-  border-radius: 2px;
 }
 
-.dcard .plate {
-  aspect-ratio: 4/5;
+.docs-section .wrap {
+  max-width: 1320px;
 }
 
-.dcard:hover .art {
-  transform: scale(1.05);
+/* Central Aurora Glow */
+.docs-section::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1100px, 92vw);
+  height: 520px;
+  background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(35, 120, 72, 0.44) 0%, rgba(15, 60, 38, 0.2) 55%, transparent 75%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-.mono {
+/* Ambient Wave Lines */
+.docs-ambient-waves {
   position: absolute;
   inset: 0;
-  z-index: 4;
-  display: grid;
-  place-items: center;
-  font: 400 clamp(5rem, 3rem + 7vw, 10rem)/1 var(--display);
-  color: rgba(243, 238, 226, 0.9);
-  letter-spacing: -0.04em;
-  opacity: 0.8;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+  animation: docsWaveFloat 14s ease-in-out infinite alternate;
 }
 
-.dcard .reveal {
+@keyframes docsWaveFloat {
+  0% { transform: translateY(0) scaleY(1); }
+  50% { transform: translateY(-8px) scaleY(1.02); }
+  100% { transform: translateY(6px) scaleY(0.98); }
+}
+
+/* Section Corner Foliage SVGs */
+.docs-corner-leaf {
   position: absolute;
-  inset: auto 0 0 0;
-  z-index: 6;
-  padding: 24px;
-  background: linear-gradient(180deg, transparent, rgba(6, 18, 14, 0.88) 40%);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  transform: translateY(100%);
-  transition: transform 0.8s var(--ease);
+  pointer-events: none;
+  z-index: 1;
+  transition: transform 1.2s ease-out;
 }
 
-.dcard:hover .reveal, .dcard:focus-within .reveal {
-  transform: none;
+.docs-corner-leaf.left {
+  bottom: -20px;
+  left: -20px;
+  width: clamp(140px, 16vw, 220px);
+  height: clamp(140px, 16vw, 220px);
 }
 
-.dcard .reveal span {
-  font-size: 0.74rem;
-  padding: 6px 11px;
-  border: 1px solid rgba(243, 238, 226, 0.3);
-  border-radius: 99px;
-  color: var(--on-dark);
+.docs-corner-leaf.right {
+  bottom: -20px;
+  right: -20px;
+  width: clamp(140px, 16vw, 220px);
+  height: clamp(140px, 16vw, 220px);
 }
 
-.dcard .role {
-  font: 600 0.78rem/1 var(--sans);
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--gold-ink);
+/* Section Header (Centered Pill, High-Impact Title, Subtitle) */
+.docs-header {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto clamp(36px, 5vw, 54px);
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(35px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.dcard h3 {
-  font-size: var(--fs-2);
-  margin-top: 14px;
+.docs-header.is-in-view {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.dcard ul {
-  list-style: none;
-  margin: 18px 0 0;
-  padding: 0;
+.docs-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: rgba(14, 40, 27, 0.75);
+  border: 1px solid rgba(74, 222, 128, 0.45);
+  color: #7FE59E;
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 16px rgba(74, 222, 128, 0.16);
+  margin-bottom: 18px;
+}
+
+.docs-pill .pill-ic {
+  width: 15px;
+  height: 15px;
+  color: #4ADE80;
+}
+
+.docs-title {
+  font-family: var(--display, 'Plus Jakarta Sans', sans-serif);
+  font-size: clamp(2rem, 3.4vw, 3.1rem);
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+}
+
+.docs-title .highlight-green {
+  color: #4ADE80;
+  text-shadow: 0 0 28px rgba(74, 222, 128, 0.4);
+}
+
+.docs-subtitle {
+  color: #9DB4A7;
+  font-family: var(--sans);
+  font-size: clamp(0.95rem, 1.15vw, 1.08rem);
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0 auto;
+  max-width: 560px;
+}
+
+/* 3-Column Doctor Cards Grid */
+.docs-grid {
   display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 28px);
+  align-items: stretch;
+  position: relative;
+  z-index: 2;
+  margin-top: 36px;
+}
+
+@media (max-width: 991px) {
+  .docs-grid {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+    margin-inline: auto;
+  }
+}
+
+/* Doctor Card Outer Shell */
+.dcard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(175deg, rgba(14, 38, 28, 0.88) 0%, rgba(7, 21, 15, 0.96) 100%);
+  border: 1px solid rgba(74, 222, 128, 0.22);
+  border-radius: 28px;
+  padding: 24px 20px 22px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  min-height: 520px;
+  opacity: 0;
+  transform: translateY(45px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.45s ease, 
+              box-shadow 0.45s ease;
+  will-change: transform, opacity;
+}
+
+.dcard.is-in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dcard:nth-child(1) { transition-delay: 0.08s; }
+.dcard:nth-child(2) { transition-delay: 0.22s; }
+.dcard:nth-child(3) { transition-delay: 0.36s; }
+
+.dcard:hover {
+  transform: translateY(-8px);
+  border-color: rgba(74, 222, 128, 0.55);
+  box-shadow: 0 30px 65px -12px rgba(0, 0, 0, 0.85), 
+              0 0 35px rgba(74, 222, 128, 0.24), 
+              inset 0 0 20px rgba(74, 222, 128, 0.05);
+}
+
+/* Green Arch Portal Backdrop (Symmetrical Arch Dome with Luminous Inner Glow) */
+.dcard-arch-portal {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 50%;
+  height: 72%;
+  border-radius: 110px 110px 0 0;
+  background: radial-gradient(ellipse 95% 85% at 50% 28%, rgba(74, 222, 128, 0.45) 0%, rgba(20, 65, 42, 0.55) 55%, rgba(10, 26, 18, 0.1) 100%);
+  border: 1.5px solid rgba(134, 239, 172, 0.55);
+  border-bottom: none;
+  box-shadow: 0 0 38px rgba(52, 211, 153, 0.3), inset 0 0 38px rgba(52, 211, 153, 0.22);
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  transition: border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+.dcard:hover .dcard-arch-portal {
+  border-color: rgba(134, 239, 172, 0.85);
+  box-shadow: 0 0 50px rgba(74, 222, 128, 0.45), inset 0 0 50px rgba(74, 222, 128, 0.32);
+}
+
+/* Medical Cross Graphic Inside Arch (Ajitha) */
+.dcard-cross-svg {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.55;
+  filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.35));
+  animation: crossBreathe 4s ease-in-out infinite alternate;
+}
+
+@keyframes crossBreathe {
+  0% { opacity: 0.35; transform: scale(1); }
+  100% { opacity: 0.7; transform: scale(1.06); }
+}
+
+/* Doctor Cutout Photo: Takes Image Area Completely, High-Res, Bold & Highlighted */
+.dcard-photo-wrap {
+  position: absolute;
+  top: 14px;
+  right: 12px;
+  width: 53%;
+  height: 74%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 3;
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+.dcard-photo-v2 {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: contain;
+  object-position: center top;
+  transform: scale(1.08);
+  transform-origin: center top;
+  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 20px rgba(74, 222, 128, 0.22));
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dcard:hover .dcard-photo-v2,
+.dcard-photo-wrap:hover .dcard-photo-v2 {
+  transform: scale(1.12) translateY(-3px);
+  filter: drop-shadow(0 28px 42px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 28px rgba(74, 222, 128, 0.38)) brightness(1.04);
+}
+
+/* Left Content Column (Strict clearance to image section with zero overflow) */
+.dcard-content {
+  position: relative;
+  z-index: 4;
+  max-width: 48%;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 2px;
+}
+
+/* Tablet & Mobile Responsiveness: Strict Column Clearance with Zero Overlap */
+@media (max-width: 991px) {
+  .dcard {
+    padding: 22px 18px 20px;
+    min-height: 510px;
+  }
+
+  .dcard-arch-portal {
+    width: 50%;
+    right: 10px;
+    top: 14px;
+    height: 74%;
+  }
+
+  .dcard-photo-wrap {
+    width: 52%;
+    right: 6px;
+    top: 14px;
+    height: 74%;
+  }
+
+  .dcard-content {
+    max-width: 46%;
+    padding-right: 6px;
+  }
+
+  .dcard-badges {
+    margin-bottom: 8px;
+  }
+
+  .dcard-badge {
+    font-size: 0.68rem;
+    padding: 3px 10px;
+    white-space: nowrap;
+  }
+
+  .dcard-name {
+    font-size: clamp(1.08rem, 3.6vw, 1.28rem);
+    line-height: 1.2;
+    margin-bottom: 5px;
+    letter-spacing: -0.01em;
+  }
+
+  .dcard-sub {
+    font-size: 0.73rem;
+    line-height: 1.3;
+  }
+
+  .dcard-accent-line,
+  .dcard-divider {
+    margin: 11px 0 14px 0;
+    width: 34px;
+  }
+
+  .dcard-creds-v2 {
+    gap: 12px;
+  }
+
+  .dcard-creds-v2 li {
+    gap: 8px;
+  }
+
+  .cred-ic-v2 {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+  }
+
+  .cred-ic-v2 svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .cred-lbl {
+    font-size: 0.69rem;
+    line-height: 1.32;
+    overflow-wrap: break-word;
+  }
+
+  .dcard-footer {
+    padding-top: 18px;
+    gap: 8px;
+  }
+
+  .btn-book-v2 {
+    padding: 9px 14px 9px 18px;
+    font-size: 0.84rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .dcard {
+    padding: 20px 14px 18px;
+    min-height: 495px;
+  }
+
+  .dcard-arch-portal {
+    width: 47%;
+    right: 8px;
+  }
+
+  .dcard-photo-wrap {
+    width: 49%;
+    right: 4px;
+  }
+
+  .dcard-content {
+    max-width: 46%;
+    padding-right: 4px;
+  }
+
+  .dcard-name {
+    font-size: clamp(1.02rem, 3.8vw, 1.18rem);
+  }
+
+  .dcard-badge {
+    font-size: 0.65rem;
+    padding: 3px 8px;
+  }
+
+  .cred-ic-v2 {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+  }
+
+  .cred-ic-v2 svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .cred-lbl {
+    font-size: 0.66rem;
+    line-height: 1.28;
+  }
+
+  .btn-book-v2 {
+    padding: 8px 12px 8px 16px;
+    font-size: 0.80rem;
+  }
+}
+
+/* Badges */
+.dcard-badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.dcard-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.dcard-badge.badge-practitioner {
+  background: rgba(22, 54, 38, 0.75);
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  color: #8DE5A5;
+}
+
+.dcard-badge.badge-director {
+  background: rgba(58, 48, 18, 0.75);
+  border: 1px solid rgba(223, 194, 137, 0.45);
+  color: #EAC984;
+}
+
+.dcard-badge.badge-experience {
+  background: #258652;
+  border: 1px solid #4ADE80;
+  color: #FFFFFF;
+  font-weight: 600;
+  font-size: 0.68rem;
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.3);
+}
+
+.dcard-badge svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Doctor Name */
+.dcard-name {
+  font-family: var(--display, 'Plus Jakarta Sans', sans-serif);
+  font-size: clamp(1.22rem, 1.4vw, 1.48rem);
+  font-weight: 600;
+  color: #FFFFFF;
+  line-height: 1.2;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+}
+
+.dcard-name a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.dcard-name a:hover {
+  color: #4ADE80;
+}
+
+/* Subtitle */
+.dcard-sub {
+  font-family: var(--sans);
+  font-size: 0.76rem;
+  color: #BACEC2;
+  line-height: 1.35;
+  margin: 0;
+}
+
+/* Divider Line After Name/Subtitle (Comfortable vertical separation) */
+.dcard-accent-line,
+.dcard-divider {
+  width: 44px;
+  height: 2.5px;
+  background: #38C76A;
+  border-radius: 2px;
+  margin: 14px 0 18px 0;
+  box-shadow: 0 0 10px rgba(56, 199, 106, 0.45);
+}
+
+/* Credentials List (Clean vertical spacing, wrap gracefully with clearance) */
+.dcard-creds-v2 {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dcard-creds-v2 li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.35;
+}
+
+.cred-ic-v2 {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: rgba(16, 42, 29, 0.85);
+  border: 1px solid rgba(74, 222, 128, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #8DE5A5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  margin-top: 1px;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.dcard:hover .cred-ic-v2 {
+  border-color: rgba(74, 222, 128, 0.6);
+  background: rgba(22, 56, 38, 0.95);
+}
+
+.cred-ic-v2 svg {
+  width: 13px;
+  height: 13px;
+}
+
+.cred-lbl {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  color: #E2ECE5;
+  font-weight: 400;
+  line-height: 1.35;
+  word-break: normal;
+}
+
+/* Corner Botanical Leaf Sprig in Card Bottom-Left */
+.dcard-corner-leaves {
+  position: absolute;
+  bottom: -6px;
+  left: -6px;
+  width: 85px;
+  height: 85px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.55;
+  transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dcard:hover .dcard-corner-leaves {
+  opacity: 0.85;
+  transform: scale(1.06);
+}
+
+/* Card Footer: Centered Compact Mint Pill Button & Full Profile Link */
+.dcard-footer {
+  margin-top: auto;
+  padding-top: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 3;
+  width: 100%;
+}
+
+/* Compact Mint Pill Button (Exact Reference Match) */
+.btn-book-v2 {
+  background: #C2E6CD;
+  color: #0A2417;
+  border-radius: 999px;
+  padding: 10px 14px 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 270px;
+  margin: 0 auto;
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transition: background 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.btn-book-v2:hover {
+  background: #D8F2E0;
+  color: #05190F;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(74, 222, 128, 0.35);
+}
+
+.btn-book-label {
+  display: flex;
+  align-items: center;
   gap: 8px;
 }
 
-.dcard li {
-  display: grid;
-  grid-template-columns: 18px minmax(0, 1fr);
-  gap: 10px;
-  font-size: 0.92rem;
-  color: var(--fg-2);
+.btn-book-label .ic-cal {
+  width: 16px;
+  height: 16px;
+  color: #0A2417;
+  stroke-width: 1.8;
 }
 
-.dcard li::before {
-  content: "";
-  width: 9px;
-  height: 9px;
-  margin-top: 8px;
-  border: 1px solid var(--gold);
-  transform: rotate(45deg);
-}
-
-.dcard .acts {
+.btn-book-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #0A2417;
+  color: #FFFFFF;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 18px;
-  margin-top: 24px;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
+}
+
+.btn-book-circle svg {
+  width: 13px;
+  height: 13px;
+}
+
+.btn-book-v2:hover .btn-book-circle {
+  transform: translateX(3px);
+  background: #000000;
+}
+
+/* View Full Profile Link */
+.link-profile-v2 {
+  text-align: center;
+  color: #92B9A2;
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: color 0.25s ease;
+}
+
+.link-profile-v2 .arr {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.link-profile-v2:hover {
+  color: #FFFFFF;
+}
+
+.link-profile-v2:hover .arr {
+  transform: translateX(4px);
+  color: #4ADE80;
+}
+
+/* Centered Bottom Action Area (Divider Lines + Meet Our Practitioners) */
+.docs-bottom-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 50px;
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity 0.85s 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.docs-bottom-action.is-in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.docs-action-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(74, 222, 128, 0.3) 50%, transparent 100%);
+  max-width: 220px;
+}
+
+.btn-meet-practitioners {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 28px;
+  border-radius: 999px;
+  background: rgba(10, 28, 20, 0.8);
+  border: 1px solid #4ADE80;
+  color: #FFFFFF;
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.25);
+  backdrop-filter: blur(8px);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-meet-practitioners .ic {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s ease;
+}
+
+.btn-meet-practitioners:hover {
+  background: #4ADE80;
+  color: #06160F;
+  box-shadow: 0 0 35px rgba(74, 222, 128, 0.6);
+  transform: translateY(-2px);
+}
+
+.btn-meet-practitioners:hover .ic {
+  transform: translateX(4px);
 }
 
 /* Quote Band */
@@ -833,18 +1521,20 @@
 }
 
 .qband cite {
-  font: 600 0.78rem/1.6 var(--sans);
+  font: 600 0.88rem/1.6 var(--sans);
   font-style: normal;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--gold-hi);
 }
 
 .qband p {
-  max-width: 56ch;
+  max-width: 60ch;
   color: var(--on-dark-2);
   text-align: center;
-  font-weight: 300;
+  font-size: 1.15rem;
+  line-height: 1.75;
+  font-weight: 400;
 }
 
 /* Testimonials / Voices */
@@ -853,6 +1543,12 @@
   grid-template-columns: auto minmax(0, 1fr);
   gap: clamp(24px, 6vw, 96px);
   align-items: start;
+}
+
+.voices p {
+  font-size: 1.12rem;
+  line-height: 1.75;
+  color: var(--fg);
 }
 
 .qm {
@@ -990,15 +1686,15 @@
 
 .bk-facts div {
   display: grid;
-  grid-template-columns: 110px minmax(0, 1fr);
+  grid-template-columns: 120px minmax(0, 1fr);
   gap: 16px;
   padding: 16px 0;
   border-bottom: 1px solid var(--on-dark-line);
-  font-size: 0.94rem;
+  font-size: 1.05rem;
 }
 
 .bk-facts dt {
-  font: 500 0.78rem/1.9 var(--sans);
+  font: 600 0.85rem/1.9 var(--sans);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--on-dark-2);
@@ -1097,11 +1793,6 @@
   .xcard p {
     grid-template-rows: 1fr;
     opacity: 1;
-  }
-  .dcard .reveal {
-    transform: none;
-    position: relative;
-    background: var(--botanical);
   }
   .intro-art {
     padding: 0 10% 16% 0;

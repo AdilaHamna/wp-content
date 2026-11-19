@@ -13,7 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once get_stylesheet_directory() . '/templates/header-custom.php';
 
 $contact = kottakkal_get_contact_info();
-$selected_service = isset( $_GET['service'] ) ? sanitize_text_field( wp_unslash( $_GET['service'] ) ) : '';
+$selected_service = isset( $_GET['service'] ) ? sanitize_text_field( wp_unslash( $_GET['service'] ) ) : ( isset( $_GET['treatment'] ) ? sanitize_text_field( wp_unslash( $_GET['treatment'] ) ) : '' );
+$selected_doctor  = isset( $_GET['doctor'] ) ? sanitize_text_field( wp_unslash( $_GET['doctor'] ) ) : '';
 ?>
 
 <div class="bk-page-hero"></div>
@@ -42,7 +43,7 @@ $selected_service = isset( $_GET['service'] ) ? sanitize_text_field( wp_unslash(
 		</div>
 
 		<div class="panel" id="bkPanel">
-			<?php kottakkal_render_contact_form( $selected_service ); ?>
+			<?php kottakkal_render_contact_form( $selected_service, $selected_doctor ); ?>
 		</div>
 	</div>
 </section>

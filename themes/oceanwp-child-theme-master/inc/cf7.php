@@ -21,27 +21,34 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @param string $selected_service Optional pre-selected service/pathway slug.
  */
-function kottakkal_render_booking_wizard( $selected_service = '' ) {
-	$contact   = kottakkal_get_contact_info();
-	$pathways  = kottakkal_get_default_pathways();
-	$treatments = kottakkal_get_default_treatments();
+function kottakkal_render_booking_wizard( $selected_service = '', $selected_doctor = '' ) {
+	$contact    = kottakkal_get_contact_info();
+	$pathways   = kottakkal_get_default_pathways();
+	$treatments = function_exists( 'kottakkal_get_treatments' ) ? kottakkal_get_treatments() : kottakkal_get_default_treatments();
 
-	// Generate 21 days starting today
+	if ( ! empty( $selected_doctor ) && empty( $selected_service ) ) {
+		$selected_service = 'consult';
+	}
+
+	// Generate 21 days starting today (Dubai Timezone)
 	$days = array();
-	$today = new DateTime( 'now', new DateTimeZone( 'Asia/Dubai' ) );
+	$now_dubai = new DateTime( 'now', new DateTimeZone( 'Asia/Dubai' ) );
+	$current_hour_dubai = (int) $now_dubai->format( 'G' );
+	$today_iso = $now_dubai->format( 'Y-m-d' );
 	for ( $i = 0; $i < 21; $i++ ) {
-		$d = clone $today;
+		$d = clone $now_dubai;
 		$d->modify( "+{$i} day" );
 		$days[] = array(
-			'iso'     => $d->format( 'Y-m-d' ),
-			'day_num' => $d->format( 'j' ),
-			'weekday' => $i === 0 ? esc_html__( 'Today', 'oceanwp' ) : $d->format( 'D' ),
-			'month'   => $d->format( 'M' ),
-			'full'    => $d->format( 'D j M' ),
+			'iso'      => $d->format( 'Y-m-d' ),
+			'day_num'  => $d->format( 'j' ),
+			'weekday'  => $i === 0 ? esc_html__( 'Today', 'oceanwp' ) : $d->format( 'D' ),
+			'month'    => $d->format( 'M' ),
+			'full'     => $d->format( 'D j M' ),
+			'is_today' => $i === 0,
 		);
 	}
 	?>
-	<div class="kottakkal-wizard" id="kottakkalWizard" data-sel="<?php echo esc_attr( $selected_service ); ?>">
+	<div class="kottakkal-wizard" id="kottakkalWizard" data-sel="<?php echo esc_attr( $selected_service ); ?>" data-doc="<?php echo esc_attr( $selected_doctor ); ?>" data-today="<?php echo esc_attr( $today_iso ); ?>" data-dubai-hour="<?php echo esc_attr( $current_hour_dubai ); ?>" data-server-time="<?php echo esc_attr( $now_dubai->format( 'c' ) ); ?>">
 		<!-- Top Progress Stepper (4 Steps) -->
 		<ol class="progress" aria-label="<?php esc_attr_e( 'Booking progress', 'oceanwp' ); ?>">
 			<li data-pi="0" class="cur" aria-current="step">
@@ -68,36 +75,68 @@ function kottakkal_render_booking_wizard( $selected_service = '' ) {
 				<legend>
 					<h3><?php esc_html_e( 'What would you like to book?', 'oceanwp' ); ?></h3>
 				</legend>
-				<p class="sub"><?php esc_html_e( 'Choose a consultation, a care pathway or a specific therapy.', 'oceanwp' ); ?></p>
+				<p class="sub"><?php esc_html_e( 'Choose one or more consultations, care pathways or therapies.', 'oceanwp' ); ?></p>
 
-				<div class="opts" role="radiogroup" aria-label="<?php esc_attr_e( 'Service selection', 'oceanwp' ); ?>">
+				<div class="opts" role="group" aria-label="<?php esc_attr_e( 'Service selection', 'oceanwp' ); ?>">
 					<!-- Wide Doctor Consultation Card -->
-					<button type="button" class="opt wide" role="radio" aria-checked="false" tabindex="0" data-svc="consult">
+					<button type="button" class="opt wide" role="checkbox" aria-checked="false" tabindex="0" data-svc="consult">
 						<b><?php esc_html_e( 'Consultation with a doctor', 'oceanwp' ); ?></b>
 						<small><?php esc_html_e( 'Start here if you are unsure. Your doctor recommends a plan.', 'oceanwp' ); ?></small>
 					</button>
 
 					<!-- Care Pathway Cards -->
 					<?php foreach ( $pathways as $p ) : ?>
-						<button type="button" class="opt" role="radio" aria-checked="false" tabindex="-1" data-svc="<?php echo esc_attr( $p['id'] ); ?>">
+						<button type="button" class="opt" role="checkbox" aria-checked="false" tabindex="0" data-svc="<?php echo esc_attr( $p['id'] ); ?>">
 							<b><?php echo esc_html( $p['name'] ); ?></b>
 							<small><?php echo esc_html( $p['intro'] ); ?></small>
 						</button>
 					<?php endforeach; ?>
 				</div>
 
-				<!-- Classical Therapy Select Dropdown -->
+				<!-- Classical Therapy Multi-Select Dropdown -->
 				<div class="flds">
-					<div class="fld full">
-						<label for="bk-ther">
-							<?php esc_html_e( 'Or a specific therapy', 'oceanwp' ); ?>
-							<span class="opt-l"><?php esc_html_e( '(optional)', 'oceanwp' ); ?></span>
+					<div class="fld full ther-multi-fld">
+						<label id="therLabel" for="therTrigger">
+							<?php esc_html_e( 'Or choose specific therapies', 'oceanwp' ); ?>
+							<span class="opt-l"><?php esc_html_e( '(optional · select multiple)', 'oceanwp' ); ?></span>
 						</label>
-						<select id="bk-ther" name="therapy_select">
-							<option value=""><?php esc_html_e( 'Choose a therapy', 'oceanwp' ); ?></option>
+
+						<div class="ther-multi-wrap" id="therMultiWrap">
+							<button type="button" class="ther-multi-trigger" id="therTrigger" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="therLabel therTrigger">
+								<span class="ther-trigger-text" id="therTriggerText"><?php esc_html_e( 'Select one or more therapies…', 'oceanwp' ); ?></span>
+								<span class="ther-trigger-badge" id="therCountBadge" style="display:none;">0</span>
+								<svg class="ther-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
+							</button>
+
+							<div class="ther-multi-dropdown" id="therDropdown" style="display:none;">
+								<div class="ther-dropdown-search">
+									<input type="text" id="therSearchInput" placeholder="<?php esc_attr_e( 'Search therapies…', 'oceanwp' ); ?>" autocomplete="off">
+									<button type="button" class="ther-dropdown-close" id="therDropdownClose" aria-label="<?php esc_attr_e( 'Close therapies list', 'oceanwp' ); ?>"><?php esc_html_e( 'Done', 'oceanwp' ); ?></button>
+								</div>
+								<ul class="ther-options-list" role="listbox" aria-multiselectable="true" id="therOptionsList">
+									<?php foreach ( $treatments as $t ) : 
+										$is_sel = ( $selected_service === $t['id'] );
+									?>
+										<li class="ther-option" role="option" aria-selected="<?php echo $is_sel ? 'true' : 'false'; ?>" data-val="<?php echo esc_attr( $t['id'] ); ?>" data-name="<?php echo esc_attr( $t['name'] ); ?>">
+											<span class="ther-chk" aria-hidden="true"></span>
+											<div class="ther-opt-info">
+												<strong class="ther-opt-name"><?php echo esc_html( $t['name'] ); ?></strong>
+												<span class="ther-opt-alt"><?php echo esc_html( $t['alt'] ); ?></span>
+											</div>
+										</li>
+									<?php endforeach; ?>
+								</ul>
+							</div>
+
+							<!-- Selected Therapy Tags/Chips -->
+							<div class="ther-chips" id="therChips" aria-live="polite"></div>
+						</div>
+
+						<!-- Hidden select for form integration / fallback -->
+						<select id="bk-ther" name="therapy_select[]" multiple style="display:none;" tabindex="-1" aria-hidden="true">
 							<?php foreach ( $treatments as $t ) : ?>
-								<option value="<?php echo esc_attr( $t['id'] ); ?>">
-									<?php echo esc_html( $t['name'] . ' · ' . $t['alt'] ); ?>
+								<option value="<?php echo esc_attr( $t['id'] ); ?>" <?php selected( $selected_service, $t['id'] ); ?>>
+									<?php echo esc_html( $t['name'] ); ?>
 								</option>
 							<?php endforeach; ?>
 						</select>
@@ -114,10 +153,19 @@ function kottakkal_render_booking_wizard( $selected_service = '' ) {
 				</legend>
 				<p class="sub"><?php esc_html_e( 'Choose a preferred day and time. We will confirm the exact time, subject to availability.', 'oceanwp' ); ?></p>
 
+				<div class="bk-selected-badge" id="bkSelectedBadge" style="display:none;">
+					<span class="bk-badge-lbl"><?php esc_html_e( 'Selected therapy:', 'oceanwp' ); ?></span>
+					<strong class="bk-badge-val" id="bkSelectedTitle"></strong>
+					<button type="button" class="btn-change-svc" id="bkChangeSvc" aria-label="<?php esc_attr_e( 'Change selected service', 'oceanwp' ); ?>"><?php esc_html_e( 'Change', 'oceanwp' ); ?></button>
+				</div>
+
 				<!-- 21-Day Horizontal Scroll Strip -->
 				<div class="dates" role="radiogroup" aria-label="<?php esc_attr_e( 'Preferred date', 'oceanwp' ); ?>">
-					<?php foreach ( $days as $i => $d ) : ?>
-						<button type="button" class="date" role="radio" aria-checked="false" tabindex="<?php echo $i === 0 ? '0' : '-1'; ?>" data-date="<?php echo esc_attr( $d['iso'] ); ?>" aria-label="<?php echo esc_attr( $d['full'] ); ?>">
+					<?php foreach ( $days as $i => $d ) : 
+						$is_today = ! empty( $d['is_today'] );
+						$is_closed_today = ( $is_today && $current_hour_dubai >= 21 );
+					?>
+						<button type="button" class="date<?php echo $is_closed_today ? ' is-closed' : ''; ?>" role="radio" aria-checked="false" tabindex="<?php echo $i === 0 ? '0' : '-1'; ?>" data-date="<?php echo esc_attr( $d['iso'] ); ?>" aria-label="<?php echo esc_attr( $d['full'] ); ?>" <?php if ( $is_closed_today ) echo 'data-closed="1"'; ?>>
 							<small><?php echo esc_html( $d['weekday'] ); ?></small>
 							<b><?php echo esc_html( $d['day_num'] ); ?></b>
 							<small><?php echo esc_html( $d['month'] ); ?></small>
@@ -127,15 +175,15 @@ function kottakkal_render_booking_wizard( $selected_service = '' ) {
 
 				<!-- Time Window Options -->
 				<div class="times" role="radiogroup" aria-label="<?php esc_attr_e( 'Preferred time', 'oceanwp' ); ?>">
-					<button type="button" class="opt" role="radio" aria-checked="false" tabindex="0" data-time="Morning, 9 am – 12 pm">
+					<button type="button" class="opt" role="radio" aria-checked="false" tabindex="0" data-time="Morning, 9 am – 12 pm" data-slot="morning">
 						<b><?php esc_html_e( 'Morning', 'oceanwp' ); ?></b>
 						<small><?php esc_html_e( '9 am – 12 pm', 'oceanwp' ); ?></small>
 					</button>
-					<button type="button" class="opt" role="radio" aria-checked="false" tabindex="-1" data-time="Afternoon, 12 – 4 pm">
+					<button type="button" class="opt" role="radio" aria-checked="false" tabindex="-1" data-time="Afternoon, 12 – 4 pm" data-slot="afternoon">
 						<b><?php esc_html_e( 'Afternoon', 'oceanwp' ); ?></b>
 						<small><?php esc_html_e( '12 – 4 pm', 'oceanwp' ); ?></small>
 					</button>
-					<button type="button" class="opt" role="radio" aria-checked="false" tabindex="-1" data-time="Evening, 4 – 9 pm">
+					<button type="button" class="opt" role="radio" aria-checked="false" tabindex="-1" data-time="Evening, 4 – 9 pm" data-slot="evening">
 						<b><?php esc_html_e( 'Evening', 'oceanwp' ); ?></b>
 						<small><?php esc_html_e( '4 – 9 pm', 'oceanwp' ); ?></small>
 					</button>
@@ -257,8 +305,8 @@ function kottakkal_render_booking_wizard( $selected_service = '' ) {
 /**
  * Universal Form Render Entrypoint
  */
-function kottakkal_render_contact_form( $selected_service = '' ) {
-	kottakkal_render_booking_wizard( $selected_service );
+function kottakkal_render_contact_form( $selected_service = '', $selected_doctor = '' ) {
+	kottakkal_render_booking_wizard( $selected_service, $selected_doctor );
 }
 add_shortcode( 'kottakkal_booking_form', 'kottakkal_render_contact_form' );
 add_shortcode( 'kottakkal_booking_wizard', 'kottakkal_render_booking_wizard' );
@@ -308,6 +356,29 @@ function kottakkal_handle_ajax_booking() {
 
 	if ( ! is_email( $email ) ) {
 		wp_send_json_error( array( 'message' => 'Please enter a valid email address.' ) );
+	}
+
+	// Validate date & time slot
+	if ( empty( $date ) || empty( $time ) ) {
+		wp_send_json_error( array( 'message' => 'Please select a preferred date and time.' ) );
+	}
+
+	// Server-side check for Today in Dubai timezone
+	$dubai_tz    = new DateTimeZone( 'Asia/Dubai' );
+	$now_dubai   = new DateTime( 'now', $dubai_tz );
+	$today_dubai = $now_dubai->format( 'Y-m-d' );
+	$curr_hour   = (int) $now_dubai->format( 'G' );
+
+	if ( $date === $today_dubai ) {
+		if ( stripos( $time, 'Morning' ) !== false && $curr_hour >= 12 ) {
+			wp_send_json_error( array( 'message' => 'The morning session for today has already concluded. Please choose the evening session or another date.' ) );
+		}
+		if ( stripos( $time, 'Afternoon' ) !== false && $curr_hour >= 16 ) {
+			wp_send_json_error( array( 'message' => 'The afternoon session for today has already concluded. Please choose the evening session or another date.' ) );
+		}
+		if ( stripos( $time, 'Evening' ) !== false && $curr_hour >= 21 ) {
+			wp_send_json_error( array( 'message' => 'All appointment sessions for today have concluded. Please select tomorrow or a later date.' ) );
+		}
 	}
 
 	// Generate Reference ID

@@ -38,7 +38,7 @@ $doctors = kottakkal_get_doctors();
 		$d_img  = ! empty( $d['img_url'] ) ? $d['img_url'] : '';
 		$mono_el = empty( $d_img ) ? '<span class="mono" aria-hidden="true">' . esc_html( $d['mono'] ) . '</span>' : '';
 	?>
-		<article class="docfull">
+		<article class="docfull doc-reveal">
 			<div class="frame">
 				<?php echo kottakkal_render_plate( 'doc-' . $d['id'], 'doc', $d['tone'], '', null, $mono_el, $d_img ); ?>
 			</div>

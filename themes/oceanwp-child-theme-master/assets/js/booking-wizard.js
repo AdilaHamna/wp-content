@@ -33,6 +33,19 @@
     "face-pack": "Face Pack (Mukha Lepam)"
   };
 
+  var DOCTOR_NAMES = {
+    "naseeba": "Dr. Naseeba Abdul Rafeeque",
+    "ajitha": "Dr. Ajitha Babu",
+    "minupriya": "Dr. Minupriya"
+  };
+
+  function getDoctorFullName(slug) {
+    if (!slug) return "";
+    var key = String(slug).toLowerCase().trim();
+    if (DOCTOR_NAMES[key]) return DOCTOR_NAMES[key];
+    return "Dr. " + key.charAt(0).toUpperCase() + key.slice(1);
+  }
+
   var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   var DAYS_OF_WEEK = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
@@ -162,19 +175,47 @@
   }
 
   function initWizard(container) {
-    if (!container || container._initialized) return;
+    if (!container) return;
+    var root = container.classList.contains("kottakkal-wizard") ? container : (container.querySelector(".kottakkal-wizard") || container);
+    if (root._initialized) return;
+    root._initialized = true;
     container._initialized = true;
+    container = root;
 
     var initialService = container.getAttribute("data-sel") || "";
+    var initialDoctor = container.getAttribute("data-doc") || "";
+
     // Check URL parameters if not pre-set
-    if (!initialService && window.location.search) {
-      var match = window.location.search.match(/[?&]service=([^&#]*)/);
-      if (match) initialService = decodeURIComponent(match[1]);
+    if (window.location.search) {
+      if (!initialService) {
+        var match = window.location.search.match(/[?&](?:service|treatment)=([^&#]*)/i);
+        if (match) initialService = decodeURIComponent(match[1]);
+      }
+      if (!initialDoctor) {
+        var docMatch = window.location.search.match(/[?&]doctor=([^&#]*)/i);
+        if (docMatch) initialDoctor = decodeURIComponent(docMatch[1]);
+      }
+    }
+
+    var initialServices = [];
+    if (initialService) {
+      initialService.split(",").forEach(function(s) {
+        var trimmed = s.trim();
+        if (trimmed && initialServices.indexOf(trimmed) === -1) {
+          initialServices.push(trimmed);
+        }
+      });
+    }
+
+    if (initialDoctor && initialServices.indexOf("consult") === -1) {
+      initialServices.unshift("consult");
     }
 
     var state = {
       step: 0,
-      svc: initialService,
+      services: initialServices,
+      svc: initialServices.join(","),
+      doc: initialDoctor,
       date: "",
       time: "",
       name: "",
@@ -189,10 +230,23 @@
     var backBtn = container.querySelector("#bk-back");
     var nextBtn = container.querySelector("#bk-next");
     var noteEl = container.querySelector("#bk-note");
-    var therSelect = container.querySelector("#bk-ther");
     var actionsBar = container.querySelector("#bk-actions");
     var reviewEl = container.querySelector("#bk-review");
     var doneEl = container.querySelector("#bk-done");
+    var badgeEl = container.querySelector("#bkSelectedBadge");
+    var badgeTitleEl = container.querySelector("#bkSelectedTitle");
+    var changeSvcBtn = container.querySelector("#bkChangeSvc");
+
+    // Therapy Multi-Select Elements
+    var therMultiWrap = container.querySelector("#therMultiWrap");
+    var therTrigger = container.querySelector("#therTrigger");
+    var therTriggerText = container.querySelector("#therTriggerText");
+    var therCountBadge = container.querySelector("#therCountBadge");
+    var therDropdown = container.querySelector("#therDropdown");
+    var therSearchInput = container.querySelector("#therSearchInput");
+    var therOptionsList = container.querySelector("#therOptionsList");
+    var therChips = container.querySelector("#therChips");
+    var therSelect = container.querySelector("#bk-ther");
 
     function $(selector) {
       return container.querySelector(selector);
@@ -206,53 +260,381 @@
       });
     }
 
-    // Auto-select initial service if present
-    if (state.svc) {
-      if (therSelect && therSelect.querySelector('option[value="' + state.svc + '"]')) {
-        therSelect.value = state.svc;
+    function updateSelectedBadge() {
+      if (!badgeEl || !badgeTitleEl) return;
+      if (state.services && state.services.length > 0) {
+        var names = state.services.map(function(slug) {
+          if (slug === "consult" && state.doc) {
+            var docFull = getDoctorFullName(state.doc);
+            return docFull ? "Consultation with " + docFull : "Consultation with a doctor";
+          }
+          return getServiceName(slug);
+        });
+        var count = names.length;
+        var title = names.join(" · ");
+        var lbl = badgeEl.querySelector(".bk-badge-lbl");
+        if (lbl) {
+          if (count === 1) {
+            lbl.textContent = (state.doc && state.services[0] === "consult") ? "Selected doctor:" : "Selected service:";
+          } else {
+            lbl.textContent = "Selected (" + count + "):";
+          }
+        }
+        badgeTitleEl.textContent = title;
+        badgeEl.style.display = "inline-flex";
       } else {
-        setRadioChecked("[data-svc]", "data-svc", state.svc);
+        badgeEl.style.display = "none";
       }
     }
 
-    // 1. Service Cards Click Handler
-    container.querySelectorAll("[data-svc]").forEach(function(card) {
-      card.addEventListener("click", function() {
-        state.svc = card.getAttribute("data-svc");
-        if (therSelect) therSelect.value = "";
-        setRadioChecked("[data-svc]", "data-svc", state.svc);
-        var err0 = container.querySelector('[data-err="0"]');
-        if (err0) err0.textContent = "";
+    if (changeSvcBtn) {
+      changeSvcBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        goToStep(0);
+      });
+    }
+
+    // Allow user to click any completed step (e.g. "1. Service") to jump back
+    container.querySelectorAll("[data-pi]").forEach(function(li) {
+      li.addEventListener("click", function() {
+        var stepIdx = parseInt(li.getAttribute("data-pi"), 10);
+        if (stepIdx < state.step) {
+          goToStep(stepIdx);
+        }
       });
     });
 
-    // Specific Therapy Dropdown Handler
-    if (therSelect) {
-      therSelect.addEventListener("change", function(e) {
-        if (e.target.value) {
-          state.svc = e.target.value;
-          setRadioChecked("[data-svc]", "data-svc", "");
-        } else if (state.svc && !container.querySelector('[data-svc="' + state.svc + '"]')) {
-          state.svc = "";
+    // Synchronize Therapy Multi-Select UI (Options, Checkboxes, Chips & Trigger Text)
+    function syncTherapiesUI() {
+      if (!therOptionsList) return;
+      var selectedTherapies = [];
+      therOptionsList.querySelectorAll(".ther-option").forEach(function(opt) {
+        var val = opt.getAttribute("data-val");
+        var name = opt.getAttribute("data-name") || val;
+        var isSel = state.services.indexOf(val) > -1;
+        opt.setAttribute("aria-selected", String(isSel));
+        if (isSel) {
+          selectedTherapies.push({ val: val, name: name });
         }
+      });
+
+      // Synchronize hidden multiple select
+      if (therSelect) {
+        Array.from(therSelect.options).forEach(function(opt) {
+          opt.selected = (state.services.indexOf(opt.value) > -1);
+        });
+      }
+
+      // Update trigger label and count badge
+      if (therTriggerText && therCountBadge) {
+        var count = selectedTherapies.length;
+        if (count === 0) {
+          therTriggerText.textContent = "Select one or more therapies…";
+          therCountBadge.style.display = "none";
+        } else if (count === 1) {
+          therTriggerText.textContent = selectedTherapies[0].name;
+          therCountBadge.textContent = "1";
+          therCountBadge.style.display = "inline-flex";
+        } else {
+          therTriggerText.textContent = count + " therapies selected";
+          therCountBadge.textContent = String(count);
+          therCountBadge.style.display = "inline-flex";
+        }
+      }
+
+      // Render removable chips
+      if (therChips) {
+        therChips.innerHTML = selectedTherapies.map(function(t) {
+          return '<span class="ther-chip" data-val="' + escapeHtml(t.val) + '">' +
+            '<span>' + escapeHtml(t.name) + '</span>' +
+            '<button type="button" class="ther-chip-remove" data-remove="' + escapeHtml(t.val) + '" aria-label="Remove ' + escapeHtml(t.name) + '">&times;</button>' +
+          '</span>';
+        }).join("");
+
+        therChips.querySelectorAll("[data-remove]").forEach(function(btn) {
+          btn.addEventListener("click", function(e) {
+            e.stopPropagation();
+            var removeVal = btn.getAttribute("data-remove");
+            var idx = state.services.indexOf(removeVal);
+            if (idx > -1) {
+              state.services.splice(idx, 1);
+              state.svc = state.services.join(",");
+              syncTherapiesUI();
+              updateSelectedBadge();
+            }
+          });
+        });
+      }
+    }
+
+    // Dropdown open/close & search filtering
+    if (therTrigger && therDropdown) {
+      function openTherDropdown() {
+        therDropdown.style.display = "flex";
+        therDropdown.classList.add("is-open");
+        therDropdown.removeAttribute("hidden");
+        therTrigger.setAttribute("aria-expanded", "true");
+        if (therSearchInput) {
+          therSearchInput.value = "";
+          filterTherapies("");
+          setTimeout(function() { therSearchInput.focus(); }, 60);
+        }
+      }
+
+      function closeTherDropdown() {
+        therDropdown.style.display = "none";
+        therDropdown.classList.remove("is-open");
+        therDropdown.setAttribute("hidden", "hidden");
+        therTrigger.setAttribute("aria-expanded", "false");
+      }
+
+      // Ensure initially closed
+      closeTherDropdown();
+
+      therTrigger.addEventListener("click", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var isOpen = therDropdown.classList.contains("is-open");
+        if (isOpen) {
+          closeTherDropdown();
+        } else {
+          openTherDropdown();
+        }
+      });
+
+      therDropdown.addEventListener("click", function(e) {
+        e.stopPropagation();
+      });
+
+      var therDropdownClose = container.querySelector("#therDropdownClose");
+      if (therDropdownClose) {
+        therDropdownClose.addEventListener("click", function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          closeTherDropdown();
+          therTrigger.focus();
+        });
+      }
+
+      document.addEventListener("click", function(e) {
+        if (therMultiWrap && !therMultiWrap.contains(e.target)) {
+          closeTherDropdown();
+        }
+      });
+
+      if (therSearchInput) {
+        therSearchInput.addEventListener("input", function(e) {
+          filterTherapies(e.target.value);
+        });
+        therSearchInput.addEventListener("keydown", function(e) {
+          if (e.key === "Escape") {
+            closeTherDropdown();
+            therTrigger.focus();
+          }
+        });
+      }
+
+      function filterTherapies(query) {
+        var q = (query || "").toLowerCase().trim();
+        if (!therOptionsList) return;
+        therOptionsList.querySelectorAll(".ther-option").forEach(function(opt) {
+          var text = opt.textContent.toLowerCase();
+          opt.style.display = (!q || text.indexOf(q) > -1) ? "flex" : "none";
+        });
+      }
+
+      if (therOptionsList) {
+        therOptionsList.querySelectorAll(".ther-option").forEach(function(opt) {
+          opt.addEventListener("click", function(e) {
+            e.stopPropagation();
+            var val = opt.getAttribute("data-val");
+            var idx = state.services.indexOf(val);
+            if (idx > -1) {
+              state.services.splice(idx, 1);
+            } else {
+              state.services.push(val);
+            }
+            state.svc = state.services.join(",");
+            var err0 = container.querySelector('[data-err="0"]');
+            if (err0) err0.textContent = "";
+            syncTherapiesUI();
+            updateSelectedBadge();
+          });
+        });
+      }
+    }
+
+    // 1. Service Cards Click Handler (Toggle Multi-Selection)
+    container.querySelectorAll("[data-svc]").forEach(function(card) {
+      card.addEventListener("click", function() {
+        var val = card.getAttribute("data-svc");
+        var idx = state.services.indexOf(val);
+        if (idx > -1) {
+          state.services.splice(idx, 1);
+          card.setAttribute("aria-checked", "false");
+          card.classList.remove("selected");
+        } else {
+          state.services.push(val);
+          card.setAttribute("aria-checked", "true");
+          card.classList.add("selected");
+        }
+        state.svc = state.services.join(",");
         var err0 = container.querySelector('[data-err="0"]');
         if (err0) err0.textContent = "";
+        updateSelectedBadge();
       });
+    });
+
+    // Auto-select initial services/therapies if present
+    container.querySelectorAll("[data-svc]").forEach(function(card) {
+      var val = card.getAttribute("data-svc");
+      var isSel = state.services.indexOf(val) > -1;
+      card.setAttribute("aria-checked", String(isSel));
+      card.classList.toggle("selected", isSel);
+    });
+    syncTherapiesUI();
+    var hasValidInitial = state.services.length > 0;
+
+    // Pre-fill doctor in message if doctor was requested
+    var msgEl = container.querySelector("#bk-msg");
+    if (initialDoctor && msgEl && !msgEl.value) {
+      var docFull = getDoctorFullName(initialDoctor);
+      msgEl.value = "Consultation requested with " + docFull + ".";
+    }
+
+    // Dubai Timezone and Time Slot Validation
+    var todayIso = container.getAttribute("data-today") || "";
+    var serverTimeStr = container.getAttribute("data-server-time") || "";
+    var serverLoadTime = serverTimeStr ? new Date(serverTimeStr).getTime() : Date.now();
+    var clientInitTime = Date.now();
+
+    function getDubaiNow() {
+      // 1. Cross-check with browser's Asia/Dubai timezone if available
+      try {
+        var str = new Date().toLocaleString("en-US", { timeZone: "Asia/Dubai" });
+        var d = new Date(str);
+        if (!isNaN(d.getTime())) return d;
+      } catch (e) {}
+      // 2. Fallback: server timestamp + elapsed client milliseconds
+      var elapsed = Date.now() - clientInitTime;
+      return new Date(serverLoadTime + elapsed);
+    }
+
+    if (!todayIso) {
+      var dNow = getDubaiNow();
+      var y = dNow.getFullYear();
+      var m = String(dNow.getMonth() + 1).padStart(2, "0");
+      var d = String(dNow.getDate()).padStart(2, "0");
+      todayIso = y + "-" + m + "-" + d;
+    }
+
+    function updateAvailableTimeSlots() {
+      var isToday = (state.date === todayIso);
+      var dubaiNow = getDubaiNow();
+      var currentHour = dubaiNow.getHours();
+
+      var timeButtons = container.querySelectorAll(".times .opt[data-time]");
+      var availableButtons = [];
+      var selectedStillValid = false;
+
+      timeButtons.forEach(function(btn) {
+        var slot = btn.getAttribute("data-slot") || "";
+        if (!slot) {
+          var tVal = btn.getAttribute("data-time") || "";
+          if (/morning/i.test(tVal)) slot = "morning";
+          else if (/afternoon/i.test(tVal)) slot = "afternoon";
+          else if (/evening/i.test(tVal)) slot = "evening";
+        }
+
+        var isPast = false;
+        if (isToday) {
+          // Morning: 9 am - 12 pm (past at/after 12:00)
+          // Afternoon: 12 - 4 pm (past at/after 16:00)
+          // Evening: 4 - 9 pm (past at/after 21:00)
+          if (slot === "morning" && currentHour >= 12) {
+            isPast = true;
+          } else if (slot === "afternoon" && currentHour >= 16) {
+            isPast = true;
+          } else if (slot === "evening" && currentHour >= 21) {
+            isPast = true;
+          }
+        }
+
+        btn.classList.toggle("is-past", isPast);
+        btn.classList.toggle("disabled", isPast);
+        btn.disabled = isPast;
+
+        var noteSpan = btn.querySelector(".slot-past-tag");
+        if (isPast) {
+          btn.setAttribute("aria-disabled", "true");
+          btn.tabIndex = -1;
+          if (state.time === btn.getAttribute("data-time")) {
+            btn.setAttribute("aria-checked", "false");
+            btn.classList.remove("selected");
+          }
+          if (!noteSpan) {
+            noteSpan = document.createElement("span");
+            noteSpan.className = "slot-past-tag";
+            noteSpan.textContent = "Concluded";
+            btn.appendChild(noteSpan);
+          }
+        } else {
+          btn.removeAttribute("aria-disabled");
+          availableButtons.push(btn);
+          if (noteSpan) {
+            noteSpan.remove();
+          }
+          if (state.time === btn.getAttribute("data-time")) {
+            selectedStillValid = true;
+          }
+        }
+      });
+
+      if (!selectedStillValid && state.time) {
+        state.time = "";
+      }
+
+      var err1 = container.querySelector('[data-err="1"]');
+      if (isToday && availableButtons.length === 0) {
+        if (err1) {
+          err1.textContent = "All consultation sessions for today have concluded. Please select tomorrow or another date.";
+        }
+      } else if (err1 && err1.textContent && err1.textContent.indexOf("concluded") !== -1) {
+        err1.textContent = "";
+      }
+
+      // If only one slot remains available for today (e.g. only Evening at/after 4pm)
+      if (isToday && availableButtons.length === 1 && !state.time) {
+        state.time = availableButtons[0].getAttribute("data-time");
+        setRadioChecked("[data-time]", "data-time", state.time);
+      }
     }
 
     // 2. Date Selection Handler
     container.querySelectorAll("[data-date]").forEach(function(btn) {
       btn.addEventListener("click", function() {
+        if (btn.classList.contains("is-closed") || btn.getAttribute("data-closed") === "1") {
+          var err1 = container.querySelector('[data-err="1"]');
+          if (err1) {
+            err1.textContent = "All consultation sessions for today have concluded. Please select tomorrow or another date.";
+          }
+          return;
+        }
         state.date = btn.getAttribute("data-date");
         setRadioChecked("[data-date]", "data-date", state.date);
         var err1 = container.querySelector('[data-err="1"]');
         if (err1) err1.textContent = "";
+
+        updateAvailableTimeSlots();
       });
     });
 
     // Time Selection Handler
     container.querySelectorAll("[data-time]").forEach(function(btn) {
       btn.addEventListener("click", function() {
+        if (btn.disabled || btn.classList.contains("is-past")) {
+          return;
+        }
         state.time = btn.getAttribute("data-time");
         setRadioChecked("[data-time]", "data-time", state.time);
         var err1 = container.querySelector('[data-err="1"]');
@@ -572,8 +954,16 @@
       if (!reviewEl) return;
       var formattedPhone = formatPhoneWithSpaces(state.cc, state.phone);
       var displayPhone = (state.cc ? state.cc + " " : "") + formattedPhone;
+      var names = state.services.map(function(slug) {
+        if (slug === "consult" && state.doc) {
+          var docFull = getDoctorFullName(state.doc);
+          return "Consultation · " + docFull;
+        }
+        return getServiceName(slug);
+      });
+      var svcDisplay = names.length > 0 ? names.join(", ") : getServiceName(state.svc);
       var rows = [
-        ["Service", getServiceName(state.svc), 0],
+        ["Selected Care", svcDisplay, 0],
         ["Preferred", formatNiceDate(state.date) + " · " + state.time, 1],
         ["Name", state.name, 2],
         ["Phone", displayPhone, 2],
@@ -602,6 +992,26 @@
     // 5. Step Transitions
     function goToStep(n, silent) {
       state.step = n;
+      updateSelectedBadge();
+
+      if (n === 1) {
+        if (!state.date) {
+          var dubaiNow = getDubaiNow();
+          var isTodayClosed = (dubaiNow.getHours() >= 21);
+          var allDateBtns = container.querySelectorAll("[data-date]");
+          var targetDateBtn = null;
+          if (isTodayClosed && allDateBtns.length > 1) {
+            targetDateBtn = allDateBtns[1];
+          } else {
+            targetDateBtn = container.querySelector('[data-date="' + todayIso + '"]') || allDateBtns[0];
+          }
+          if (targetDateBtn) {
+            state.date = targetDateBtn.getAttribute("data-date");
+            setRadioChecked("[data-date]", "data-date", state.date);
+          }
+        }
+        updateAvailableTimeSlots();
+      }
 
       // Toggle fieldset step active state
       container.querySelectorAll(".step").forEach(function(fieldset) {
@@ -681,9 +1091,9 @@
     if (nextBtn) {
       nextBtn.addEventListener("click", function() {
         if (state.step === 0) {
-          if (!state.svc) {
+          if (!state.services || state.services.length === 0) {
             var err0 = container.querySelector('[data-err="0"]');
-            if (err0) err0.textContent = "Please select a consultation, care pathway or therapy.";
+            if (err0) err0.textContent = "Please select at least one consultation, care pathway or therapy.";
             return;
           }
           goToStep(1);
@@ -695,6 +1105,25 @@
             }
             return;
           }
+
+          var isToday = (state.date === todayIso);
+          var curH = getDubaiNow().getHours();
+          var isSlotPassed = false;
+          if (isToday) {
+            if (/morning/i.test(state.time) && curH >= 12) isSlotPassed = true;
+            if (/afternoon/i.test(state.time) && curH >= 16) isSlotPassed = true;
+            if (/evening/i.test(state.time) && curH >= 21) isSlotPassed = true;
+          }
+
+          if (isSlotPassed) {
+            updateAvailableTimeSlots();
+            var err1 = container.querySelector('[data-err="1"]');
+            if (err1) {
+              err1.textContent = "The selected session has already concluded. Please choose an available time window.";
+            }
+            return;
+          }
+
           goToStep(2);
         } else if (state.step === 2) {
           if (validateDetails()) {
@@ -798,8 +1227,16 @@
       formData.append("name", state.name);
       formData.append("phone", fullPhone);
       formData.append("email", state.email);
-      formData.append("service", getServiceName(state.svc));
-      formData.append("service_id", state.svc);
+      var names = state.services.map(function(slug) {
+        if (slug === "consult" && state.doc) {
+          var docFull = getDoctorFullName(state.doc);
+          return "Consultation (" + docFull + ")";
+        }
+        return getServiceName(slug);
+      });
+      var fullServiceName = names.length > 0 ? names.join(", ") : getServiceName(state.svc);
+      formData.append("service", fullServiceName);
+      formData.append("service_id", state.services.join(","));
       formData.append("date", state.date);
       formData.append("time", state.time);
       formData.append("message", state.msg);
@@ -833,8 +1270,26 @@
       });
     }
 
-    // Initialize at step 0
-    goToStep(0, true);
+    container._goToStep = goToStep;
+
+    // Initialize: if service was pre-selected from single treatment/pathway, advance directly to Step 1 (Date & Time)
+    if (hasValidInitial) {
+      goToStep(1, true);
+      setTimeout(function() {
+        var panel = document.getElementById("bkPanel") || container;
+        if (panel) {
+          var rect = panel.getBoundingClientRect();
+          if (rect.top > 120 || rect.top < 0) {
+            var header = document.querySelector(".hdr");
+            var headerH = header ? header.offsetHeight : 80;
+            var top = rect.top + (window.pageYOffset || document.documentElement.scrollTop || 0) - headerH - 24;
+            window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+          }
+        }
+      }, 150);
+    } else {
+      goToStep(0, true);
+    }
   }
 
   function escapeHtml(text) {
@@ -849,7 +1304,10 @@
 
   // Auto-mount wizards on DOMContentLoaded
   function mountAllWizards() {
-    var wizards = document.querySelectorAll(".kottakkal-wizard, #bkPanel");
+    var wizards = document.querySelectorAll(".kottakkal-wizard");
+    if (!wizards || wizards.length === 0) {
+      wizards = document.querySelectorAll("#bkPanel");
+    }
     wizards.forEach(function(w) {
       initWizard(w);
     });
@@ -868,6 +1326,9 @@
             if (therSelect && therSelect.querySelector('option[value="' + svc + '"]')) {
               therSelect.value = svc;
               therSelect.dispatchEvent(new Event("change"));
+            }
+            if (typeof panel._goToStep === "function") {
+              panel._goToStep(1);
             }
           }
           var bookingSec = document.getElementById("booking");

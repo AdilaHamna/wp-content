@@ -62,60 +62,15 @@
     }
   }
 
-  // 2. Therapies Explorer Filtering
-  var grid = document.getElementById("xgrid");
-  var chips = document.querySelectorAll(".filters .chip");
-  var countEl = document.getElementById("xcount");
-  if (grid && chips.length) {
-    var cards = grid.querySelectorAll(".xcard");
-    chips.forEach(function(chip) {
-      chip.addEventListener("click", function(e) {
-        e.preventDefault();
-        var filter = chip.getAttribute("data-f");
-
-        chips.forEach(function(c) {
-          c.setAttribute("aria-pressed", String(c === chip));
-          c.classList.toggle("active", c === chip);
-        });
-
-        var visibleCount = 0;
-        cards.forEach(function(card) {
-          var cats = (card.getAttribute("data-cats") || "").split(" ");
-          var show = filter === "all" || cats.indexOf(filter) > -1;
-          card.hidden = !show;
-          if (show) visibleCount++;
-        });
-
-        if (countEl) {
-          countEl.textContent = filter === "all"
-            ? "Showing all " + cards.length + " therapies."
-            : "Showing " + visibleCount + " " + (visibleCount === 1 ? "therapy" : "therapies") + " for " + chip.querySelector("span").textContent.toLowerCase() + ".";
-        }
-      });
-    });
-
-    // Custom view dot
-    if (window.matchMedia("(pointer: fine)").matches) {
-      var dot = document.getElementById("cdot");
-      if (dot) {
-        grid.addEventListener("pointermove", function(e) {
-          dot.style.transform = "translate(" + e.clientX + "px," + e.clientY + "px)";
-        });
-        grid.addEventListener("pointerover", function(e) {
-          if (e.target.closest(".xcard")) dot.classList.add("on");
-        });
-        grid.addEventListener("pointerout", function(e) {
-          if (!e.relatedTarget || !e.relatedTarget.closest || !e.relatedTarget.closest(".xcard")) {
-            dot.classList.remove("on");
-          }
-        });
-      }
-    }
+  // 2. Therapies Explorer Filtering (delegated to main.js)
+  if (typeof window.initTherapiesFilter === "function") {
+    window.initTherapiesFilter();
   }
 
   // 3. Care Pathways Accordion Panes Hover / Focus
   var acc = document.getElementById("acc");
-  if (acc) {
+  if (acc && !acc._accInitialized) {
+    acc._accInitialized = true;
     var panes = acc.querySelectorAll(".pane");
     panes.forEach(function(pane) {
       pane.addEventListener("mouseenter", function() {

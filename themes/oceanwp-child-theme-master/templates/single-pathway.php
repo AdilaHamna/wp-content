@@ -18,6 +18,12 @@ if ( empty( $current_slug ) ) {
 		$current_slug = sanitize_title( $matches[1] );
 	}
 }
+if ( 'injury' === $current_slug ) {
+	$current_slug = 'injury-management';
+}
+if ( 'marma' === $current_slug ) {
+	$current_slug = 'marma-chikitsa';
+}
 
 $all_pathways = kottakkal_get_pathways();
 $pathway = null;
@@ -112,7 +118,7 @@ if ( ! empty( $pathway['docs'] ) ) {
 		<div>
 			<div class="dsec" id="s1">
 				<h2><?php esc_html_e( 'Overview', 'oceanwp' ); ?></h2>
-				<p class="lede"><?php echo esc_html( $pathway['overview'] ); ?></p>
+				<p><?php echo esc_html( $pathway['overview'] ); ?></p>
 			</div>
 
 			<div class="dsec" id="s2">
