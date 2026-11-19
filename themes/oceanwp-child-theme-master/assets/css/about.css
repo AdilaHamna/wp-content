@@ -240,6 +240,23 @@
   }
   .ceo-portrait-wrap {
     max-width: 280px;
+    width: 100%;
+    margin-inline: auto;
+    align-items: center;
+    text-align: center;
+  }
+  .ceo-frame {
+    margin-inline: auto;
+  }
+  .ceo-meta {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+  }
+  .ceo-meta .ceo-name,
+  .ceo-meta .ceo-title,
+  .ceo-meta .ceo-subtitle {
+    text-align: center;
   }
 }
 
