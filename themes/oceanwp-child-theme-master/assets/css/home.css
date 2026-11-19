@@ -1734,6 +1734,24 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .intro {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .intro h2 {
+    max-width: 100%;
+  }
+  .intro .body {
+    max-width: 100%;
+  }
+  .intro .body p {
+    max-width: 100%;
+  }
+  .shead p {
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 860px) {
   .hero {
     min-height: max(560px, 100svh);

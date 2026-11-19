@@ -212,12 +212,33 @@
   }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1024px) {
   .docfull {
     grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
   }
   .docfull .frame {
     position: relative;
     top: 0;
+    max-width: 420px;
+    margin-inline: auto;
+  }
+  .docfull h1 {
+    max-width: 100%;
+  }
+  .docfull .creds,
+  .docfull .creds li {
+    max-width: 100%;
+  }
+  .docfull .body {
+    max-width: 100%;
+  }
+  .docfull .body p,
+  .docfull .body p.lede,
+  .docfull .body .doc-journey {
+    max-width: 100%;
+  }
+  .docfull .specs {
+    max-width: 100%;
   }
 }

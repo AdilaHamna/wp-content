@@ -356,7 +356,7 @@
   }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1024px) {
   .ph2, .dgrid {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -365,5 +365,24 @@
   }
   .ph2 .plate {
     aspect-ratio: 16/12;
+    max-width: 600px;
+    margin-inline: auto;
+  }
+  .phead h1 {
+    max-width: 100%;
+  }
+  .phead .lede {
+    max-width: 100%;
+  }
+  .phead p {
+    max-width: 100%;
+  }
+  .dsec h2,
+  .dsec p,
+  .dsec .lede,
+  .dsec p.lede,
+  .callout,
+  .about-award-card {
+    max-width: 100%;
   }
 }
