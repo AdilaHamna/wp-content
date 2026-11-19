@@ -1,6 +1,10 @@
 # WordPress uploads & temporary directories
 uploads/
 upgrade/
+upgrade-temp-backup/
+ai1wm-backups/
+litespeed/
+*.wpress
 
 # Log & cache files
 *.log
