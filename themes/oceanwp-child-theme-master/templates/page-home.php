@@ -38,34 +38,245 @@ $doctors    = kottakkal_get_doctors();
 	</svg>
 
 	<div class="wrap hero-in">
-		<div class="hero-grid">
-			<div>
+		<div class="hero-grid hero-pk-grid">
+			<div class="hero-pk-content">
 				<span class="label fade-up" style="color:var(--gold-hi)">
-					<?php esc_html_e( 'Ayurvedic centre · Al Qusais, Dubai', 'oceanwp' ); ?>
+					<?php esc_html_e( '✦ Classical Kerala Ayurveda · Shodhana Chikitsa · Dubai', 'oceanwp' ); ?>
 				</span>
-				<h1 id="hero-h" style="margin-top:28px">
-					<span class="ln"><span><?php esc_html_e( 'Ancient wisdom.', 'oceanwp' ); ?></span></span>
-					<span class="ln"><span><em><?php esc_html_e( 'Personalised', 'oceanwp' ); ?></em></span></span>
-					<span class="ln"><span><?php esc_html_e( 'wellness.', 'oceanwp' ); ?></span></span>
+				<h1 id="hero-h" style="margin-top:24px">
+					<span class="ln"><span><?php esc_html_e( 'Classical', 'oceanwp' ); ?></span></span>
+					<span class="ln"><span><em><?php esc_html_e( 'Panchakarma.', 'oceanwp' ); ?></em></span></span>
+					<span class="ln"><span><?php esc_html_e( '5 Sacred Cleansing Therapies.', 'oceanwp' ); ?></span></span>
 				</h1>
-			</div>
 
-			<div>
 				<p class="sub fade-up d1">
-					<?php esc_html_e( 'Discover a more considered approach to wellbeing through traditional Ayurvedic therapies and personalised care at Kottakkal Green Life, Dubai.', 'oceanwp' ); ?>
+					<?php esc_html_e( 'Experience the pinnacle of authentic Ayurvedic purification. Panchakarma is a sacred, physician-guided sequence of five cleansing therapies (Shodhanas) that eliminate deep-seated metabolic toxins (Ama), clear vital channels, and restore tri-doshic equilibrium under DHA-certified Ayurvedic doctors.', 'oceanwp' ); ?>
 				</p>
+
+				<!-- 5 Panchakarma Therapies Quick-Nav List (matches user drawing list) -->
+				<div class="pk-therapies-quicknav fade-up d2" role="navigation" aria-label="<?php esc_attr_e( 'Panchakarma Therapies', 'oceanwp' ); ?>">
+					<div class="pk-qnav-label"><?php esc_html_e( 'The 5 Shodhana Stages:', 'oceanwp' ); ?></div>
+					<div class="pk-qnav-items">
+						<a href="<?php echo esc_url( home_url( '/treatments/vamana/' ) ); ?>" class="pk-qnav-item" data-stage="vamana">
+							<span class="pk-qnum">01</span>
+							<span class="pk-qname">Vamana</span>
+							<span class="pk-qtag"><?php esc_html_e( 'Kapha Emesis', 'oceanwp' ); ?></span>
+						</a>
+						<a href="<?php echo esc_url( home_url( '/treatments/virechana/' ) ); ?>" class="pk-qnav-item" data-stage="virechana">
+							<span class="pk-qnum">02</span>
+							<span class="pk-qname">Virechana</span>
+							<span class="pk-qtag"><?php esc_html_e( 'Pitta Purgation', 'oceanwp' ); ?></span>
+						</a>
+						<a href="<?php echo esc_url( home_url( '/treatments/basti/' ) ); ?>" class="pk-qnav-item" data-stage="basti">
+							<span class="pk-qnum">03</span>
+							<span class="pk-qname">Basti</span>
+							<span class="pk-qtag"><?php esc_html_e( 'Vata Enemas', 'oceanwp' ); ?></span>
+						</a>
+						<a href="<?php echo esc_url( home_url( '/treatments/nasyam/' ) ); ?>" class="pk-qnav-item" data-stage="nasya">
+							<span class="pk-qnum">04</span>
+							<span class="pk-qname">Nasya</span>
+							<span class="pk-qtag"><?php esc_html_e( 'Prana / Nasal', 'oceanwp' ); ?></span>
+						</a>
+						<a href="<?php echo esc_url( home_url( '/treatments/raktamokshana/' ) ); ?>" class="pk-qnav-item" data-stage="raktamokshana">
+							<span class="pk-qnum">05</span>
+							<span class="pk-qname">Raktamokshana</span>
+							<span class="pk-qtag"><?php esc_html_e( 'Blood Cleansing', 'oceanwp' ); ?></span>
+						</a>
+					</div>
+				</div>
+
 				<div class="ctas fade-up d2">
-					<a class="btn btn-ivory mag" href="<?php echo esc_url( home_url( '/book/' ) ); ?>">
-						<?php esc_html_e( 'Book your consultation', 'oceanwp' ); ?>
+					<a class="btn btn-ivory mag" href="<?php echo esc_url( home_url( '/book/?treatment=panchakarma' ) ); ?>">
+						<?php esc_html_e( 'Book Panchakarma Consultation', 'oceanwp' ); ?>
 						<svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5"/></svg>
 					</a>
-					<a class="btn btn-glass mag" href="<?php echo esc_url( home_url( '/treatments/' ) ); ?>">
-						<?php esc_html_e( 'Explore treatments', 'oceanwp' ); ?>
+					<a class="btn btn-glass mag" href="#panchakarma-cycle">
+						<?php esc_html_e( 'Explore 5 Therapies', 'oceanwp' ); ?>
 					</a>
 				</div>
+
 				<div class="meta fade-up d3">
-					<span><?php esc_html_e( 'DHA-certified Ayurvedic doctors', 'oceanwp' ); ?></span>
+					<span><?php esc_html_e( 'DHA-Certified Ayurvedic Doctors', 'oceanwp' ); ?></span>
+					<span><?php esc_html_e( 'Authentic Kerala Tradition', 'oceanwp' ); ?></span>
 					<span><?php esc_html_e( 'Open daily, 9 am – 9 pm', 'oceanwp' ); ?></span>
+				</div>
+			</div>
+
+			<!-- Right Column: The Panchakarma Cycle Component -->
+			<div class="hero-pk-visual fade-up d1">
+				<div class="pk-cycle-card">
+					<div class="pk-cycle-header">
+						<span class="pk-cycle-eyebrow"><?php esc_html_e( 'Classical Purification Flow', 'oceanwp' ); ?></span>
+						<h3 class="pk-cycle-title"><?php esc_html_e( 'Panchakarma Cycle', 'oceanwp' ); ?></h3>
+					</div>
+
+					<div class="pk-cycle-diagram-wrap">
+						<!-- SVG Panchakarma Cycle Diagram -->
+						<svg class="pk-cycle-svg" viewBox="0 0 520 520" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="<?php esc_attr_e( 'Panchakarma 5-stage cycle diagram', 'oceanwp' ); ?>">
+							<defs>
+								<!-- Ambient Central Glow -->
+								<radialGradient id="pkCoreGlow" cx="50%" cy="50%" r="50%">
+									<stop offset="0%" stop-color="#DFC289" stop-opacity="0.22"/>
+									<stop offset="60%" stop-color="#24513F" stop-opacity="0.15"/>
+									<stop offset="100%" stop-color="#0A1D17" stop-opacity="0"/>
+								</radialGradient>
+								<!-- Vamana Gradient -->
+								<radialGradient id="gradVamana" cx="38%" cy="32%" r="68%">
+									<stop offset="0%" stop-color="#D47A4A"/>
+									<stop offset="70%" stop-color="#803816"/>
+									<stop offset="100%" stop-color="#2E1206"/>
+								</radialGradient>
+								<!-- Virechana Gradient -->
+								<radialGradient id="gradVirechana" cx="38%" cy="32%" r="68%">
+									<stop offset="0%" stop-color="#E5A93C"/>
+									<stop offset="70%" stop-color="#8E5B0F"/>
+									<stop offset="100%" stop-color="#331E04"/>
+								</radialGradient>
+								<!-- Basti Gradient -->
+								<radialGradient id="gradBasti" cx="38%" cy="32%" r="68%">
+									<stop offset="0%" stop-color="#5BB381"/>
+									<stop offset="70%" stop-color="#246842"/>
+									<stop offset="100%" stop-color="#0B2316"/>
+								</radialGradient>
+								<!-- Nasya Gradient -->
+								<radialGradient id="gradNasya" cx="38%" cy="32%" r="68%">
+									<stop offset="0%" stop-color="#D96B75"/>
+									<stop offset="70%" stop-color="#7C252D"/>
+									<stop offset="100%" stop-color="#2C090D"/>
+								</radialGradient>
+								<!-- Raktamokshana Gradient -->
+								<radialGradient id="gradRakta" cx="38%" cy="32%" r="68%">
+									<stop offset="0%" stop-color="#4A8FD4"/>
+									<stop offset="70%" stop-color="#1B4D80"/>
+									<stop offset="100%" stop-color="#07192C"/>
+								</radialGradient>
+								<!-- Golden Orbit Gradient -->
+								<linearGradient id="orbitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+									<stop offset="0%" stop-color="#DFC289" stop-opacity="0.6"/>
+									<stop offset="50%" stop-color="#24513F" stop-opacity="0.25"/>
+									<stop offset="100%" stop-color="#DFC289" stop-opacity="0.6"/>
+								</linearGradient>
+								<!-- Filter: Gold Drop Shadow -->
+								<filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+									<feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#DFC289" flood-opacity="0.3"/>
+								</filter>
+								<filter id="nodeShadow" x="-30%" y="-30%" width="160%" height="160%">
+									<feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.6"/>
+								</filter>
+							</defs>
+
+							<!-- Ambient Background Core Glow -->
+							<circle cx="260" cy="260" r="190" fill="url(#pkCoreGlow)"/>
+
+							<!-- Outer Orbital Circle Track (R = 175) -->
+							<circle cx="260" cy="260" r="175" stroke="url(#orbitGrad)" stroke-width="1.8" stroke-dasharray="6 4" class="pk-orbit-line"/>
+							<circle cx="260" cy="260" r="175" stroke="#DFC289" stroke-opacity="0.12" stroke-width="1"/>
+
+							<!-- Directional Flow Arrows Along Orbit (Clockwise: 1->2->3->4->5->1) -->
+							<!-- Arrow 1 -> 2 (Vamana to Virechana, Midpoint angle -54°: x=362.9, y=118.4, rotation 36°) -->
+							<g transform="translate(362.9, 118.4) rotate(36)" class="pk-cycle-arrow" data-flow="1-2">
+								<path d="M-10 -4 L0 0 L-10 4 L-7 0 Z" fill="#DFC289"/>
+								<circle cx="-16" cy="0" r="2" fill="#DFC289" opacity="0.6"/>
+							</g>
+
+							<!-- Arrow 2 -> 3 (Virechana to Basti, Midpoint angle 18°: x=426.4, y=314.1, rotation 108°) -->
+							<g transform="translate(426.4, 314.1) rotate(108)" class="pk-cycle-arrow" data-flow="2-3">
+								<path d="M-10 -4 L0 0 L-10 4 L-7 0 Z" fill="#DFC289"/>
+								<circle cx="-16" cy="0" r="2" fill="#DFC289" opacity="0.6"/>
+							</g>
+
+							<!-- Arrow 3 -> 4 (Basti to Nasya, Midpoint angle 90°: x=260, y=435, rotation 180°) -->
+							<g transform="translate(260, 435) rotate(180)" class="pk-cycle-arrow" data-flow="3-4">
+								<path d="M-10 -4 L0 0 L-10 4 L-7 0 Z" fill="#DFC289"/>
+								<circle cx="-16" cy="0" r="2" fill="#DFC289" opacity="0.6"/>
+							</g>
+
+							<!-- Arrow 4 -> 5 (Nasya to Raktamokshana, Midpoint angle 162°: x=93.6, y=314.1, rotation 252°) -->
+							<g transform="translate(93.6, 314.1) rotate(252)" class="pk-cycle-arrow" data-flow="4-5">
+								<path d="M-10 -4 L0 0 L-10 4 L-7 0 Z" fill="#DFC289"/>
+								<circle cx="-16" cy="0" r="2" fill="#DFC289" opacity="0.6"/>
+							</g>
+
+							<!-- Arrow 5 -> 1 (Raktamokshana to Vamana, Midpoint angle 234°: x=157.1, y=118.4, rotation 324°) -->
+							<g transform="translate(157.1, 118.4) rotate(324)" class="pk-cycle-arrow" data-flow="5-1">
+								<path d="M-10 -4 L0 0 L-10 4 L-7 0 Z" fill="#DFC289"/>
+								<circle cx="-16" cy="0" r="2" fill="#DFC289" opacity="0.6"/>
+							</g>
+
+							<!-- Center Core Hub: Panchakarma Emblem (cx=260, cy=260) -->
+							<g class="pk-center-hub">
+								<circle cx="260" cy="260" r="62" fill="#081812" stroke="#DFC289" stroke-width="1.2" stroke-opacity="0.45"/>
+								<circle cx="260" cy="260" r="56" fill="none" stroke="#DFC289" stroke-width="0.8" stroke-dasharray="3 3" stroke-opacity="0.3"/>
+								<!-- Center Decorative Botanical Ring -->
+								<circle cx="260" cy="260" r="48" fill="#0A1D17" stroke="rgba(223, 194, 137, 0.2)" stroke-width="1"/>
+								<text x="260" y="242" text-anchor="middle" fill="#DFC289" font-size="8.5" font-family="var(--sans)" font-weight="600" letter-spacing="0.22em">AYURVEDA</text>
+								<text x="260" y="262" text-anchor="middle" fill="#F3EEE2" font-size="15" font-family="var(--display)" font-weight="500" letter-spacing="0.04em">PANCHA</text>
+								<text x="260" y="278" text-anchor="middle" fill="#DFC289" font-size="13" font-family="var(--display)" font-style="italic">Karma</text>
+								<text x="260" y="294" text-anchor="middle" fill="rgba(243, 238, 226, 0.65)" font-size="7.5" font-family="var(--sans)" letter-spacing="0.14em">5 SHODHANAS</text>
+							</g>
+
+							<!-- Node 1: Vamana (Top, 260, 85) -->
+							<a href="<?php echo esc_url( home_url( '/treatments/vamana/' ) ); ?>" class="pk-node-link" data-node="vamana" aria-label="Vamana Treatment">
+								<g class="pk-node-group" filter="url(#nodeShadow)">
+									<circle cx="260" cy="85" r="44" fill="url(#gradVamana)" stroke="#DFC289" stroke-width="1.8" class="pk-node-circle"/>
+									<circle cx="260" cy="85" r="40" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="0.8"/>
+									<text x="260" y="70" text-anchor="middle" fill="#DFC289" font-size="8" font-family="var(--sans)" font-weight="700" letter-spacing="0.18em">01 · KAPHA</text>
+									<text x="260" y="88" text-anchor="middle" fill="#FFFFFF" font-size="11.5" font-family="var(--display)" font-weight="600" letter-spacing="0.08em">VAMANA</text>
+									<text x="260" y="103" text-anchor="middle" fill="rgba(243, 238, 226, 0.85)" font-size="7.5" font-family="var(--sans)" font-weight="500">Therapeutic Emesis</text>
+								</g>
+							</a>
+
+							<!-- Node 2: Virechana (Top-Right, 426.4, 205.9) -->
+							<a href="<?php echo esc_url( home_url( '/treatments/virechana/' ) ); ?>" class="pk-node-link" data-node="virechana" aria-label="Virechana Treatment">
+								<g class="pk-node-group" filter="url(#nodeShadow)">
+									<circle cx="426.4" cy="205.9" r="44" fill="url(#gradVirechana)" stroke="#DFC289" stroke-width="1.8" class="pk-node-circle"/>
+									<circle cx="426.4" cy="205.9" r="40" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="0.8"/>
+									<text x="426.4" y="191" text-anchor="middle" fill="#DFC289" font-size="8" font-family="var(--sans)" font-weight="700" letter-spacing="0.18em">02 · PITTA</text>
+									<text x="426.4" y="209" text-anchor="middle" fill="#FFFFFF" font-size="11" font-family="var(--display)" font-weight="600" letter-spacing="0.08em">VIRECHANA</text>
+									<text x="426.4" y="224" text-anchor="middle" fill="rgba(243, 238, 226, 0.85)" font-size="7.5" font-family="var(--sans)" font-weight="500">Therapeutic Purgation</text>
+								</g>
+							</a>
+
+							<!-- Node 3: Basti (Bottom-Right, 362.9, 401.6) -->
+							<a href="<?php echo esc_url( home_url( '/treatments/basti/' ) ); ?>" class="pk-node-link" data-node="basti" aria-label="Basti Treatment">
+								<g class="pk-node-group" filter="url(#nodeShadow)">
+									<circle cx="362.9" cy="401.6" r="44" fill="url(#gradBasti)" stroke="#DFC289" stroke-width="1.8" class="pk-node-circle"/>
+									<circle cx="362.9" cy="401.6" r="40" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="0.8"/>
+									<text x="362.9" y="386.6" text-anchor="middle" fill="#DFC289" font-size="8" font-family="var(--sans)" font-weight="700" letter-spacing="0.18em">03 · VATA</text>
+									<text x="362.9" y="404.6" text-anchor="middle" fill="#FFFFFF" font-size="12" font-family="var(--display)" font-weight="600" letter-spacing="0.08em">BASTI</text>
+									<text x="362.9" y="419.6" text-anchor="middle" fill="rgba(243, 238, 226, 0.85)" font-size="7.5" font-family="var(--sans)" font-weight="500">Medicated Enemas</text>
+								</g>
+							</a>
+
+							<!-- Node 4: Nasya (Bottom-Left, 157.1, 401.6) -->
+							<a href="<?php echo esc_url( home_url( '/treatments/nasyam/' ) ); ?>" class="pk-node-link" data-node="nasya" aria-label="Nasya Treatment">
+								<g class="pk-node-group" filter="url(#nodeShadow)">
+									<circle cx="157.1" cy="401.6" r="44" fill="url(#gradNasya)" stroke="#DFC289" stroke-width="1.8" class="pk-node-circle"/>
+									<circle cx="157.1" cy="401.6" r="40" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="0.8"/>
+									<text x="157.1" y="386.6" text-anchor="middle" fill="#DFC289" font-size="8" font-family="var(--sans)" font-weight="700" letter-spacing="0.18em">04 · PRANA</text>
+									<text x="157.1" y="404.6" text-anchor="middle" fill="#FFFFFF" font-size="12" font-family="var(--display)" font-weight="600" letter-spacing="0.08em">NASYA</text>
+									<text x="157.1" y="419.6" text-anchor="middle" fill="rgba(243, 238, 226, 0.85)" font-size="7.5" font-family="var(--sans)" font-weight="500">Nasal Administration</text>
+								</g>
+							</a>
+
+							<!-- Node 5: Raktamokshana (Top-Left, 93.6, 205.9) -->
+							<a href="<?php echo esc_url( home_url( '/treatments/raktamokshana/' ) ); ?>" class="pk-node-link" data-node="raktamokshana" aria-label="Raktamokshana Treatment">
+								<g class="pk-node-group" filter="url(#nodeShadow)">
+									<circle cx="93.6" cy="205.9" r="44" fill="url(#gradRakta)" stroke="#DFC289" stroke-width="1.8" class="pk-node-circle"/>
+									<circle cx="93.6" cy="205.9" r="40" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="0.8"/>
+									<text x="93.6" y="191" text-anchor="middle" fill="#DFC289" font-size="7.5" font-family="var(--sans)" font-weight="700" letter-spacing="0.16em">05 · RAKTA</text>
+									<text x="93.6" y="209" text-anchor="middle" fill="#FFFFFF" font-size="9.5" font-family="var(--display)" font-weight="600" letter-spacing="0.04em">RAKTAMOKSHANA</text>
+									<text x="93.6" y="224" text-anchor="middle" fill="rgba(243, 238, 226, 0.85)" font-size="7.5" font-family="var(--sans)" font-weight="500">Blood Cleansing</text>
+								</g>
+							</a>
+						</svg>
+					</div>
+
+					<!-- Live Interactive Stage Indicator Bar -->
+					<div class="pk-cycle-status-bar" id="pkStatusBanner">
+						<span class="pk-status-dot"></span>
+						<span class="pk-status-text" id="pkStatusText"><?php esc_html_e( 'Interactive Cycle: Tap or hover any of the 5 Shodhana therapies to explore its action.', 'oceanwp' ); ?></span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -73,6 +284,130 @@ $doctors    = kottakkal_get_doctors();
 
 	<div class="cue" aria-hidden="true">
 		<?php esc_html_e( 'Scroll', 'oceanwp' ); ?><i></i>
+	</div>
+</section>
+
+<!-- The 5 Pillars of Panchakarma Detailed Section -->
+<section class="pk-pillars-sec" id="panchakarma-cycle" aria-labelledby="pk-sec-h">
+	<div class="wrap">
+		<div class="pk-sec-header">
+			<span class="label" style="color:var(--gold-hi)">
+				<?php esc_html_e( 'Panchakarma Protocol · Shodhana Chikitsa', 'oceanwp' ); ?>
+			</span>
+			<h2 id="pk-sec-h" style="margin-top:16px">
+				<?php esc_html_e( 'The Five Sacred Purifications.', 'oceanwp' ); ?> <em><?php esc_html_e( 'Rooted in Classical Kerala Ayurveda.', 'oceanwp' ); ?></em>
+			</h2>
+			<p class="lede" style="margin-top:20px">
+				<?php esc_html_e( 'Unlike superficial treatments, classical Panchakarma works at the deepest cellular level to detach, liquefy, and systematically eliminate metabolic toxins (Ama), restoring harmony across Vata, Pitta, and Kapha.', 'oceanwp' ); ?>
+			</p>
+		</div>
+
+		<div class="pk-cards-grid">
+			<!-- 1. Vamana Card -->
+			<article class="pk-card pk-card-vamana" id="pk-card-vamana">
+				<div class="pk-card-badge"><span>01</span> · <?php esc_html_e( 'Kapha Elimination', 'oceanwp' ); ?></div>
+				<h3 class="pk-card-title"><?php esc_html_e( 'Vamana', 'oceanwp' ); ?></h3>
+				<span class="pk-card-sub"><?php esc_html_e( 'Therapeutic Emesis', 'oceanwp' ); ?></span>
+				<p class="pk-card-desc">
+					<?php esc_html_e( 'The primary purificatory procedure for Kapha disorders. After internal oleation (Snehana) and sweating (Swedana), induced therapeutic emesis eliminates deep-seated toxins from the respiratory and upper digestive tract.', 'oceanwp' ); ?>
+				</p>
+				<div class="pk-card-details">
+					<div class="pk-detail-item">
+						<b><?php esc_html_e( 'Action:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Respiratory & mucus toxin purge', 'oceanwp' ); ?>
+					</div>
+					<div class="pk-detail-item">
+						<b><?php esc_html_e( 'Indications:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Asthma, chronic allergies, psoriasis, obesity, hyperacidity', 'oceanwp' ); ?>
+					</div>
+				</div>
+				<a href="<?php echo esc_url( home_url( '/treatments/vamana/' ) ); ?>" class="pk-card-link">
+					<?php esc_html_e( 'Explore Vamana Details', 'oceanwp' ); ?> →
+				</a>
+			</article>
+
+			<!-- 2. Virechana Card -->
+			<article class="pk-card pk-card-virechana" id="pk-card-virechana">
+				<div class="pk-card-badge"><span>02</span> · <?php esc_html_e( 'Pitta Elimination', 'oceanwp' ); ?></div>
+				<h3 class="pk-card-title"><?php esc_html_e( 'Virechana', 'oceanwp' ); ?></h3>
+				<span class="pk-card-sub"><?php esc_html_e( 'Therapeutic Purgation', 'oceanwp' ); ?></span>
+				<p class="pk-card-desc">
+					<?php esc_html_e( 'The supreme purification for Pitta-dominant ailments. Individualized herbal purgation clears heat toxins from the liver, gallbladder, and small intestine, calming acute internal inflammation and chronic skin eruptions.', 'oceanwp' ); ?>
+				</p>
+				<div class="pk-card-details">
+					<div class="pk-detail-item">
+						<b><?php esc_html_e( 'Action:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Liver, bile & intestinal detoxification', 'oceanwp' ); ?>
+					</div>
+					<div class="pk-detail-item">
+						<b><?php esc_html_e( 'Indications:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Dermatitis, chronic acidity, eczema, sluggish liver, gut inflammation', 'oceanwp' ); ?>
+					</div>
+				</div>
+				<a href="<?php echo esc_url( home_url( '/treatments/virechana/' ) ); ?>" class="pk-card-link">
+					<?php esc_html_e( 'Explore Virechana Details', 'oceanwp' ); ?> →
+				</a>
+			</article>
+
+			<!-- 3. Basti Card -->
+			<article class="pk-card pk-card-basti" id="pk-card-basti">
+				<div class="pk-card-badge"><span>03</span> · <?php esc_html_e( 'Vata Balance', 'oceanwp' ); ?></div>
+				<h3 class="pk-card-title"><?php esc_html_e( 'Basti', 'oceanwp' ); ?></h3>
+				<span class="pk-card-sub"><?php esc_html_e( 'Medicated Enemas · King of Panchakarma', 'oceanwp' ); ?></span>
+				<p class="pk-card-desc">
+					<?php esc_html_e( 'Revered as Ardha Chikitsa (half of all Ayurvedic treatments). Administered into the colon—the primary seat of Vata—using herbal decoctions (Niruha) and medicated oils (Anuvasana) to lubricate joints and restore deep nerve vitality.', 'oceanwp' ); ?>
+				</p>
+				<div class="pk-card-details">
+					<div class="pk-detail-item">
+						<b><?php esc_html_e( 'Action:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Colon purification & nervous system regeneration', 'oceanwp' ); ?>
+					</div>
+					<div class="pk-detail-item">
+						<b><?php esc_html_e( 'Indications:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Sciatica, arthritis, lumbar spondylosis, neuromuscular stiffness', 'oceanwp' ); ?>
+					</div>
+				</div>
+				<a href="<?php echo esc_url( home_url( '/treatments/basti/' ) ); ?>" class="pk-card-link">
+					<?php esc_html_e( 'Explore Basti Details', 'oceanwp' ); ?> →
+				</a>
+			</article>
+
+			<!-- 4. Nasya Card -->
+			<article class="pk-card pk-card-nasya" id="pk-card-nasya">
+				<div class="pk-card-badge"><span>04</span> · <?php esc_html_e( 'Prana & Sensory Detox', 'oceanwp' ); ?></div>
+				<h3 class="pk-card-title"><?php esc_html_e( 'Nasya', 'oceanwp' ); ?></h3>
+				<span class="pk-card-sub"><?php esc_html_e( 'Nasal Administration', 'oceanwp' ); ?></span>
+				<p class="pk-card-desc">
+					<?php esc_html_e( 'The gateway to the head and consciousness. Measured drops of classical medicated oils (Anu Thailam) are instilled into the nasal passages after facial massage and mild herbal steam to clear stagnant toxins above the collarbone.', 'oceanwp' ); ?>
+				</p>
+				<div class="pk-card-details">
+					<div class="pk-detail-item">
+						<b><?php esc_html_e( 'Action:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Supraclavicular & sensory pathway cleansing', 'oceanwp' ); ?>
+					</div>
+					<div class="pk-detail-item">
+						<b><?php esc_html_e( 'Indications:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Chronic migraines, cervical spondylosis, sinusitis, hair fall, insomnia', 'oceanwp' ); ?>
+					</div>
+				</div>
+				<a href="<?php echo esc_url( home_url( '/treatments/nasyam/' ) ); ?>" class="pk-card-link">
+					<?php esc_html_e( 'Explore Nasya Details', 'oceanwp' ); ?> →
+				</a>
+			</article>
+
+			<!-- 5. Raktamokshana Card -->
+			<article class="pk-card pk-card-raktamokshana" id="pk-card-raktamokshana">
+				<div class="pk-card-badge"><span>05</span> · <?php esc_html_e( 'Blood Purification', 'oceanwp' ); ?></div>
+				<h3 class="pk-card-title"><?php esc_html_e( 'Raktamokshana', 'oceanwp' ); ?></h3>
+				<span class="pk-card-sub"><?php esc_html_e( 'Controlled Bloodletting', 'oceanwp' ); ?></span>
+				<p class="pk-card-desc">
+					<?php esc_html_e( 'A highly specialized micro-cleansing protocol for intractable skin disorders and localized vascular toxicity. Utilizes medicinal leeches (Jalouka Avacharana) or clinical siravyadha under sterile medical supervision.', 'oceanwp' ); ?>
+				</p>
+				<div class="pk-card-details">
+					<div class="pk-detail-item">
+						<b><?php esc_html_e( 'Action:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Microvascular toxin evacuation & bio-enzyme release', 'oceanwp' ); ?>
+					</div>
+					<div class="pk-detail-item">
+						<b><?php esc_html_e( 'Indications:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Severe psoriasis, chronic eczema, varicose veins, stubborn skin heat', 'oceanwp' ); ?>
+					</div>
+				</div>
+				<a href="<?php echo esc_url( home_url( '/treatments/raktamokshana/' ) ); ?>" class="pk-card-link">
+					<?php esc_html_e( 'Explore Raktamokshana Details', 'oceanwp' ); ?> →
+				</a>
+			</article>
+		</div>
 	</div>
 </section>
 

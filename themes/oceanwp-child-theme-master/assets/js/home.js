@@ -162,4 +162,83 @@
     });
   }
 
+  // 7. Panchakarma Cycle & Navigator Interactive Sync
+  var pkNodes = document.querySelectorAll(".pk-node-link");
+  var pkQuickItems = document.querySelectorAll(".pk-qnav-item");
+  var pkStatusText = document.getElementById("pkStatusText");
+  var pkCards = document.querySelectorAll(".pk-card");
+
+  var pkData = {
+    "vamana": {
+      title: "Step 01: Vamana (Therapeutic Emesis)",
+      text: "Eliminates deep-seated Kapha toxins from respiratory & upper gastric passages."
+    },
+    "virechana": {
+      title: "Step 02: Virechana (Therapeutic Purgation)",
+      text: "Cleanses excess Pitta from liver, gallbladder & gut to subdue internal heat."
+    },
+    "basti": {
+      title: "Step 03: Basti (Medicated Enemas)",
+      text: "The King of Panchakarma. Rejuvenates Vata, colon, joints & deep nerve vitality."
+    },
+    "nasya": {
+      title: "Step 04: Nasya (Nasal Administration)",
+      text: "Cleanses cervical channels, sinuses, senses & mind through medicated herbal oils."
+    },
+    "raktamokshana": {
+      title: "Step 05: Raktamokshana (Blood Cleansing)",
+      text: "Targeted vascular purification to clear chronic skin disorders & toxic blood stagnation."
+    }
+  };
+
+  var setActivePK = function(stageKey) {
+    if (!stageKey) {
+      pkNodes.forEach(function(n) { n.classList.remove("is-active"); });
+      pkQuickItems.forEach(function(q) { q.classList.remove("is-active"); });
+      pkCards.forEach(function(c) { c.classList.remove("is-active"); });
+      if (pkStatusText) {
+        pkStatusText.textContent = "Interactive Cycle: Tap or hover any of the 5 Shodhana therapies to explore its action.";
+      }
+      return;
+    }
+
+    pkNodes.forEach(function(n) {
+      n.classList.toggle("is-active", n.getAttribute("data-node") === stageKey);
+    });
+    pkQuickItems.forEach(function(q) {
+      q.classList.toggle("is-active", q.getAttribute("data-stage") === stageKey);
+    });
+    pkCards.forEach(function(c) {
+      c.classList.toggle("is-active", c.id === "pk-card-" + stageKey);
+    });
+
+    if (pkStatusText && pkData[stageKey]) {
+      pkStatusText.textContent = pkData[stageKey].title + " — " + pkData[stageKey].text;
+    }
+  };
+
+  pkNodes.forEach(function(n) {
+    n.addEventListener("mouseenter", function() {
+      setActivePK(n.getAttribute("data-node"));
+    });
+    n.addEventListener("focus", function() {
+      setActivePK(n.getAttribute("data-node"));
+    });
+    n.addEventListener("mouseleave", function() {
+      setActivePK(null);
+    });
+  });
+
+  pkQuickItems.forEach(function(q) {
+    q.addEventListener("mouseenter", function() {
+      setActivePK(q.getAttribute("data-stage"));
+    });
+    q.addEventListener("focus", function() {
+      setActivePK(q.getAttribute("data-stage"));
+    });
+    q.addEventListener("mouseleave", function() {
+      setActivePK(null);
+    });
+  });
+
 })();
