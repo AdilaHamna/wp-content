@@ -11,7 +11,7 @@
   min-height: clamp(600px, 100svh, 880px);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   overflow: hidden;
   background: #0A1D17;
   color: var(--on-dark);
@@ -101,8 +101,8 @@
   position: relative;
   z-index: 3;
   width: 100%;
-  padding-top: calc(92px + clamp(16px, 2.5vh, 32px));
-  padding-bottom: clamp(48px, 6vh, 72px);
+  padding-top: calc(96px + clamp(20px, 3.5vh, 44px));
+  padding-bottom: clamp(40px, 5vh, 64px);
 }
 
 .hero h1 {
@@ -348,20 +348,6 @@
   overflow: hidden;
 }
 
-.pk-cycle-card::before {
-  content: "";
-  position: absolute;
-  inset: -100px;
-  background: radial-gradient(circle at 50% 50%, rgba(223, 194, 137, 0.08) 0%, transparent 60%);
-  pointer-events: none;
-  animation: pkCardAura 8s ease-in-out infinite alternate;
-}
-
-@keyframes pkCardAura {
-  0% { transform: scale(0.9); opacity: 0.6; }
-  100% { transform: scale(1.1); opacity: 1; }
-}
-
 .pk-cycle-header {
   text-align: center;
   margin-bottom: 6px;
@@ -410,13 +396,7 @@
 }
 
 .pk-cycle-arrow {
-  animation: pkArrowPulse 2.4s ease-in-out infinite;
-  transform-box: fill-box;
-}
-
-@keyframes pkArrowPulse {
-  0%, 100% { opacity: 0.75; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.18); filter: drop-shadow(0 0 6px rgba(223, 194, 137, 0.85)); }
+  opacity: 0.85;
 }
 
 .pk-node-link {

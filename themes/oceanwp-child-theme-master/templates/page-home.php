@@ -265,7 +265,7 @@ $doctors    = kottakkal_get_doctors();
 									<circle cx="93.6" cy="205.9" r="55" fill="url(#gradRakta)" stroke="#DFC289" stroke-width="2" class="pk-node-circle"/>
 									<circle cx="93.6" cy="205.9" r="50" fill="none" stroke="rgba(255, 255, 255, 0.25)" stroke-width="1"/>
 									<text x="93.6" y="187" text-anchor="middle" fill="#DFC289" font-size="9.5" font-family="var(--sans)" font-weight="700" letter-spacing="0.16em">05 · RAKTA</text>
-									<text x="93.6" y="209" text-anchor="middle" fill="#FFFFFF" font-size="9" font-family="var(--display)" font-weight="700" letter-spacing="0.01em" textLength="76" lengthAdjust="spacingAndGlyphs">RAKTAMOKSHANA</text>
+									<text x="93.6" y="209" text-anchor="middle" fill="#FFFFFF" font-size="11.5" font-family="var(--display)" font-weight="700" letter-spacing="0.02em" textLength="88" lengthAdjust="spacingAndGlyphs">RAKTAMOKSHANA</text>
 									<text x="93.6" y="227" text-anchor="middle" fill="#F3EEE2" font-size="9.5" font-family="var(--sans)" font-weight="600">Blood Cleansing</text>
 								</g>
 							</a>

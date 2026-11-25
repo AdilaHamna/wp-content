@@ -622,21 +622,7 @@
     // Hero section scroll scrub
     var hero = document.querySelector(".hero");
     if (hero) {
-      var heroIn = hero.querySelector(".hero-in");
       var heroCv = hero.querySelector("canvas");
-      if (heroIn) {
-        gsap.to(heroIn, {
-          yPercent: -14,
-          opacity: 0.15,
-          ease: "none",
-          scrollTrigger: {
-            trigger: hero,
-            start: "top top",
-            end: "bottom top",
-            scrub: true
-          }
-        });
-      }
       if (heroCv) {
         gsap.to(heroCv, {
           yPercent: 16,
