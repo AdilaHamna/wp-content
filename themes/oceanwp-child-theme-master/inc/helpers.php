@@ -349,6 +349,7 @@ function kottakkal_get_default_treatments() {
 				array( 'Indications', 'Whole-back pain, spinal stiffness, posture fatigue, degenerative spinal changes' ),
 			),
 			'paths'   => array( 'bahya-basti', 'joint', 'degenerative' ),
+			'img'     => 'assets/img/t-prishta-basti.jpg',
 		),
 		array(
 			'id'      => 'janu-basti',
@@ -368,6 +369,7 @@ function kottakkal_get_default_treatments() {
 				array( 'Indications', 'Knee osteoarthritis, cartilage wear, ligament strain, crepitus, stiffness' ),
 			),
 			'paths'   => array( 'bahya-basti', 'joint', 'degenerative' ),
+			'img'     => 'assets/img/t-janu-basti.jpg',
 		),
 		array(
 			'id'      => 'shiro-basti',
@@ -444,6 +446,7 @@ function kottakkal_get_default_treatments() {
 				array( 'Indications', 'Rheumatoid arthritis, generalized swelling, hemiplegia, metabolic obesity, inflammatory joint pain' ),
 			),
 			'paths'   => array( 'dhara-head', 'joint', 'degenerative', 'weight' ),
+			'img'     => 'assets/img/t-dhanyamla-dhara.jpg',
 		),
 		array(
 			'id'      => 'takra-dhara',
@@ -482,6 +485,7 @@ function kottakkal_get_default_treatments() {
 				array( 'Indications', 'Psoriasis, eczema, allergic dermatitis, burning skin sensations, systemic toxic heat' ),
 			),
 			'paths'   => array( 'other-therapies', 'beauty', 'degenerative' ),
+			'img'     => 'assets/img/t-sarvanga-lepanam.jpg',
 		),
 		array(
 			'id'      => 'udhwarthanam',
@@ -579,6 +583,7 @@ function kottakkal_get_default_treatments() {
 				array( 'Indications', 'Alopecia Areata, patchy hair loss, localized eczema, stubborn lichenified lesions' ),
 			),
 			'paths'   => array( 'other-therapies', 'beauty', 'degenerative' ),
+			'img'     => 'assets/img/t-prachanam.jpg',
 		),
 		array(
 			'id'      => 'njavara-kizhi',
@@ -1740,7 +1745,7 @@ function kottakkal_render_plate( $key, $ill, $tone = 'oil', $cap = '', $ratio = 
 		't-shiro-basti'       => 'assets/img/t-shiro-basti.jpg',
 		't-dhanyamla-dhara'   => 'assets/img/t-dhanyamla-dhara.jpg',
 		't-takra-dhara'       => 'assets/img/t-takra-dhara.jpg',
-		't-sarvanga-lepanam'  => 'assets/img/t-sarvanga-lepanam.webp',
+		't-sarvanga-lepanam'  => file_exists( $theme_dir . '/assets/img/t-sarvanga-lepanam.jpg' ) ? 'assets/img/t-sarvanga-lepanam.jpg' : 'assets/img/t-sarvanga-lepanam.webp',
 		't-tarpanam'          => 'assets/img/t-tarpanam.jpg',
 		't-akshi-seka'        => 'assets/img/t-akshi-seka.webp',
 		't-karnapoorana'      => 'assets/img/t-karnapoorana.jpg',
