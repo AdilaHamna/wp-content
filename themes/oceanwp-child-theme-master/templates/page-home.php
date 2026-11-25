@@ -40,8 +40,8 @@ $doctors    = kottakkal_get_doctors();
 	<div class="wrap hero-in">
 		<div class="hero-grid hero-pk-grid">
 			<div class="hero-pk-content">
-				<span class="label fade-up" style="color:var(--gold-hi)">
-					<?php esc_html_e( '✦ Classical Kerala Ayurveda · Shodhana Chikitsa · Dubai', 'oceanwp' ); ?>
+				<span class="label hero-pk-label fade-up" style="color:var(--gold-hi)">
+					<?php esc_html_e( 'Classical Kerala Ayurveda · Shodhana Chikitsa · Dubai', 'oceanwp' ); ?>
 				</span>
 				<h1 id="hero-h" style="margin-top:24px">
 					<span class="ln"><span><?php esc_html_e( 'Classical', 'oceanwp' ); ?></span></span>
@@ -309,18 +309,14 @@ $doctors    = kottakkal_get_doctors();
 				<h3 class="pk-card-title"><?php esc_html_e( 'Vamana', 'oceanwp' ); ?></h3>
 				<span class="pk-card-sub"><?php esc_html_e( 'Therapeutic Emesis', 'oceanwp' ); ?></span>
 				<p class="pk-card-desc">
-					<?php esc_html_e( 'The primary purificatory procedure for Kapha disorders. After internal oleation (Snehana) and sweating (Swedana), induced therapeutic emesis eliminates deep-seated toxins from the respiratory and upper digestive tract.', 'oceanwp' ); ?>
+					<?php esc_html_e( 'Physician-guided therapeutic emesis eliminating deep Kapha toxins and mucus congestion from respiratory pathways.', 'oceanwp' ); ?>
 				</p>
 				<div class="pk-card-details">
-					<div class="pk-detail-item">
-						<b><?php esc_html_e( 'Action:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Respiratory & mucus toxin purge', 'oceanwp' ); ?>
-					</div>
-					<div class="pk-detail-item">
-						<b><?php esc_html_e( 'Indications:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Asthma, chronic allergies, psoriasis, obesity, hyperacidity', 'oceanwp' ); ?>
-					</div>
+					<div class="pk-detail-item"><b><?php esc_html_e( 'Action:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Upper GI & respiratory purge', 'oceanwp' ); ?></div>
+					<div class="pk-detail-item"><b><?php esc_html_e( 'Indications:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Asthma, allergies, psoriasis, hyperacidity', 'oceanwp' ); ?></div>
 				</div>
 				<a href="<?php echo esc_url( home_url( '/treatments/vamana/' ) ); ?>" class="pk-card-link">
-					<?php esc_html_e( 'Explore Vamana Details', 'oceanwp' ); ?> →
+					<?php esc_html_e( 'Explore Details', 'oceanwp' ); ?> →
 				</a>
 			</article>
 
@@ -330,18 +326,14 @@ $doctors    = kottakkal_get_doctors();
 				<h3 class="pk-card-title"><?php esc_html_e( 'Virechana', 'oceanwp' ); ?></h3>
 				<span class="pk-card-sub"><?php esc_html_e( 'Therapeutic Purgation', 'oceanwp' ); ?></span>
 				<p class="pk-card-desc">
-					<?php esc_html_e( 'The supreme purification for Pitta-dominant ailments. Individualized herbal purgation clears heat toxins from the liver, gallbladder, and small intestine, calming acute internal inflammation and chronic skin eruptions.', 'oceanwp' ); ?>
+					<?php esc_html_e( 'Controlled herbal purgation flushing excess Pitta heat toxins from the liver, gallbladder, and small intestine.', 'oceanwp' ); ?>
 				</p>
 				<div class="pk-card-details">
-					<div class="pk-detail-item">
-						<b><?php esc_html_e( 'Action:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Liver, bile & intestinal detoxification', 'oceanwp' ); ?>
-					</div>
-					<div class="pk-detail-item">
-						<b><?php esc_html_e( 'Indications:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Dermatitis, chronic acidity, eczema, sluggish liver, gut inflammation', 'oceanwp' ); ?>
-					</div>
+					<div class="pk-detail-item"><b><?php esc_html_e( 'Action:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Liver & intestinal detox', 'oceanwp' ); ?></div>
+					<div class="pk-detail-item"><b><?php esc_html_e( 'Indications:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Dermatitis, chronic acidity, eczema, sluggish liver', 'oceanwp' ); ?></div>
 				</div>
 				<a href="<?php echo esc_url( home_url( '/treatments/virechana/' ) ); ?>" class="pk-card-link">
-					<?php esc_html_e( 'Explore Virechana Details', 'oceanwp' ); ?> →
+					<?php esc_html_e( 'Explore Details', 'oceanwp' ); ?> →
 				</a>
 			</article>
 
@@ -349,20 +341,16 @@ $doctors    = kottakkal_get_doctors();
 			<article class="pk-card pk-card-basti" id="pk-card-basti">
 				<div class="pk-card-badge"><span>03</span> · <?php esc_html_e( 'Vata Balance', 'oceanwp' ); ?></div>
 				<h3 class="pk-card-title"><?php esc_html_e( 'Basti', 'oceanwp' ); ?></h3>
-				<span class="pk-card-sub"><?php esc_html_e( 'Medicated Enemas · King of Panchakarma', 'oceanwp' ); ?></span>
+				<span class="pk-card-sub"><?php esc_html_e( 'Medicated Enemas', 'oceanwp' ); ?></span>
 				<p class="pk-card-desc">
-					<?php esc_html_e( 'Revered as Ardha Chikitsa (half of all Ayurvedic treatments). Administered into the colon—the primary seat of Vata—using herbal decoctions (Niruha) and medicated oils (Anuvasana) to lubricate joints and restore deep nerve vitality.', 'oceanwp' ); ?>
+					<?php esc_html_e( 'Classical herbal decoction and oil enemas administered to pacify Vata, lubricate tissues, and rejuvenate nerves.', 'oceanwp' ); ?>
 				</p>
 				<div class="pk-card-details">
-					<div class="pk-detail-item">
-						<b><?php esc_html_e( 'Action:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Colon purification & nervous system regeneration', 'oceanwp' ); ?>
-					</div>
-					<div class="pk-detail-item">
-						<b><?php esc_html_e( 'Indications:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Sciatica, arthritis, lumbar spondylosis, neuromuscular stiffness', 'oceanwp' ); ?>
-					</div>
+					<div class="pk-detail-item"><b><?php esc_html_e( 'Action:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Colon & nerve regeneration', 'oceanwp' ); ?></div>
+					<div class="pk-detail-item"><b><?php esc_html_e( 'Indications:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Sciatica, arthritis, lumbar stiffness, joint pain', 'oceanwp' ); ?></div>
 				</div>
 				<a href="<?php echo esc_url( home_url( '/treatments/basti/' ) ); ?>" class="pk-card-link">
-					<?php esc_html_e( 'Explore Basti Details', 'oceanwp' ); ?> →
+					<?php esc_html_e( 'Explore Details', 'oceanwp' ); ?> →
 				</a>
 			</article>
 
@@ -372,18 +360,14 @@ $doctors    = kottakkal_get_doctors();
 				<h3 class="pk-card-title"><?php esc_html_e( 'Nasya', 'oceanwp' ); ?></h3>
 				<span class="pk-card-sub"><?php esc_html_e( 'Nasal Administration', 'oceanwp' ); ?></span>
 				<p class="pk-card-desc">
-					<?php esc_html_e( 'The gateway to the head and consciousness. Measured drops of classical medicated oils (Anu Thailam) are instilled into the nasal passages after facial massage and mild herbal steam to clear stagnant toxins above the collarbone.', 'oceanwp' ); ?>
+					<?php esc_html_e( 'Medicated oil instillation into nasal passages to cleanse sinuses, awaken senses, and relieve supraclavicular stagnation.', 'oceanwp' ); ?>
 				</p>
 				<div class="pk-card-details">
-					<div class="pk-detail-item">
-						<b><?php esc_html_e( 'Action:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Supraclavicular & sensory pathway cleansing', 'oceanwp' ); ?>
-					</div>
-					<div class="pk-detail-item">
-						<b><?php esc_html_e( 'Indications:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Chronic migraines, cervical spondylosis, sinusitis, hair fall, insomnia', 'oceanwp' ); ?>
-					</div>
+					<div class="pk-detail-item"><b><?php esc_html_e( 'Action:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Head & sensory purification', 'oceanwp' ); ?></div>
+					<div class="pk-detail-item"><b><?php esc_html_e( 'Indications:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Migraines, cervical spondylosis, sinusitis, insomnia', 'oceanwp' ); ?></div>
 				</div>
 				<a href="<?php echo esc_url( home_url( '/treatments/nasyam/' ) ); ?>" class="pk-card-link">
-					<?php esc_html_e( 'Explore Nasya Details', 'oceanwp' ); ?> →
+					<?php esc_html_e( 'Explore Details', 'oceanwp' ); ?> →
 				</a>
 			</article>
 
@@ -393,18 +377,14 @@ $doctors    = kottakkal_get_doctors();
 				<h3 class="pk-card-title"><?php esc_html_e( 'Raktamokshana', 'oceanwp' ); ?></h3>
 				<span class="pk-card-sub"><?php esc_html_e( 'Controlled Bloodletting', 'oceanwp' ); ?></span>
 				<p class="pk-card-desc">
-					<?php esc_html_e( 'A highly specialized micro-cleansing protocol for intractable skin disorders and localized vascular toxicity. Utilizes medicinal leeches (Jalouka Avacharana) or clinical siravyadha under sterile medical supervision.', 'oceanwp' ); ?>
+					<?php esc_html_e( 'Specialized medical leech therapy (Jalouka) evacuating localized vascular toxins to calm severe inflammatory skin flare-ups.', 'oceanwp' ); ?>
 				</p>
 				<div class="pk-card-details">
-					<div class="pk-detail-item">
-						<b><?php esc_html_e( 'Action:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Microvascular toxin evacuation & bio-enzyme release', 'oceanwp' ); ?>
-					</div>
-					<div class="pk-detail-item">
-						<b><?php esc_html_e( 'Indications:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Severe psoriasis, chronic eczema, varicose veins, stubborn skin heat', 'oceanwp' ); ?>
-					</div>
+					<div class="pk-detail-item"><b><?php esc_html_e( 'Action:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Microvascular toxin release', 'oceanwp' ); ?></div>
+					<div class="pk-detail-item"><b><?php esc_html_e( 'Indications:', 'oceanwp' ); ?></b> <?php esc_html_e( 'Psoriasis, chronic eczema, varicose congestion', 'oceanwp' ); ?></div>
 				</div>
 				<a href="<?php echo esc_url( home_url( '/treatments/raktamokshana/' ) ); ?>" class="pk-card-link">
-					<?php esc_html_e( 'Explore Raktamokshana Details', 'oceanwp' ); ?> →
+					<?php esc_html_e( 'Explore Details', 'oceanwp' ); ?> →
 				</a>
 			</article>
 		</div>
