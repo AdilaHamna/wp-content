@@ -430,6 +430,12 @@
   transform-origin: center;
 }
 
+.pk-node-group text,
+.pk-center-hub text {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
+  pointer-events: none;
+}
+
 .pk-node-circle {
   transition: stroke 0.3s ease, stroke-width 0.3s ease;
 }
@@ -493,12 +499,21 @@
 }
 
 .pk-sec-header {
-  max-width: 860px;
-  margin-bottom: 44px;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 32px;
 }
 
 .pk-sec-header h2 {
   font-size: var(--fs-1);
+  line-height: 1.08;
+  max-width: 100%;
+}
+
+.pk-sec-header .lede {
+  max-width: 100%;
+  line-height: 1.55;
+  margin-top: 14px;
 }
 
 .pk-cards-grid {
@@ -545,10 +560,11 @@
 }
 
 .pk-card-badge {
-  font: 600 0.72rem/1 var(--sans);
+  font: 600 0.72rem/1.45 var(--sans);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--gold-hi);
+  line-height: 1.45;
 }
 
 .pk-card-badge span {
@@ -635,18 +651,59 @@
 }
 
 @media (max-width: 768px) {
+  .hero {
+    min-height: auto !important;
+    height: auto !important;
+  }
+  .hero-in {
+    padding-bottom: 16px !important;
+  }
+  .cue {
+    display: none !important;
+  }
+  .hero-pk-visual {
+    margin-bottom: 0;
+  }
   .pk-cycle-card {
-    padding: 16px;
+    padding: 16px 12px 14px;
     border-radius: 20px;
+    max-width: 100%;
   }
   .pk-cycle-diagram-wrap {
-    max-width: 380px;
+    max-width: 100%;
+    width: 100%;
   }
 }
 
 @media (max-width: 520px) {
+  .hero {
+    min-height: auto !important;
+    height: auto !important;
+  }
+  .hero-in {
+    padding-bottom: 8px !important;
+  }
+  .cue {
+    display: none !important;
+  }
+  .hero-pk-visual {
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+  .pk-cycle-card {
+    padding: 14px 8px 12px;
+    border-radius: 18px;
+    max-width: 100%;
+  }
   .pk-cycle-diagram-wrap {
-    max-width: 320px;
+    max-width: 370px;
+    width: 100%;
+  }
+  .pk-cycle-status-bar {
+    margin-top: 8px;
+    padding: 8px 12px;
+    font-size: 0.74rem;
+    min-height: 38px;
   }
   .pk-cards-grid {
     grid-template-columns: 1fr;

@@ -46,11 +46,11 @@ $doctors    = kottakkal_get_doctors();
 				<h1 id="hero-h" style="margin-top:24px">
 					<span class="ln"><span><?php esc_html_e( 'Classical', 'oceanwp' ); ?></span></span>
 					<span class="ln"><span><em><?php esc_html_e( 'Panchakarma.', 'oceanwp' ); ?></em></span></span>
-					<span class="ln"><span><?php esc_html_e( '5 Sacred Cleansing Therapies.', 'oceanwp' ); ?></span></span>
+					<span class="ln"><span><?php esc_html_e( '5 Sacred Therapies.', 'oceanwp' ); ?></span></span>
 				</h1>
 
 				<p class="sub fade-up d1">
-					<?php esc_html_e( 'Experience the pinnacle of authentic Ayurvedic purification. Panchakarma is a sacred, physician-guided sequence of five cleansing therapies (Shodhanas) that eliminate deep-seated metabolic toxins (Ama), clear vital channels, and restore tri-doshic equilibrium under DHA-certified Ayurvedic doctors.', 'oceanwp' ); ?>
+					<?php esc_html_e( 'Experience authentic Ayurvedic purification. A sacred, physician-guided sequence of five cleansing therapies (Shodhanas) eliminating deep metabolic toxins (Ama) and restoring tri-doshic balance under DHA-certified doctors.', 'oceanwp' ); ?>
 				</p>
 
 				<!-- 5 Panchakarma Therapies Quick-Nav List (matches user drawing list) -->
@@ -205,68 +205,68 @@ $doctors    = kottakkal_get_doctors();
 
 							<!-- Center Core Hub: Panchakarma Emblem (cx=260, cy=260) -->
 							<g class="pk-center-hub">
-								<circle cx="260" cy="260" r="62" fill="#081812" stroke="#DFC289" stroke-width="1.2" stroke-opacity="0.45"/>
-								<circle cx="260" cy="260" r="56" fill="none" stroke="#DFC289" stroke-width="0.8" stroke-dasharray="3 3" stroke-opacity="0.3"/>
+								<circle cx="260" cy="260" r="64" fill="#081812" stroke="#DFC289" stroke-width="1.4" stroke-opacity="0.55"/>
+								<circle cx="260" cy="260" r="58" fill="none" stroke="#DFC289" stroke-width="0.8" stroke-dasharray="3 3" stroke-opacity="0.35"/>
 								<!-- Center Decorative Botanical Ring -->
-								<circle cx="260" cy="260" r="48" fill="#0A1D17" stroke="rgba(223, 194, 137, 0.2)" stroke-width="1"/>
-								<text x="260" y="242" text-anchor="middle" fill="#DFC289" font-size="8.5" font-family="var(--sans)" font-weight="600" letter-spacing="0.22em">AYURVEDA</text>
-								<text x="260" y="262" text-anchor="middle" fill="#F3EEE2" font-size="15" font-family="var(--display)" font-weight="500" letter-spacing="0.04em">PANCHA</text>
-								<text x="260" y="278" text-anchor="middle" fill="#DFC289" font-size="13" font-family="var(--display)" font-style="italic">Karma</text>
-								<text x="260" y="294" text-anchor="middle" fill="rgba(243, 238, 226, 0.65)" font-size="7.5" font-family="var(--sans)" letter-spacing="0.14em">5 SHODHANAS</text>
+								<circle cx="260" cy="260" r="50" fill="#0A1D17" stroke="rgba(223, 194, 137, 0.25)" stroke-width="1"/>
+								<text x="260" y="240" text-anchor="middle" fill="#DFC289" font-size="9.5" font-family="var(--sans)" font-weight="700" letter-spacing="0.22em">AYURVEDA</text>
+								<text x="260" y="261" text-anchor="middle" fill="#FFFFFF" font-size="16.5" font-family="var(--display)" font-weight="600" letter-spacing="0.04em">PANCHA</text>
+								<text x="260" y="278" text-anchor="middle" fill="#DFC289" font-size="14.5" font-family="var(--display)" font-style="italic">Karma</text>
+								<text x="260" y="295" text-anchor="middle" fill="rgba(243, 238, 226, 0.88)" font-size="8.5" font-family="var(--sans)" font-weight="600" letter-spacing="0.14em">5 SHODHANAS</text>
 							</g>
 
 							<!-- Node 1: Vamana (Top, 260, 85) -->
 							<a href="<?php echo esc_url( home_url( '/treatments/vamana/' ) ); ?>" class="pk-node-link" data-node="vamana" aria-label="Vamana Treatment">
 								<g class="pk-node-group" filter="url(#nodeShadow)">
-									<circle cx="260" cy="85" r="44" fill="url(#gradVamana)" stroke="#DFC289" stroke-width="1.8" class="pk-node-circle"/>
-									<circle cx="260" cy="85" r="40" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="0.8"/>
-									<text x="260" y="70" text-anchor="middle" fill="#DFC289" font-size="8" font-family="var(--sans)" font-weight="700" letter-spacing="0.18em">01 · KAPHA</text>
-									<text x="260" y="88" text-anchor="middle" fill="#FFFFFF" font-size="11.5" font-family="var(--display)" font-weight="600" letter-spacing="0.08em">VAMANA</text>
-									<text x="260" y="103" text-anchor="middle" fill="rgba(243, 238, 226, 0.85)" font-size="7.5" font-family="var(--sans)" font-weight="500">Therapeutic Emesis</text>
+									<circle cx="260" cy="85" r="55" fill="url(#gradVamana)" stroke="#DFC289" stroke-width="2" class="pk-node-circle"/>
+									<circle cx="260" cy="85" r="50" fill="none" stroke="rgba(255, 255, 255, 0.25)" stroke-width="1"/>
+									<text x="260" y="66" text-anchor="middle" fill="#DFC289" font-size="9.5" font-family="var(--sans)" font-weight="700" letter-spacing="0.16em">01 · KAPHA</text>
+									<text x="260" y="88" text-anchor="middle" fill="#FFFFFF" font-size="14.5" font-family="var(--display)" font-weight="700" letter-spacing="0.06em">VAMANA</text>
+									<text x="260" y="106" text-anchor="middle" fill="#F3EEE2" font-size="9.5" font-family="var(--sans)" font-weight="600">Therapeutic Emesis</text>
 								</g>
 							</a>
 
 							<!-- Node 2: Virechana (Top-Right, 426.4, 205.9) -->
 							<a href="<?php echo esc_url( home_url( '/treatments/virechana/' ) ); ?>" class="pk-node-link" data-node="virechana" aria-label="Virechana Treatment">
 								<g class="pk-node-group" filter="url(#nodeShadow)">
-									<circle cx="426.4" cy="205.9" r="44" fill="url(#gradVirechana)" stroke="#DFC289" stroke-width="1.8" class="pk-node-circle"/>
-									<circle cx="426.4" cy="205.9" r="40" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="0.8"/>
-									<text x="426.4" y="191" text-anchor="middle" fill="#DFC289" font-size="8" font-family="var(--sans)" font-weight="700" letter-spacing="0.18em">02 · PITTA</text>
-									<text x="426.4" y="209" text-anchor="middle" fill="#FFFFFF" font-size="11" font-family="var(--display)" font-weight="600" letter-spacing="0.08em">VIRECHANA</text>
-									<text x="426.4" y="224" text-anchor="middle" fill="rgba(243, 238, 226, 0.85)" font-size="7.5" font-family="var(--sans)" font-weight="500">Therapeutic Purgation</text>
+									<circle cx="426.4" cy="205.9" r="55" fill="url(#gradVirechana)" stroke="#DFC289" stroke-width="2" class="pk-node-circle"/>
+									<circle cx="426.4" cy="205.9" r="50" fill="none" stroke="rgba(255, 255, 255, 0.25)" stroke-width="1"/>
+									<text x="426.4" y="187" text-anchor="middle" fill="#DFC289" font-size="9.5" font-family="var(--sans)" font-weight="700" letter-spacing="0.16em">02 · PITTA</text>
+									<text x="426.4" y="209" text-anchor="middle" fill="#FFFFFF" font-size="13.5" font-family="var(--display)" font-weight="700" letter-spacing="0.06em">VIRECHANA</text>
+									<text x="426.4" y="227" text-anchor="middle" fill="#F3EEE2" font-size="9.5" font-family="var(--sans)" font-weight="600">Therapeutic Purgation</text>
 								</g>
 							</a>
 
 							<!-- Node 3: Basti (Bottom-Right, 362.9, 401.6) -->
 							<a href="<?php echo esc_url( home_url( '/treatments/basti/' ) ); ?>" class="pk-node-link" data-node="basti" aria-label="Basti Treatment">
 								<g class="pk-node-group" filter="url(#nodeShadow)">
-									<circle cx="362.9" cy="401.6" r="44" fill="url(#gradBasti)" stroke="#DFC289" stroke-width="1.8" class="pk-node-circle"/>
-									<circle cx="362.9" cy="401.6" r="40" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="0.8"/>
-									<text x="362.9" y="386.6" text-anchor="middle" fill="#DFC289" font-size="8" font-family="var(--sans)" font-weight="700" letter-spacing="0.18em">03 · VATA</text>
-									<text x="362.9" y="404.6" text-anchor="middle" fill="#FFFFFF" font-size="12" font-family="var(--display)" font-weight="600" letter-spacing="0.08em">BASTI</text>
-									<text x="362.9" y="419.6" text-anchor="middle" fill="rgba(243, 238, 226, 0.85)" font-size="7.5" font-family="var(--sans)" font-weight="500">Medicated Enemas</text>
+									<circle cx="362.9" cy="401.6" r="55" fill="url(#gradBasti)" stroke="#DFC289" stroke-width="2" class="pk-node-circle"/>
+									<circle cx="362.9" cy="401.6" r="50" fill="none" stroke="rgba(255, 255, 255, 0.25)" stroke-width="1"/>
+									<text x="362.9" y="382.5" text-anchor="middle" fill="#DFC289" font-size="9.5" font-family="var(--sans)" font-weight="700" letter-spacing="0.16em">03 · VATA</text>
+									<text x="362.9" y="404.5" text-anchor="middle" fill="#FFFFFF" font-size="14.5" font-family="var(--display)" font-weight="700" letter-spacing="0.06em">BASTI</text>
+									<text x="362.9" y="422.5" text-anchor="middle" fill="#F3EEE2" font-size="9.5" font-family="var(--sans)" font-weight="600">Medicated Enemas</text>
 								</g>
 							</a>
 
 							<!-- Node 4: Nasya (Bottom-Left, 157.1, 401.6) -->
 							<a href="<?php echo esc_url( home_url( '/treatments/nasyam/' ) ); ?>" class="pk-node-link" data-node="nasya" aria-label="Nasya Treatment">
 								<g class="pk-node-group" filter="url(#nodeShadow)">
-									<circle cx="157.1" cy="401.6" r="44" fill="url(#gradNasya)" stroke="#DFC289" stroke-width="1.8" class="pk-node-circle"/>
-									<circle cx="157.1" cy="401.6" r="40" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="0.8"/>
-									<text x="157.1" y="386.6" text-anchor="middle" fill="#DFC289" font-size="8" font-family="var(--sans)" font-weight="700" letter-spacing="0.18em">04 · PRANA</text>
-									<text x="157.1" y="404.6" text-anchor="middle" fill="#FFFFFF" font-size="12" font-family="var(--display)" font-weight="600" letter-spacing="0.08em">NASYA</text>
-									<text x="157.1" y="419.6" text-anchor="middle" fill="rgba(243, 238, 226, 0.85)" font-size="7.5" font-family="var(--sans)" font-weight="500">Nasal Administration</text>
+									<circle cx="157.1" cy="401.6" r="55" fill="url(#gradNasya)" stroke="#DFC289" stroke-width="2" class="pk-node-circle"/>
+									<circle cx="157.1" cy="401.6" r="50" fill="none" stroke="rgba(255, 255, 255, 0.25)" stroke-width="1"/>
+									<text x="157.1" y="382.5" text-anchor="middle" fill="#DFC289" font-size="9.5" font-family="var(--sans)" font-weight="700" letter-spacing="0.16em">04 · PRANA</text>
+									<text x="157.1" y="404.5" text-anchor="middle" fill="#FFFFFF" font-size="14.5" font-family="var(--display)" font-weight="700" letter-spacing="0.06em">NASYA</text>
+									<text x="157.1" y="422.5" text-anchor="middle" fill="#F3EEE2" font-size="9.5" font-family="var(--sans)" font-weight="600">Nasal Administration</text>
 								</g>
 							</a>
 
 							<!-- Node 5: Raktamokshana (Top-Left, 93.6, 205.9) -->
 							<a href="<?php echo esc_url( home_url( '/treatments/raktamokshana/' ) ); ?>" class="pk-node-link" data-node="raktamokshana" aria-label="Raktamokshana Treatment">
 								<g class="pk-node-group" filter="url(#nodeShadow)">
-									<circle cx="93.6" cy="205.9" r="44" fill="url(#gradRakta)" stroke="#DFC289" stroke-width="1.8" class="pk-node-circle"/>
-									<circle cx="93.6" cy="205.9" r="40" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="0.8"/>
-									<text x="93.6" y="191" text-anchor="middle" fill="#DFC289" font-size="7.5" font-family="var(--sans)" font-weight="700" letter-spacing="0.16em">05 · RAKTA</text>
-									<text x="93.6" y="209" text-anchor="middle" fill="#FFFFFF" font-size="9.5" font-family="var(--display)" font-weight="600" letter-spacing="0.04em">RAKTAMOKSHANA</text>
-									<text x="93.6" y="224" text-anchor="middle" fill="rgba(243, 238, 226, 0.85)" font-size="7.5" font-family="var(--sans)" font-weight="500">Blood Cleansing</text>
+									<circle cx="93.6" cy="205.9" r="55" fill="url(#gradRakta)" stroke="#DFC289" stroke-width="2" class="pk-node-circle"/>
+									<circle cx="93.6" cy="205.9" r="50" fill="none" stroke="rgba(255, 255, 255, 0.25)" stroke-width="1"/>
+									<text x="93.6" y="187" text-anchor="middle" fill="#DFC289" font-size="9.5" font-family="var(--sans)" font-weight="700" letter-spacing="0.16em">05 · RAKTA</text>
+									<text x="93.6" y="209" text-anchor="middle" fill="#FFFFFF" font-size="11.5" font-family="var(--display)" font-weight="700" letter-spacing="0.04em">RAKTAMOKSHANA</text>
+									<text x="93.6" y="227" text-anchor="middle" fill="#F3EEE2" font-size="9.5" font-family="var(--sans)" font-weight="600">Blood Cleansing</text>
 								</g>
 							</a>
 						</svg>
