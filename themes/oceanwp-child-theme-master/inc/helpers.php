@@ -1005,24 +1005,43 @@ function kottakkal_get_treatments() {
 			$paths_meta = get_post_meta( $p->ID, '_kottakkal_paths', true );
 			$paths = is_array( $paths_meta ) ? $paths_meta : array_filter( array_map( 'trim', explode( ',', (string) $paths_meta ) ) );
 
-			$feat_img = get_the_post_thumbnail_url( $p->ID, 'large' );
-			if ( empty( $feat_img ) ) {
-				$feat_img = get_post_meta( $p->ID, '_kottakkal_photo', true );
+			$slug      = $p->post_name;
+			$theme_dir = get_stylesheet_directory();
+			$theme_uri = get_stylesheet_directory_uri();
+			$feat_img  = '';
+
+			// 1. Prefer verified local high-res theme asset
+			if ( ! empty( $slug ) ) {
+				if ( file_exists( $theme_dir . '/assets/img/t-' . $slug . '.jpg' ) ) {
+					$feat_img = $theme_uri . '/assets/img/t-' . $slug . '.jpg';
+				} elseif ( file_exists( $theme_dir . '/assets/img/t-' . $slug . '.webp' ) ) {
+					$feat_img = $theme_uri . '/assets/img/t-' . $slug . '.webp';
+				} elseif ( file_exists( $theme_dir . '/assets/img/t-' . $slug . '.png' ) ) {
+					$feat_img = $theme_uri . '/assets/img/t-' . $slug . '.png';
+				}
 			}
+
+			// 2. Check custom photo meta (ignoring old draft webp)
+			if ( empty( $feat_img ) ) {
+				$meta_photo = get_post_meta( $p->ID, '_kottakkal_photo', true );
+				if ( ! empty( $meta_photo ) && ! preg_match( '/(basti|virechana|veshtanam|prachanam)\.webp$/i', $meta_photo ) ) {
+					$feat_img = $meta_photo;
+				}
+			}
+
+			// 3. Fallback: photo attachment ID
 			if ( empty( $feat_img ) ) {
 				$photo_id = get_post_meta( $p->ID, '_kottakkal_photo_id', true );
 				if ( $photo_id ) {
 					$feat_img = wp_get_attachment_image_url( $photo_id, 'large' );
 				}
 			}
+
+			// 4. Fallback: featured image (ignoring old draft webp)
 			if ( empty( $feat_img ) ) {
-				$slug = $p->post_name;
-				$theme_dir = get_stylesheet_directory();
-				$theme_uri = get_stylesheet_directory_uri();
-				if ( ! empty( $slug ) && file_exists( $theme_dir . '/assets/img/t-' . $slug . '.jpg' ) ) {
-					$feat_img = $theme_uri . '/assets/img/t-' . $slug . '.jpg';
-				} elseif ( ! empty( $slug ) && file_exists( $theme_dir . '/assets/img/t-' . $slug . '.png' ) ) {
-					$feat_img = $theme_uri . '/assets/img/t-' . $slug . '.png';
+				$thumb = get_the_post_thumbnail_url( $p->ID, 'large' );
+				if ( ! empty( $thumb ) && ! preg_match( '/(basti|virechana|veshtanam|prachanam)\.webp$/i', $thumb ) ) {
+					$feat_img = $thumb;
 				}
 			}
 
@@ -1680,67 +1699,67 @@ function kottakkal_render_plate( $key, $ill, $tone = 'oil', $cap = '', $ratio = 
 	$theme_dir = get_stylesheet_directory();
 
 	$photo_url = '';
-	if ( ! empty( $custom_img ) ) {
-		$photo_url = $custom_img;
-	} else {
-		// Map known keys to local assets
-		$map = array(
-			'about'           => 'assets/img/about.jpg',
-			'intro-a'         => 'assets/img/intro-a.jpg',
-			'intro-b'         => 'assets/img/intro-b.jpg',
-			'p-beauty'        => 'assets/img/p-beauty.jpg',
-			'p-degenerative'  => 'assets/img/p-degenerative.jpg',
-			'p-injury'        => 'assets/img/p-injury.jpg',
-			'p-injury-management' => 'assets/img/p-injury.jpg',
-			'p-joint'         => 'assets/img/p-joint.jpg',
-			'p-marma'         => 'assets/img/p-marma.jpg',
-			'p-marma-chikitsa' => 'assets/img/p-marma.jpg',
-			'p-postnatal'     => 'assets/img/p-postnatal.jpg',
-			'p-relax'         => 'assets/img/p-relax.jpg',
-			'p-weight'        => 'assets/img/p-weight.jpg',
-			'ritual-1'        => 'assets/img/ritual-1.jpg',
-			'ritual-2'        => 'assets/img/ritual-2.jpg',
-			'ritual-3'        => 'assets/img/ritual-3.jpg',
-			't-abhyangam'     => 'assets/img/t-abhyangam.jpg',
-			't-basti'         => 'assets/img/t-basti.jpg',
-			't-virechana'     => 'assets/img/t-virechana.jpg',
-			't-pottali-sweda' => 'assets/img/t-kizhi.jpg',
-			't-kizhi'         => 'assets/img/t-kizhi.jpg',
-			't-njavara-kizhi' => 'assets/img/t-kizhi.jpg',
-			't-pizhichil'     => 'assets/img/t-pizhichil.jpg',
-			't-pichu'         => 'assets/img/t-pichu.jpg',
-			't-kati-greeva-pichu' => 'assets/img/t-pichu.jpg',
-			't-veshtanam'     => 'assets/img/t-veshtanam.jpg',
-			't-shirodara'     => 'assets/img/t-shirodara.jpg',
-			't-nasyam'        => 'assets/img/t-nasyam.jpg',
-			't-dhoomapana'    => 'assets/img/t-dhoomapanam.jpg',
-			't-dhoomapanam'   => 'assets/img/t-dhoomapanam.jpg',
-			't-uro-basti'     => 'assets/img/t-urovasthi.jpg',
-			't-greeva-basti'  => 'assets/img/t-greeva-basti.jpg',
-			't-kativasthi'    => 'assets/img/t-kativasthi.jpg',
-			't-prishta-basti' => 'assets/img/t-prishta-basti.jpg',
-			't-janu-basti'    => 'assets/img/t-janu-basti.jpg',
-			't-shiro-basti'   => 'assets/img/t-shiro-basti.jpg',
-			't-dhanyamla-dhara' => 'assets/img/t-dhanyamla-dhara.jpg',
-			't-takra-dhara'   => 'assets/img/t-takra-dhara.jpg',
-			't-sarvanga-lepanam' => 'assets/img/t-sarvanga-lepanam.webp',
-			't-tarpanam'      => 'assets/img/t-tarpanam.jpg',
-			't-akshi-seka'    => 'assets/img/t-akshi-seka.webp',
-			't-karnapoorana'  => 'assets/img/t-karnapoorana.jpg',
-			't-prachanam'     => 'assets/img/t-prachanam.jpg',
-			't-face-pack'     => 'assets/img/t-face-pack.jpg',
-			't-thalapothichil' => 'assets/img/t-thalapothichil.jpg',
-			't-udhwarthanam'  => 'assets/img/t-udhwarthanam.jpg',
-			'doc-naseeba'     => file_exists( $theme_dir . '/assets/img/doc-naseeba-hd.png' ) ? 'assets/img/doc-naseeba-hd.png' : ( file_exists( $theme_dir . '/assets/img/doc-naseeba.png' ) ? 'assets/img/doc-naseeba.png' : 'assets/img/doc-naseeba.jpg' ),
-			'doc-ajitha'      => file_exists( $theme_dir . '/assets/img/doc-ajitha-hd.png' ) ? 'assets/img/doc-ajitha-hd.png' : ( file_exists( $theme_dir . '/assets/img/doc-ajitha.png' ) ? 'assets/img/doc-ajitha.png' : 'assets/img/doc-ajitha.jpg' ),
-			'doc-minupriya'   => file_exists( $theme_dir . '/assets/img/doc-minupriya-hd.png' ) ? 'assets/img/doc-minupriya-hd.png' : ( file_exists( $theme_dir . '/assets/img/doc-minupriya.png' ) ? 'assets/img/doc-minupriya.png' : 'assets/img/doc-minupriya.jpg' ),
-			'doc-rajesh'      => 'assets/img/doc-rajesh.jpg',
-			'doc-arun'        => 'assets/img/doc-arun.jpg',
-		);
 
-		if ( isset( $map[ $key ] ) && file_exists( $theme_dir . '/' . $map[ $key ] ) ) {
-			$photo_url = $theme_uri . '/' . $map[ $key ];
-		}
+	// Map known keys to local verified assets
+	$map = array(
+		'about'               => 'assets/img/about.jpg',
+		'intro-a'             => 'assets/img/intro-a.jpg',
+		'intro-b'             => 'assets/img/intro-b.jpg',
+		'p-beauty'            => 'assets/img/p-beauty.jpg',
+		'p-degenerative'      => 'assets/img/p-degenerative.jpg',
+		'p-injury'            => 'assets/img/p-injury.jpg',
+		'p-injury-management' => 'assets/img/p-injury.jpg',
+		'p-joint'             => 'assets/img/p-joint.jpg',
+		'p-marma'             => 'assets/img/p-marma.jpg',
+		'p-marma-chikitsa'    => 'assets/img/p-marma.jpg',
+		'p-postnatal'         => 'assets/img/p-postnatal.jpg',
+		'p-relax'             => 'assets/img/p-relax.jpg',
+		'p-weight'            => 'assets/img/p-weight.jpg',
+		'ritual-1'            => 'assets/img/ritual-1.jpg',
+		'ritual-2'            => 'assets/img/ritual-2.jpg',
+		'ritual-3'            => 'assets/img/ritual-3.jpg',
+		't-abhyangam'         => 'assets/img/t-abhyangam.jpg',
+		't-basti'             => 'assets/img/t-basti.jpg',
+		't-virechana'         => 'assets/img/t-virechana.jpg',
+		't-pottali-sweda'     => 'assets/img/t-kizhi.jpg',
+		't-kizhi'             => 'assets/img/t-kizhi.jpg',
+		't-njavara-kizhi'     => 'assets/img/t-kizhi.jpg',
+		't-pizhichil'         => 'assets/img/t-pizhichil.jpg',
+		't-pichu'             => 'assets/img/t-pichu.jpg',
+		't-kati-greeva-pichu' => 'assets/img/t-pichu.jpg',
+		't-veshtanam'         => 'assets/img/t-veshtanam.jpg',
+		't-shirodara'         => 'assets/img/t-shirodara.jpg',
+		't-nasyam'            => 'assets/img/t-nasyam.jpg',
+		't-dhoomapana'        => 'assets/img/t-dhoomapanam.jpg',
+		't-dhoomapanam'       => 'assets/img/t-dhoomapanam.jpg',
+		't-uro-basti'         => 'assets/img/t-urovasthi.jpg',
+		't-greeva-basti'      => 'assets/img/t-greeva-basti.jpg',
+		't-kativasthi'        => 'assets/img/t-kativasthi.jpg',
+		't-prishta-basti'     => 'assets/img/t-prishta-basti.jpg',
+		't-janu-basti'        => 'assets/img/t-janu-basti.jpg',
+		't-shiro-basti'       => 'assets/img/t-shiro-basti.jpg',
+		't-dhanyamla-dhara'   => 'assets/img/t-dhanyamla-dhara.jpg',
+		't-takra-dhara'       => 'assets/img/t-takra-dhara.jpg',
+		't-sarvanga-lepanam'  => 'assets/img/t-sarvanga-lepanam.webp',
+		't-tarpanam'          => 'assets/img/t-tarpanam.jpg',
+		't-akshi-seka'        => 'assets/img/t-akshi-seka.webp',
+		't-karnapoorana'      => 'assets/img/t-karnapoorana.jpg',
+		't-prachanam'         => 'assets/img/t-prachanam.jpg',
+		't-face-pack'         => 'assets/img/t-face-pack.jpg',
+		't-thalapothichil'    => 'assets/img/t-thalapothichil.jpg',
+		't-udhwarthanam'      => 'assets/img/t-udhwarthanam.jpg',
+		'doc-naseeba'         => file_exists( $theme_dir . '/assets/img/doc-naseeba-hd.png' ) ? 'assets/img/doc-naseeba-hd.png' : ( file_exists( $theme_dir . '/assets/img/doc-naseeba.png' ) ? 'assets/img/doc-naseeba.png' : 'assets/img/doc-naseeba.jpg' ),
+		'doc-ajitha'          => file_exists( $theme_dir . '/assets/img/doc-ajitha-hd.png' ) ? 'assets/img/doc-ajitha-hd.png' : ( file_exists( $theme_dir . '/assets/img/doc-ajitha.png' ) ? 'assets/img/doc-ajitha.png' : 'assets/img/doc-ajitha.jpg' ),
+		'doc-minupriya'       => file_exists( $theme_dir . '/assets/img/doc-minupriya-hd.png' ) ? 'assets/img/doc-minupriya-hd.png' : ( file_exists( $theme_dir . '/assets/img/doc-minupriya.png' ) ? 'assets/img/doc-minupriya.png' : 'assets/img/doc-minupriya.jpg' ),
+		'doc-rajesh'          => 'assets/img/doc-rajesh.jpg',
+		'doc-arun'            => 'assets/img/doc-arun.jpg',
+	);
+
+	// 1. Prefer verified local high-res asset
+	if ( isset( $map[ $key ] ) && file_exists( $theme_dir . '/' . $map[ $key ] ) ) {
+		$photo_url = $theme_uri . '/' . $map[ $key ];
+	} elseif ( ! empty( $custom_img ) && ! preg_match( '/(basti|virechana|veshtanam|prachanam)\.webp$/i', $custom_img ) ) {
+		$photo_url = $custom_img;
 	}
 
 	// For any doctor plate, ensure transparent PNG cutout is used whenever available (prefer enhanced HD)
