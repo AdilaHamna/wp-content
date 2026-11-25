@@ -1015,38 +1015,29 @@ function kottakkal_get_treatments() {
 			$theme_uri = get_stylesheet_directory_uri();
 			$feat_img  = '';
 
-			// 1. Prefer verified local high-res theme asset
-			if ( ! empty( $slug ) ) {
+			// 1. First priority: Custom image set by user in the backend (Featured Image or Treatment Photo metabox)
+			$thumb_id   = get_post_thumbnail_id( $p->ID );
+			$photo_id   = get_post_meta( $p->ID, '_kottakkal_photo_id', true );
+			$meta_photo = get_post_meta( $p->ID, '_kottakkal_photo', true );
+
+			if ( $thumb_id ) {
+				$feat_img = wp_get_attachment_image_url( $thumb_id, 'full' ) ?: wp_get_attachment_image_url( $thumb_id, 'large' );
+			}
+			if ( empty( $feat_img ) && $photo_id ) {
+				$feat_img = wp_get_attachment_image_url( $photo_id, 'full' ) ?: wp_get_attachment_image_url( $photo_id, 'large' );
+			}
+			if ( empty( $feat_img ) && ! empty( $meta_photo ) ) {
+				$feat_img = $meta_photo;
+			}
+
+			// 2. Second priority (fallback): Bundled theme asset if no custom backend image exists
+			if ( empty( $feat_img ) && ! empty( $slug ) ) {
 				if ( file_exists( $theme_dir . '/assets/img/t-' . $slug . '.jpg' ) ) {
 					$feat_img = $theme_uri . '/assets/img/t-' . $slug . '.jpg';
 				} elseif ( file_exists( $theme_dir . '/assets/img/t-' . $slug . '.webp' ) ) {
 					$feat_img = $theme_uri . '/assets/img/t-' . $slug . '.webp';
 				} elseif ( file_exists( $theme_dir . '/assets/img/t-' . $slug . '.png' ) ) {
 					$feat_img = $theme_uri . '/assets/img/t-' . $slug . '.png';
-				}
-			}
-
-			// 2. Check custom photo meta (ignoring old draft webp)
-			if ( empty( $feat_img ) ) {
-				$meta_photo = get_post_meta( $p->ID, '_kottakkal_photo', true );
-				if ( ! empty( $meta_photo ) && ! preg_match( '/(basti|virechana|veshtanam|prachanam)\.webp$/i', $meta_photo ) ) {
-					$feat_img = $meta_photo;
-				}
-			}
-
-			// 3. Fallback: photo attachment ID
-			if ( empty( $feat_img ) ) {
-				$photo_id = get_post_meta( $p->ID, '_kottakkal_photo_id', true );
-				if ( $photo_id ) {
-					$feat_img = wp_get_attachment_image_url( $photo_id, 'large' );
-				}
-			}
-
-			// 4. Fallback: featured image (ignoring old draft webp)
-			if ( empty( $feat_img ) ) {
-				$thumb = get_the_post_thumbnail_url( $p->ID, 'large' );
-				if ( ! empty( $thumb ) && ! preg_match( '/(basti|virechana|veshtanam|prachanam)\.webp$/i', $thumb ) ) {
-					$feat_img = $thumb;
 				}
 			}
 
@@ -1760,15 +1751,18 @@ function kottakkal_render_plate( $key, $ill, $tone = 'oil', $cap = '', $ratio = 
 		'doc-arun'            => 'assets/img/doc-arun.jpg',
 	);
 
-	// 1. Prefer verified local high-res asset
-	if ( isset( $map[ $key ] ) && file_exists( $theme_dir . '/' . $map[ $key ] ) ) {
-		$photo_url = $theme_uri . '/' . $map[ $key ];
-	} elseif ( ! empty( $custom_img ) && ! preg_match( '/(basti|virechana|veshtanam|prachanam)\.webp$/i', $custom_img ) ) {
+	$photo_url = '';
+
+	// 1. First priority: Custom image passed from backend / post meta
+	if ( ! empty( $custom_img ) ) {
 		$photo_url = $custom_img;
+	} elseif ( isset( $map[ $key ] ) && file_exists( $theme_dir . '/' . $map[ $key ] ) ) {
+		// 2. Second priority (fallback): Default verified high-res asset from theme
+		$photo_url = $theme_uri . '/' . $map[ $key ];
 	}
 
-	// For any doctor plate, ensure transparent PNG cutout is used whenever available (prefer enhanced HD)
-	if ( ( str_starts_with( (string) $key, 'doc-' ) || $ill === 'doc' ) && ! empty( $photo_url ) ) {
+	// For doctor plates without a custom image, ensure transparent PNG cutout is used when available
+	if ( empty( $custom_img ) && ( str_starts_with( (string) $key, 'doc-' ) || $ill === 'doc' ) ) {
 		$doc_slug = str_replace( 'doc-', '', (string) $key );
 		if ( ! empty( $doc_slug ) ) {
 			if ( file_exists( $theme_dir . '/assets/img/doc-' . $doc_slug . '-hd.png' ) ) {
