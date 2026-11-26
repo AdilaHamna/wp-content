@@ -75,7 +75,7 @@ $contact = kottakkal_get_contact_info();
 				<div class="ceo-message-grid">
 					<div class="ceo-portrait-wrap">
 						<div class="ceo-frame">
-							<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/ceo-somarajan.png' ); ?>" alt="<?php esc_attr_e( 'Somarajan AR - CEO & Managing Director', 'oceanwp' ); ?>" width="731" height="1024" loading="lazy">
+							<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/ceo-somarajan.png' ); ?>" alt="<?php esc_attr_e( 'Somarajan AR - CEO & Managing Director', 'oceanwp' ); ?>" width="600" height="800" loading="lazy">
 						</div>
 						<div class="ceo-meta">
 							<b class="ceo-name">Somarajan AR</b>
